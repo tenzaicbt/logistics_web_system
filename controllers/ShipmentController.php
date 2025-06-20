@@ -1,3 +1,0 @@
-<?php
-// ShipmentController.php
-?>

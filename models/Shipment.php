@@ -1,3 +1,0 @@
-<?php
-// Shipment.php
-?>

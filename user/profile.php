@@ -1,3 +1,0 @@
-<?php
-// profile.php
-?>

@@ -1,3 +1,0 @@
-<?php
-// AdminController.php
-?>

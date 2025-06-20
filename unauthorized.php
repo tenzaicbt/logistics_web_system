@@ -1,0 +1,3 @@
+<?php
+// unauthorized.php - placeholder
+?>

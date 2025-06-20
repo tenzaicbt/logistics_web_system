@@ -1,0 +1,3 @@
+<?php
+// en.php - placeholder
+?>

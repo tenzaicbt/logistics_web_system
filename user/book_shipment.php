@@ -1,3 +1,3 @@
 <?php
-// book_shipment.php
+// book_shipment.php - placeholder
 ?>
