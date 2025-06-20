@@ -1,0 +1,76 @@
+/tadefording_shipping/
+│
+├── index.php                            # Redirects to /auth/login.php
+├── .htaccess                            # Clean URLs and security
+├── README.md
+│
+├── /assets/                             # Static assets
+│   ├── /css/
+│   ├── /js/
+│   ├── /images/
+│   ├── /uploads/                        # Uploaded files (logo, documents)
+│   └── /themes/                         # Theme CSS files (e.g., dark.css)
+│
+├── /config/                             # Core configs
+│   ├── db.php                           # Database connection
+│   └── constants.php                    # App-wide constants (roles, statuses)
+│
+├── /includes/                           # Shared includes
+│   ├── header.php
+│   ├── footer.php
+│   ├── auth_check.php                   # Session and access logic
+│   └── functions.php                    # Utility functions (e.g., log_action)
+│
+├── /layouts/                            # Layout components
+│   ├── admin_sidebar.php
+│   ├── user_sidebar.php
+│   └── topbar.php
+│
+├── /auth/                               # Authentication module
+│   ├── login.php
+│   ├── logout.php
+│   └── forgot_password.php
+│
+├── /admin/                              # Admin dashboard & control
+│   ├── dashboard.php
+│   ├── profile.php
+│   ├── manage_admins.php                # 👤 Main admin creates/edit sub-admins
+│   ├── manage_users.php                 # 🧑‍💼 Manage shipping clients
+│   ├── manage_shipments.php             # 📦 View/edit shipment requests
+│   ├── fleet.php                        # 🚢 Manage ships
+│   ├── containers.php                   # 🧱 Manage containers
+│   ├── invoices.php                     # 💰 Manage billing
+│   ├── theme_settings.php               # 🎨 Logo, footer, theme control
+│   └── logs.php                         # 📜 View all logs (actions, logins)
+│
+├── /user/                               # Regular user interface
+│   ├── dashboard.php
+│   ├── book_shipment.php
+│   ├── view_shipments.php
+│   ├── pay_invoice.php
+│   ├── track_shipment.php
+│   ├── notifications.php
+│   └── profile.php
+│
+├── /ajax/                               # AJAX endpoints
+│   ├── update_status.php
+│   ├── fetch_shipments.php
+│   └── log_action.php
+│
+├── /models/                             # Data logic layer
+│   ├── Admin.php
+│   ├── User.php
+│   ├── Shipment.php
+│   ├── Fleet.php
+│   ├── Container.php
+│   ├── Invoice.php
+│   └── SiteSetting.php
+│
+├── /controllers/                        # Handles business logic
+│   ├── AuthController.php
+│   ├── AdminController.php
+│   ├── ShipmentController.php
+│   ├── FleetController.php
+│   ├── InvoiceController.php
+│   └── ThemeController.php
+

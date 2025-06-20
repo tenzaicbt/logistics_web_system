@@ -1,0 +1,3 @@
+<?php
+// SiteSetting.php
+?>
