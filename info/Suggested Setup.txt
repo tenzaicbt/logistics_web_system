@@ -1,9 +1,0 @@
-STEP 1: index.php, .htaccess, README.md
-STEP 2: config/db.php, config/constants.php
-STEP 3: /auth/login.php, /auth/logout.php
-STEP 4: /includes/auth_check.php
-STEP 5: /admin/dashboard.php + sidebar/layouts
-STEP 6: /admin/manage_admins.php + models/Admin.php
-STEP 7: /admin/theme_settings.php + uploads
-STEP 8: /user/dashboard.php
-STEP 9: /ajax endpoints

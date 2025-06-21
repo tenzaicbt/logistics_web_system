@@ -1,19 +1,20 @@
 <?php
-// Start session only once
+// includes/auth.php
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Set session timeout duration (30 minutes)
+// Session timeout duration in seconds (30 minutes)
 $timeout_duration = 1800;
 
-// Check login
+// Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: /login.php');
     exit;
 }
 
-// Check session timeout
+// Session timeout check
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
     session_unset();
     session_destroy();
@@ -21,13 +22,13 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     exit;
 }
 
-// Update last activity timestamp
+// Refresh activity timestamp
 $_SESSION['last_activity'] = time();
 
 /**
- * Authorize access based on role(s)
- * 
- * @param string|array $allowed_roles - Single role or array of allowed roles
+ * Role authorization
+ *
+ * @param string|array $allowed_roles
  */
 if (!function_exists('authorize')) {
     function authorize($allowed_roles) {
@@ -36,14 +37,36 @@ if (!function_exists('authorize')) {
             exit;
         }
 
-        // Normalize to array
-        if (!is_array($allowed_roles)) {
-            $allowed_roles = [$allowed_roles];
-        }
+        $roles = is_array($allowed_roles) ? $allowed_roles : [$allowed_roles];
 
-        if (!in_array($_SESSION['role'], $allowed_roles)) {
+        if (!in_array($_SESSION['role'], $roles)) {
             header('Location: /unauthorized.php');
             exit;
         }
     }
+}
+
+function requireLogin($role = null) {
+    // Check login
+    if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+        // Redirect to login with redirect param to come back after login
+        header("Location: /login.php?redirect=" . urlencode($_SERVER['REQUEST_URI']));
+        exit;
+    }
+
+    // Check role if specified
+    if ($role !== null && (!isset($_SESSION['role']) || $_SESSION['role'] !== $role)) {
+        header("Location: /unauthorized.php");
+        exit;
+    }
+
+    // Session timeout (30 min)
+    if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
+        session_unset();
+        session_destroy();
+        header("Location: /login.php?timeout=1");
+        exit;
+    }
+
+    $_SESSION['last_activity'] = time();
 }
