@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2025 at 08:40 PM
+-- Generation Time: Jun 23, 2025 at 09:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,6 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `northport`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_messages`
+--
+
+CREATE TABLE `admin_messages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `subject` varchar(200) DEFAULT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1027,7 +1042,75 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `updated_at`) VALU
 (792, 'footer_shortcut_2_url', '', '2025-06-23 17:51:45'),
 (793, 'footer_shortcut_3_name', '', '2025-06-23 17:51:45'),
 (794, 'footer_shortcut_3_url', '', '2025-06-23 17:51:45'),
-(795, 'site_logo', 'assets/images/site_logo_1750701105.png', '2025-06-23 17:51:45');
+(795, 'site_logo', 'assets/images/site_logo_1750701105.png', '2025-06-23 17:51:45'),
+(796, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-23 19:04:12'),
+(797, 'footer_text', '', '2025-06-23 19:04:12'),
+(798, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-23 19:04:12'),
+(799, 'footer_contact_phone', '+94 11 2517445', '2025-06-23 19:04:12'),
+(800, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-23 19:04:12'),
+(801, 'footer_address_line2', 'Sri Lanka', '2025-06-23 19:04:12'),
+(802, 'footer_social_facebook', 'https://facebook.com/northport', '2025-06-23 19:04:12'),
+(803, 'footer_social_twitter', 'https://twitter.com/northport', '2025-06-23 19:04:12'),
+(804, 'footer_social_linkedin', 'https://linkedin.com/company/northport', '2025-06-23 19:04:12'),
+(805, 'footer_social_instagram', 'https://instagram.com/northport', '2025-06-23 19:04:12'),
+(806, 'footer_shortcut_1_name', '', '2025-06-23 19:04:12'),
+(807, 'footer_shortcut_1_url', '', '2025-06-23 19:04:12'),
+(808, 'footer_shortcut_2_name', '', '2025-06-23 19:04:12'),
+(809, 'footer_shortcut_2_url', '', '2025-06-23 19:04:12'),
+(810, 'footer_shortcut_3_name', '', '2025-06-23 19:04:12'),
+(811, 'footer_shortcut_3_url', '', '2025-06-23 19:04:12'),
+(812, 'site_logo', 'assets/images/site_logo_1750705452.jpg', '2025-06-23 19:04:12'),
+(813, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-23 19:04:16'),
+(814, 'footer_text', '', '2025-06-23 19:04:16'),
+(815, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-23 19:04:16'),
+(816, 'footer_contact_phone', '+94 11 2517445', '2025-06-23 19:04:16'),
+(817, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-23 19:04:16'),
+(818, 'footer_address_line2', 'Sri Lanka', '2025-06-23 19:04:16'),
+(819, 'footer_social_facebook', 'https://facebook.com/northport', '2025-06-23 19:04:16'),
+(820, 'footer_social_twitter', 'https://twitter.com/northport', '2025-06-23 19:04:16'),
+(821, 'footer_social_linkedin', 'https://linkedin.com/company/northport', '2025-06-23 19:04:16'),
+(822, 'footer_social_instagram', 'https://instagram.com/northport', '2025-06-23 19:04:16'),
+(823, 'footer_shortcut_1_name', '', '2025-06-23 19:04:16'),
+(824, 'footer_shortcut_1_url', '', '2025-06-23 19:04:16'),
+(825, 'footer_shortcut_2_name', '', '2025-06-23 19:04:16'),
+(826, 'footer_shortcut_2_url', '', '2025-06-23 19:04:16'),
+(827, 'footer_shortcut_3_name', '', '2025-06-23 19:04:16'),
+(828, 'footer_shortcut_3_url', '', '2025-06-23 19:04:16'),
+(829, 'site_logo', 'assets/images/site_logo_1750705456.jpg', '2025-06-23 19:04:16'),
+(830, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-23 19:04:35'),
+(831, 'footer_text', '', '2025-06-23 19:04:35'),
+(832, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-23 19:04:35'),
+(833, 'footer_contact_phone', '+94 11 2517445', '2025-06-23 19:04:35'),
+(834, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-23 19:04:35'),
+(835, 'footer_address_line2', 'Sri Lanka', '2025-06-23 19:04:35'),
+(836, 'footer_social_facebook', 'https://facebook.com/northport', '2025-06-23 19:04:35'),
+(837, 'footer_social_twitter', 'https://twitter.com/northport', '2025-06-23 19:04:35'),
+(838, 'footer_social_linkedin', 'https://linkedin.com/company/northport', '2025-06-23 19:04:35'),
+(839, 'footer_social_instagram', 'https://instagram.com/northport', '2025-06-23 19:04:35'),
+(840, 'footer_shortcut_1_name', '', '2025-06-23 19:04:35'),
+(841, 'footer_shortcut_1_url', '', '2025-06-23 19:04:35'),
+(842, 'footer_shortcut_2_name', '', '2025-06-23 19:04:35'),
+(843, 'footer_shortcut_2_url', '', '2025-06-23 19:04:35'),
+(844, 'footer_shortcut_3_name', '', '2025-06-23 19:04:35'),
+(845, 'footer_shortcut_3_url', '', '2025-06-23 19:04:35'),
+(846, 'site_logo', 'assets/images/site_logo_1750705475.png', '2025-06-23 19:04:35'),
+(847, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-23 19:04:39'),
+(848, 'footer_text', '', '2025-06-23 19:04:39'),
+(849, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-23 19:04:39'),
+(850, 'footer_contact_phone', '+94 11 2517445', '2025-06-23 19:04:39'),
+(851, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-23 19:04:39'),
+(852, 'footer_address_line2', 'Sri Lanka', '2025-06-23 19:04:39'),
+(853, 'footer_social_facebook', 'https://facebook.com/northport', '2025-06-23 19:04:39'),
+(854, 'footer_social_twitter', 'https://twitter.com/northport', '2025-06-23 19:04:39'),
+(855, 'footer_social_linkedin', 'https://linkedin.com/company/northport', '2025-06-23 19:04:39'),
+(856, 'footer_social_instagram', 'https://instagram.com/northport', '2025-06-23 19:04:39'),
+(857, 'footer_shortcut_1_name', '', '2025-06-23 19:04:39'),
+(858, 'footer_shortcut_1_url', '', '2025-06-23 19:04:39'),
+(859, 'footer_shortcut_2_name', '', '2025-06-23 19:04:39'),
+(860, 'footer_shortcut_2_url', '', '2025-06-23 19:04:39'),
+(861, 'footer_shortcut_3_name', '', '2025-06-23 19:04:39'),
+(862, 'footer_shortcut_3_url', '', '2025-06-23 19:04:39'),
+(863, 'site_logo', 'assets/images/site_logo_1750705479.png', '2025-06-23 19:04:39');
 
 -- --------------------------------------------------------
 
@@ -1089,6 +1172,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `role`, `is_act
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin_messages`
+--
+ALTER TABLE `admin_messages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `bookings`
@@ -1175,6 +1264,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admin_messages`
+--
+ALTER TABLE `admin_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
@@ -1238,7 +1333,7 @@ ALTER TABLE `roles_permissions`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=796;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=864;
 
 --
 -- AUTO_INCREMENT for table `shipments`

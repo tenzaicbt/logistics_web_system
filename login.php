@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Only administrators can create user accounts.
                 <br>
                 Need help? <a href="mailto:admin@northport.com">Email</a> or
-                <a href="contact_admin.php">Contact the admin</a>.
+                <a href="user/contact_admin.php">Contact the admin</a>.
             </small>
         </div>
 
