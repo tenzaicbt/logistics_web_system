@@ -1,20 +1,15 @@
 <?php
-// includes/db.php
-declare(strict_types=1);
+$host = 'localhost';
+$db   = 'northport';
+$user = 'root';
+$pass = '';
 
-require_once __DIR__ . '/../config.php';
-
-$dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4';
-
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,          // Throw exceptions on errors
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,     // Fetch assoc arrays by default
-    PDO::ATTR_EMULATE_PREPARES => false,                  // Use native prepares
-];
+$dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 
 try {
-    $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+    $pdo = new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 } catch (PDOException $e) {
-    error_log('Database Connection Error: ' . $e->getMessage());
-    exit('Database connection failed.');
+    die("DB connection failed: " . $e->getMessage());
 }

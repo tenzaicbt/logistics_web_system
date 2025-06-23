@@ -1,34 +1,8 @@
 <?php
 session_start();
-require_once 'includes/db.php';
-require_once 'includes/settings.php';
-
-// === Load logo ===
-$default_logo = 'assets/images/default-logo.png';
-$logo_path = $default_logo;
-
-try {
-  $stmt = $pdo->prepare("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_logo', 'logo_path')");
-  $stmt->execute();
-  $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-
-  if (!empty($settings['site_logo']) && file_exists(__DIR__ . '/' . $settings['site_logo'])) {
-    $logo_path = $settings['site_logo'];
-  } elseif (!empty($settings['logo_path']) && file_exists(__DIR__ . '/' . $settings['logo_path'])) {
-    $logo_path = $settings['logo_path'];
-  }
-} catch (PDOException $e) {
-  $logo_path = $default_logo; // fallback silently
-}
-
-// Handle relative path
-$logo_fs_path = realpath(__DIR__ . '/' . $logo_path);
-if (!$logo_fs_path || !file_exists($logo_fs_path)) {
-  $logo_path = $default_logo;
-}
-$logo = $logo_path . '?v=' . time(); // Cache bust
-
-$errors = [];
+require_once '../includes/auth.php';
+require_once '../includes/db.php';
+// require_once '../includes/header.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username         = trim($_POST['username'] ?? '');
@@ -117,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 ?>
+
+<link rel="stylesheet" href="/northport/assets/css/animations.css">
+<script src="/northport/assets/js/animations.js" defer></script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -223,11 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
   <div class="login-container">
-    <?php if ($logo): ?>
-      <img src="<?= htmlspecialchars($logo) ?>" alt="NorthPort Logo" class="logo" />
-    <?php endif; ?>
 
-    <h3>REGISTER</h3>
+    <h3>REGISTER NEW USER</h3>
 
     <?php if (!empty($errors)): ?>
       <div class="alert alert-danger">
@@ -285,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label class="form-label">Date of Birth</label>
             <input type="date" name="date_of_birth" class="form-control" value="<?= htmlspecialchars($_POST['date_of_birth'] ?? '') ?>">
 
-            <label class="form-label">Preferences (JSON)</label>
+            <label class="form-label">Preferences </label>
             <textarea name="preferences" rows="3" class="form-control"><?= htmlspecialchars($_POST['preferences'] ?? '') ?></textarea>
 
             <!-- <label class="form-label">Notes</label>
@@ -298,11 +272,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </form>
 
       <div class="mt-3 text-center">
-        <small>Already have an account? <a href="login.php">Login here</a></small>
+        <small><a href="manage_users.php">Back</a></small>
       </div>
     </div>
   </div>
-
 </body>
-
 </html>
+
+<footer class="text-center py-3 mt-2">
+    <div class="footer-bottom">
+        &copy; <?= date('Y') ?> NorthPort Logistics Pvt Ltd. All rights reserved.
+    </div>
+</footer>

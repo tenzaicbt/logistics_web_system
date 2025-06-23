@@ -1,4 +1,5 @@
 
+
 CREATE TABLE `containers` (
   `id` int(11) NOT NULL,
   `container_no` varchar(50) NOT NULL,
@@ -24,17 +25,6 @@ CREATE TABLE `logs` (
 
 
 
-CREATE TABLE `master_admins` (
-  `id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
-  `password_hint` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
 CREATE TABLE `payments` (
   `id` int(11) NOT NULL,
   `booking_id` int(11) NOT NULL,
@@ -53,41 +43,6 @@ CREATE TABLE `payments` (
 
 
 
-CREATE TABLE `permissions` (
-  `id` int(11) NOT NULL,
-  `permission_key` varchar(100) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `group_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
-CREATE TABLE `permission_groups` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
-CREATE TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `role_name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `parent_role_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-CREATE TABLE `role_permissions` (
-  `id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  `granted` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
   `setting_key` varchar(100) NOT NULL,
@@ -95,6 +50,30 @@ CREATE TABLE `settings` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `updated_at`) VALUES
+(1, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-21 07:41:08'),
+(2, 'logo_path', 'assets/images/logo.png', '2025-06-20 16:29:08'),
+(3, 'footer_text', '', '2025-06-21 07:41:08'),
+(4, 'site_logo', 'assets/images/site_logo_1750489895.png', '2025-06-21 07:11:35'),
+(5, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-21 07:41:08'),
+(6, 'footer_contact_phone', '+94 11 2517445', '2025-06-21 07:41:08'),
+(7, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-21 07:41:08'),
+(8, 'footer_address_line2', 'Sri Lanka', '2025-06-21 07:41:08'),
+(9, 'footer_social_facebook', 'https://facebook.com/northport', '2025-06-21 07:41:08'),
+(10, 'footer_social_twitter', 'https://twitter.com/northport', '2025-06-21 07:41:08'),
+(11, 'footer_social_linkedin', 'https://linkedin.com/company/northport', '2025-06-21 07:41:08'),
+(12, 'footer_social_instagram', 'https://instagram.com/northport', '2025-06-21 07:41:08'),
+(13, 'footer_shortcut_1_name', '', '2025-06-21 07:41:08'),
+(14, 'footer_shortcut_1_url', '', '2025-06-21 07:41:08'),
+(15, 'footer_shortcut_2_name', '', '2025-06-21 07:41:08'),
+(16, 'footer_shortcut_2_url', '', '2025-06-21 07:41:08'),
+(17, 'footer_shortcut_3_name', '', '2025-06-21 07:41:08'),
+(18, 'footer_shortcut_3_url', '', '2025-06-21 07:41:08'),
+(19, 'footer_bottom_text', '&copy; 2025 NorthPort Logistics. All rights reserved.', '2025-06-21 07:29:21');
 
 
 CREATE TABLE `shipments` (
@@ -118,7 +97,7 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
-  `role` enum('admin','sub-admin','user') NOT NULL DEFAULT 'user',
+  `role` enum('admin','manager','employer','user') NOT NULL DEFAULT 'user',
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -131,37 +110,7 @@ CREATE TABLE `users` (
   `company_name` varchar(255) DEFAULT NULL,
   `profile_pic` varchar(255) DEFAULT NULL,
   `date_of_birth` date DEFAULT NULL,
-  `user_role` enum('user','admin','manager') DEFAULT 'user',
   `preferences` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`preferences`)),
   `notes` text DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
-CREATE TABLE `user_documents` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `document_type` varchar(100) NOT NULL,
-  `file_path` varchar(255) NOT NULL,
-  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-
-CREATE TABLE `user_permissions` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  `is_granted` tinyint(1) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-CREATE TABLE `user_roles` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `assigned_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

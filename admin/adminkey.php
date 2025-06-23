@@ -3,6 +3,6 @@ echo password_hash('admin123', PASSWORD_BCRYPT);
 ?>
 
 INSERT INTO `users` 
-  (`username`, `email`, `password_hash`, `role`, `is_active`, `created_at`, `updated_at`, `user_role`) 
+  (`username`, `email`, `password_hash`, `role`, `is_active`, `created_at`, `updated_at`) 
 VALUES
-  ('admin', 'admin@northport.com', '$2y$10$e0NRB3XGxJGmAom6H.8lMeD2l3u8OdTqz6A2A5LGkn0Ul2F6Tqpr2', 'admin', 1, NOW(), NOW(), 'admin');
+  ('admin', 'admin@northport.com', '$2y$10$x2mFCP.UpSdTOctE3r9SRuD5tfWPw6A3UaP7frAspSiQ5egaQVtsm', 'admin', 1, NOW(), NOW());

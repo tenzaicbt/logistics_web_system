@@ -3,8 +3,12 @@ session_start();
 require_once '../includes/db.php';
 require_once '../includes/auth.php';
 
-// Only admin and sub-admin allowed
-authorize(['admin', 'sub-admin']);
+
+// Only allow 'admin' and 'sub-admin'
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'sub-admin'])) {
+    header("Location: ../unauthorized.php");
+    exit;
+}
 
 $search = trim($_GET['search'] ?? '');
 $page = max(1, (int)($_GET['page'] ?? 1));

@@ -1,16 +1,10 @@
 <?php
 require_once '../includes/auth.php';
-require_once '../includes/db.php';      // Your PDO connection ($pdo)
-require_once '../includes/functions.php';
+require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-// Require login with 'user' role only
-requireLogin('user');
-
 $user_id = $_SESSION['user_id'] ?? null;
-
 if (!$user_id) {
-  // Just in case, redirect to login if no user_id in session
   header("Location: /login.php");
   exit;
 }
@@ -19,7 +13,7 @@ if (!$user_id) {
 $stmt = $pdo->prepare("
     SELECT 
       username, email, phone, company_name, street_address, city, state, postal_code, country,
-      profile_pic, date_of_birth, role, user_role, created_at, updated_at, preferences, notes
+      profile_pic, date_of_birth, role, created_at, updated_at, preferences, notes
     FROM users WHERE id = ? LIMIT 1
 ");
 $stmt->execute([$user_id]);
@@ -30,9 +24,11 @@ if (!$user) {
 }
 
 // Fetch user's uploaded documents
-$docStmt = $pdo->prepare("SELECT document_type, file_path, uploaded_at FROM user_documents WHERE user_id = ? ORDER BY uploaded_at DESC");
+$docStmt = $pdo->prepare("SELECT document_type, file_path, uploaded_at FROM documents WHERE uploaded_by = ? ORDER BY uploaded_at DESC");
 $docStmt->execute([$user_id]);
 $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <style>
@@ -237,12 +233,10 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
       font-size: 0.8rem;
     }
   }
-  
 </style>
 
 <div class="container my-5">
   <h2 class="mb-4 fw-bold">USER DASHBOARD</h2>
-  <div class="row g-2 mb-4"></div>
 
   <?php if (!empty($user['profile_pic'])): ?>
     <img src="<?= htmlspecialchars($user['profile_pic']) ?>" alt="Profile Picture of <?= htmlspecialchars($user['username']) ?>" class="profile-pic" />
@@ -268,12 +262,14 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if (!empty($user['date_of_birth'])): ?>
       <p><strong>Date of Birth:</strong> <?= htmlspecialchars($user['date_of_birth']) ?></p>
     <?php endif; ?>
-    <p><strong>Role:</strong> <?= htmlspecialchars($user['role']) ?> / <?= htmlspecialchars($user['user_role']) ?></p>
+    <p><strong>Role:</strong> <?= htmlspecialchars($user['role']) ?></p>
     <?php if (!empty($user['notes'])): ?>
       <p><strong>Notes:</strong> <?= nl2br(htmlspecialchars($user['notes'])) ?></p>
     <?php endif; ?>
   </div>
+</div>
 
+<div class="container my-5">
   <p class="description">Welcome to NorthPort Logistics. Use the options below to book shipments or track your orders.</p>
 
   <a href="book_shipment.php" class="btn" role="button">Book a Shipment</a>
@@ -298,5 +294,5 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
   </section>
   </section>
 </div>
-
+</div>
 <?php require_once '../includes/footer.php'; ?>

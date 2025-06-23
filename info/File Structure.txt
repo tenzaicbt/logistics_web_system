@@ -1,4 +1,4 @@
-/tradefording/
+/northport/
 │
 ├── /admin/                          # Admin dashboard & modules
 │   ├── dashboard.php
@@ -13,14 +13,12 @@
 ├── /user/                           # User dashboard & functions
 │   ├── dashboard.php
 │   ├── book_shipment.php
-│   ├── track_shipment.php
 │   ├── my_invoices.php
 │   └── upload_documents.php
 │
 ├── /includes/                       # Reusable includes & utilities
 │   ├── db.php                       # ✅ PDO or MySQLi connection
 │   ├── auth.php                     # ✅ Session + role check + expiration
-│   ├── functions.php
 │   ├── header.php
 │   ├── footer.php
 │   └── language.php                 # Language switch handler
@@ -40,9 +38,6 @@
 ├── /pdf/                            # PDF generation logic
 │   └── generate_invoice.php
 │
-├── /api/                            # For AJAX/API calls
-│   ├── track.php
-│   └── get_schedule.php
 │
 ├── /logs/                           # Activity logs (admin viewable)
 │
@@ -53,6 +48,5 @@
 ├── login.php                        # ✅ Shared secure login page
 ├── register.php                     # ✅ Registration (optional or admin-only)
 ├── logout.php                       # ✅ Secure session destroy
-├── unauthorized.php                 # ❌ Permission denied page
 ├── index.php                        # Redirect based on session
 └── config.php                       # Global constants, base URLs

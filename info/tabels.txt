@@ -1,76 +1,12 @@
-TABLE `containers` (
-  `id` int(11) NOT NULL,
-  `container_no` varchar(50) NOT NULL,
-  `type` enum('20ft','40ft','Reefer','Open Top','Tank') NOT NULL,
-  `status` enum('Available','In Use','Under Maintenance','Damaged') DEFAULT 'Available',
-  `location` varchar(100) DEFAULT NULL,
-  `assigned_fleet_id` int(11) DEFAULT NULL,
-  `last_inspected_at` date DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TABLE `logs` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `action` varchar(255) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `user_agent` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TABLE `payments` (
-  `id` int(11) NOT NULL,
-  `booking_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `invoice_id` int(11) DEFAULT NULL,
-  `amount` decimal(12,2) NOT NULL,
-  `currency` varchar(10) DEFAULT 'USD',
-  `payment_method` enum('Bank Transfer','Credit Card','Cash','PayPal') DEFAULT 'Bank Transfer',
-  `status` enum('Pending','Paid','Failed','Refunded') DEFAULT 'Pending',
-  `transaction_reference` varchar(100) DEFAULT NULL,
-  `notes` text DEFAULT NULL,
-  `paid_at` datetime DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `role_name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TABLE `settings` (
-  `id` int(11) NOT NULL,
-  `setting_key` varchar(100) NOT NULL,
-  `setting_value` text DEFAULT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-TABLE `shipments` (
-  `id` int(11) NOT NULL,
-  `shipment_id` varchar(50) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `booking_id` int(11) DEFAULT NULL,
-  `container_id` int(11) DEFAULT NULL,
-  `origin` varchar(100) NOT NULL,
-  `destination` varchar(100) NOT NULL,
-  `status` enum('Pending','In Transit','Delivered','Cancelled') DEFAULT 'Pending',
-  `departure_date` date DEFAULT NULL,
-  `arrival_date` date DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-TABLE `users` (
-  `id` int(11) NOT NULL,
+-- -----------------------------------------------------
+-- Table: users
+-- -----------------------------------------------------
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
-  `role` enum('admin','sub-admin','user') NOT NULL DEFAULT 'user',
+  `role` enum('admin','manager','employer','user') NOT NULL DEFAULT 'user',
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -83,34 +19,214 @@ TABLE `users` (
   `company_name` varchar(255) DEFAULT NULL,
   `profile_pic` varchar(255) DEFAULT NULL,
   `date_of_birth` date DEFAULT NULL,
-  `user_role` enum('user','admin','manager') DEFAULT 'user',
   `preferences` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`preferences`)),
   `notes` text DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TABLE `user_documents` (
-  `id` int(11) NOT NULL,
+-- -----------------------------------------------------
+-- Table: containers
+-- -----------------------------------------------------
+CREATE TABLE `containers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `container_no` varchar(50) NOT NULL,
+  `type` enum('20ft','40ft','Reefer','Open Top','Tank') NOT NULL,
+  `status` enum('Available','In Use','Under Maintenance','Damaged') DEFAULT 'Available',
+  `location` varchar(100) DEFAULT NULL,
+  `assigned_fleet_id` int(11) DEFAULT NULL,
+  `last_inspected_at` date DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: fleets
+-- -----------------------------------------------------
+CREATE TABLE `fleets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fleet_name` varchar(100) NOT NULL,
+  `type` enum('Vessel','Truck') NOT NULL,
+  `registration_no` varchar(50) DEFAULT NULL,
+  `capacity` int(11) DEFAULT NULL,
+  `status` enum('Active','Inactive','Under Maintenance') DEFAULT 'Active',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: bookings
+-- -----------------------------------------------------
+CREATE TABLE `bookings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `booking_ref` varchar(50) NOT NULL UNIQUE,
   `user_id` int(11) NOT NULL,
-  `document_type` varchar(100) NOT NULL,
+  `container_id` int(11) DEFAULT NULL,
+  `fleet_id` int(11) DEFAULT NULL,
+  `status` enum('Pending','Confirmed','Cancelled','Completed') DEFAULT 'Pending',
+  `notes` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: shipments
+-- -----------------------------------------------------
+CREATE TABLE `shipments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shipment_id` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `booking_id` int(11) DEFAULT NULL,
+  `container_id` int(11) DEFAULT NULL,
+  `origin` varchar(100) NOT NULL,
+  `destination` varchar(100) NOT NULL,
+  `status` enum('Pending','In Transit','Delivered','Cancelled') DEFAULT 'Pending',
+  `departure_date` date DEFAULT NULL,
+  `arrival_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: documents
+-- -----------------------------------------------------
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shipment_id` int(11) NOT NULL,
+  `document_type` enum('Bill of Lading','Invoice','Packing List','Commercial Invoice','Other') NOT NULL,
   `file_path` varchar(255) NOT NULL,
-  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `uploaded_by` int(11) NOT NULL,
+  `uploaded_at` datetime DEFAULT current_timestamp(),
+  `status` enum('Draft','Final','Rejected','Archived') DEFAULT 'Draft',
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TABLE `role_permissions` (
-  `role_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL
+-- -----------------------------------------------------
+-- Table: invoices
+-- -----------------------------------------------------
+CREATE TABLE `invoices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `booking_id` int(11) NOT NULL,
+  `invoice_number` varchar(50) NOT NULL UNIQUE,
+  `amount` decimal(12,2) NOT NULL,
+  `currency` varchar(10) DEFAULT 'USD',
+  `status` enum('Unpaid','Paid','Overdue','Cancelled') DEFAULT 'Unpaid',
+  `issued_at` datetime DEFAULT current_timestamp(),
+  `due_date` date DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TABLE `roles` (
-  `id` int(11) NOT NULL,
-  `role_name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+-- -----------------------------------------------------
+-- Table: payments
+-- -----------------------------------------------------
+CREATE TABLE `payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `booking_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `invoice_id` int(11) DEFAULT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `currency` varchar(10) DEFAULT 'USD',
+  `payment_method` enum('Bank Transfer','Credit Card','Cash','PayPal') DEFAULT 'Bank Transfer',
+  `status` enum('Pending','Paid','Failed','Refunded') DEFAULT 'Pending',
+  `transaction_reference` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `paid_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-TABLE `permissions` (
-  `id` int(11) NOT NULL,
+-- -----------------------------------------------------
+-- Table: logs
+-- -----------------------------------------------------
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: settings
+-- -----------------------------------------------------
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `setting_key` varchar(100) NOT NULL,
+  `setting_value` text DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: document_templates
+-- -----------------------------------------------------
+CREATE TABLE `document_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `description` varchar(255) DEFAULT NULL
+  `type` enum('Bill of Lading','Invoice','Packing List','Other') NOT NULL,
+  `content_html` longtext NOT NULL,
+  `last_modified_by` int(11) DEFAULT NULL,
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- -----------------------------------------------------
+-- Table: notifications
+-- -----------------------------------------------------
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `is_read` tinyint(1) DEFAULT 0,
+  `sent_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `roles_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role` enum('admin','manager','employer','user') NOT NULL,
+  `module` varchar(100) NOT NULL,      -- e.g., 'manage_bookings', 'upload_documents'
+  `can_view` tinyint(1) DEFAULT 0,
+  `can_create` tinyint(1) DEFAULT 0,
+  `can_edit` tinyint(1) DEFAULT 0,
+  `can_delete` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Admin: Full Access
+INSERT INTO roles_permissions (role, module, can_view, can_create, can_edit, can_delete) VALUES
+('admin', 'manage_users', 1,1,1,1),
+('admin', 'manage_bookings', 1,1,1,1),
+('admin', 'manage_fleet', 1,1,1,1),
+('admin', 'manage_containers', 1,1,1,1),
+('admin', 'manage_invoices', 1,1,1,1),
+('admin', 'settings', 1,1,1,1);
+
+-- Manager: Limited Admin
+INSERT INTO roles_permissions (role, module, can_view, can_create, can_edit, can_delete) VALUES
+('manager', 'manage_bookings', 1,1,1,0),
+('manager', 'manage_invoices', 1,1,1,0),
+('manager', 'manage_fleet', 1,1,1,0),
+('manager', 'upload_documents', 1,1,1,0);
+
+-- Employer: Can input documents & shipment data
+INSERT INTO roles_permissions (role, module, can_view, can_create, can_edit, can_delete) VALUES
+('employer', 'upload_documents', 1,1,1,0),
+('employer', 'book_shipment', 1,1,0,0);
+
+-- User: Only see their data
+INSERT INTO roles_permissions (role, module, can_view, can_create, can_edit, can_delete) VALUES
+('user', 'dashboard', 1,0,0,0),
+('user', 'book_shipment', 1,1,0,0),
+('user', 'upload_documents', 1,1,0,0),
+('user', 'my_invoices', 1,0,0,0);
