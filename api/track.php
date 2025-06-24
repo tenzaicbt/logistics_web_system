@@ -1,3 +1,0 @@
-<?php
-// track.php - placeholder
-?>

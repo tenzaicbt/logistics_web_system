@@ -1,3 +1,0 @@
-<?php
-// zh.php - placeholder
-?>

@@ -1,7 +1,0 @@
-Hash passwords using password_hash()
-
-Use prepared statements (mysqli or PDO)
-
-Session expiration/logout
-
-Role-based access to pages

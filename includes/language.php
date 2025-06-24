@@ -1,3 +1,0 @@
-<?php
-// language.php - placeholder
-?>
