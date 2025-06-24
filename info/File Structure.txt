@@ -1,0 +1,52 @@
+/northport/
+│
+├── /admin/                          # Admin dashboard & modules
+│   ├── dashboard.php
+│   ├── manage_users.php
+│   ├── manage_bookings.php
+│   ├── manage_fleet.php
+│   ├── manage_containers.php
+│   ├── manage_invoices.php
+│   ├── role_permissions.php
+│   └── settings.php
+│
+├── /user/                           # User dashboard & functions
+│   ├── dashboard.php
+│   ├── book_shipment.php
+│   ├── my_invoices.php
+│   └── upload_documents.php
+│
+├── /includes/                       # Reusable includes & utilities
+│   ├── db.php                       # ✅ PDO or MySQLi connection
+│   ├── auth.php                     # ✅ Session + role check + expiration
+│   ├── header.php
+│   ├── footer.php
+│   └── language.php                 # Language switch handler
+│
+├── /assets/                         # CSS, JS, images
+│   ├── /css/
+│   ├── /js/
+│   └── /images/
+│
+├── /uploads/                        # Uploaded documents (bill of lading, etc.)
+│
+├── /lang/                           # Multi-language support files
+│   ├── en.php
+│   ├── zh.php
+│   └── ...
+│
+├── /pdf/                            # PDF generation logic
+│   └── generate_invoice.php
+│
+│
+├── /logs/                           # Activity logs (admin viewable)
+│
+├── /templates/                      # Email templates, HTML fragments
+│   ├── invoice_email.php
+│   └── notification_template.php
+│
+├── login.php                        # ✅ Shared secure login page
+├── register.php                     # ✅ Registration (optional or admin-only)
+├── logout.php                       # ✅ Secure session destroy
+├── index.php                        # Redirect based on session
+└── config.php                       # Global constants, base URLs

@@ -1,0 +1,28 @@
+Sidebar navigation
+
+Responsive design
+
+Modals for forms
+
+Cards and tables for data
+
+Status badges (e.g., shipment status, invoice paid)
+
+Fixed on Desktop, collapsible on mobile
+
+Bootstrap + FontAwesome icons
+
+Highlight active page
+
+Responsive behavior using media queries or Bootstrap’s collapse
+
+Mobile-friendly sidebar with collapse toggle
+
+Viewport units for height/width in components
+
+Element	Color	Hex Code
+Primary Color	Red	#e30613
+Text Color	Dark Gray/Black	#222222
+Background	White	#ffffff
+Button Hover	Darker Red	#b6050e
+Links/Accents	Deep Red	#cc0612

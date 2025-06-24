@@ -1,0 +1,154 @@
+🚀 PHASE 1: Core Setup (Authentication System)
+✅ Must be secure and role-based.
+
+📍 Step 1: Environment Setup
+Create project folder /tradefording/
+
+Setup local server (XAMPP/Laravel Valet/etc.)
+
+Create config.php with DB constants
+
+📍 Step 2: Database
+Create a users table with roles (admin, user, sub-admin)
+
+Also prepare sessions, logs table
+
+📍 Step 3: DB Connection (/includes/db.php)
+Use MySQLi with prepared statements or PDO
+
+📍 Step 4: Registration (register.php)
+Use password_hash() for secure storage
+
+📍 Step 5: Login System (login.php)
+Use password_verify() for authentication
+
+Use session_regenerate_id() to prevent hijacking
+
+📍 Step 6: Session & Role Middleware (/includes/auth.php)
+Auto-expire sessions (e.g., 30 mins)
+
+Role-based access (deny users to admin pages)
+
+📍 Step 7: Logout (logout.php)
+🧑‍💼 PHASE 2: Admin & User Dashboards
+✅ Role redirects, dynamic data, simple cards.
+
+📍 Step 8: Dashboard Routing
+index.php detects role and redirects:
+
+/admin/dashboard.php
+
+/user/dashboard.php
+
+/subadmin/dashboard.php
+
+📍 Step 9: Admin Dashboard Layout
+Add counts: Bookings, Shipments, Revenue, Users
+
+📍 Step 10: User Dashboard Layout
+Add recent bookings, shipment tracking, invoice stats
+
+🚢 PHASE 3: Booking & Shipment Management
+✅ Central trade forwarding logic.
+
+📍 Step 11: Shipment Booking
+/user/book_shipment.php
+
+Form for origin, destination, date, weight, container type
+
+📍 Step 12: Admin Approval Workflow
+/admin/manage_bookings.php
+
+View & update status: pending → approved → in-transit
+
+📍 Step 13: Track Shipment (User & Public)
+/track.php?ref=XYZ123
+
+Shows status, history, location (optional map)
+
+🚛 PHASE 4: Fleet & Container Management
+✅ Admin-controlled logistics.
+
+📍 Step 14: Fleet Module
+/admin/manage_fleet.php
+
+Add/edit vehicles, assign to shipments
+
+📍 Step 15: Container Module
+/admin/manage_containers.php
+
+Sizes, availability, assignment
+
+💵 PHASE 5: Invoice & Payment System
+✅ Billing and finance.
+
+📍 Step 16: Invoice Generation
+/pdf/generate_invoice.php
+
+Auto-generate from booking details
+
+📍 Step 17: Payment Tracking
+Mark invoice as paid/unpaid
+
+Optional: add payment gateway
+
+🧾 PHASE 6: Uploads, Notifications & Logs
+✅ Operational and audit features.
+
+📍 Step 18: Upload Documents
+Bill of Lading, customs docs
+
+/uploads/ folder with access control
+
+📍 Step 19: Notifications
+Show bell icon alerts for:
+
+New booking
+
+Status changes
+
+Payments
+
+📍 Step 20: Activity Logs
+/logs/
+
+Track logins, shipment edits, payments
+
+⚙️ PHASE 7: Admin Settings & Permissions
+✅ Full control center.
+
+📍 Step 21: Global Settings
+Update logo, footer, contact info
+
+Email SMTP config
+
+📍 Step 22: Role Permission Editor
+/admin/role_permissions.php
+
+Allow/disallow sub-admin access to modules
+
+🌍 PHASE 8: Enhancements
+📍 Step 23: Multi-language Support
+/lang/en.php, /lang/zh.php
+
+UI switcher
+
+📍 Step 24: Mobile-Responsive UI
+Bootstrap 5 + custom CSS
+
+📍 Step 25: Final Testing & Security
+Sanitize inputs, secure uploads, CSRF, XSS protection
+
+Optimize queries and backups
+
+✅ Optional Industrial Add-Ons (Advanced Phase)
+Email confirmations for booking/invoice
+
+Shipment ETA with live map (Google Maps API)
+
+Customer support/ticket system
+
+Messaging/chat between shipper and customer
+
+Barcode/QR for tracking reference
+
