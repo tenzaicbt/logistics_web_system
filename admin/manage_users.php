@@ -203,7 +203,7 @@ function redCheckIcon()
             onfocus="this.style.borderColor='#8b0000';"
             onblur="this.style.borderColor='#b6050e';" />
         <button type="submit" class="btn-simple" style="padding: 6px 14px;">Search</button>
-        <a href="user_create.php" class="btn-simple" style="margin-left: auto; padding: 6px 14px;">+ Add User</a>
+        <a href="user_create.php" class="btn-simple" style="margin-left: auto; padding: 6px 14px;">Add User</a>
     </form>
 
     <div class="table-responsive shadow-sm">

@@ -46,7 +46,7 @@ $currentRole = $_SESSION['role'] ?? 'user';
 $actions = [
   ['title' => 'Manage Users', 'desc' => 'Create, update or delete system users.', 'href' => 'manage_users.php', 'roles' => ['admin']], // Admin only
   ['title' => 'Manage Bookings', 'desc' => 'Handle and approve bookings.', 'href' => 'manage_bookings.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
-  ['title' => 'Manage Fleet', 'desc' => 'Update fleet and container data.', 'href' => 'manage_containers.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
+  ['title' => 'Manage Fleet', 'desc' => 'Update fleet and container data.', 'href' => 'manage_fleet.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
   ['title' => 'Settings', 'desc' => 'System and branding options.', 'href' => 'settings.php', 'roles' => ['admin']],
   
   // These three only for manager

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2025 at 04:23 PM
+-- Generation Time: Jun 24, 2025 at 07:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -118,8 +118,20 @@ CREATE TABLE `fleets` (
   `capacity` int(11) DEFAULT NULL,
   `status` enum('Active','Inactive','Under Maintenance') DEFAULT 'Active',
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `manufacturer` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `year_built` int(11) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `fleets`
+--
+
+INSERT INTO `fleets` (`id`, `fleet_name`, `type`, `registration_no`, `capacity`, `status`, `created_at`, `updated_at`, `manufacturer`, `model`, `year_built`, `location`, `notes`) VALUES
+(1, 'Pacific Voyager', 'Vessel', 'PV-2025-001', 5000, 'Active', '2025-06-24 23:11:08', '2025-06-24 23:22:42', 'Oceanic Shipyards', 'Voyager X200', 2018, 'Singapore Port', '');
 
 -- --------------------------------------------------------
 
@@ -350,7 +362,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `role`, `is_active`, `created_at`, `updated_at`, `phone`, `street_address`, `city`, `state`, `postal_code`, `country`, `company_name`, `profile_pic`, `date_of_birth`, `preferences`, `notes`, `department`, `job_title`, `date_of_joining`, `nic_passport_number`) VALUES
 (1, 'Yohan Koshala', 'yohankoshala@gmail.com', '$2y$10$ZEvAE7pZ4HgM5qyQ4iGPjuXqPQxGAtwjJrRztLihtRcam2c2criKO', 'user', 1, '2025-06-23 11:26:47', '2025-06-24 03:29:43', '0766446354', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro Technologies (PVT) Ltd', '', '2000-01-21', NULL, '', NULL, NULL, NULL, NULL),
 (2, 'admin', 'admin@northport.com', '$2y$10$x2mFCP.UpSdTOctE3r9SRuD5tfWPw6A3UaP7frAspSiQ5egaQVtsm', 'admin', 1, '2025-06-23 12:38:27', '2025-06-24 03:21:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'Vimash Kavinda', 'vimash@northport.com', '$2y$10$KYSmusBrhFjJVlnLs4GESOZQy9w6odqbaHeNPXyGl5msxnF1ND/5q', 'manager', 1, '2025-06-24 03:41:06', '2025-06-24 03:41:06', '0766446355', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro (PVT) Ltd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(3, 'Vimash Kavinda', 'vimash@northport.com', '$2y$10$KYSmusBrhFjJVlnLs4GESOZQy9w6odqbaHeNPXyGl5msxnF1ND/5q', 'manager', 1, '2025-06-24 03:41:06', '2025-06-24 03:41:06', '0766446355', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro (PVT) Ltd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'Christy Philip', 'philip@northport.com', '$2y$10$M.2aRUl1T/vX3FZi2OjYkOu7cs.mATiMxIvy1JMNmgR2tx67Oj5Vm', 'employer', 1, '2025-06-24 17:20:33', '2025-06-24 17:20:33', '0766446366', NULL, NULL, 'western Province', '10360', 'sri lanka', 'Aramex (PVT) Ltd', NULL, '2000-01-24', NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -480,7 +493,7 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `fleets`
 --
 ALTER TABLE `fleets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `invoices`
@@ -528,7 +541,7 @@ ALTER TABLE `shipments`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
