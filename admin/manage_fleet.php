@@ -44,11 +44,40 @@ $stmt->execute($params);
 $fleets = $stmt->fetchAll();
 ?>
 
+<style>
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .btn-danger {
+    background-color: #e30613;
+    border: none;
+  }
+
+  .btn-danger:hover {
+    background-color: #b6050e;
+  }
+
+  .btn-secondary {
+    background-color: #666;
+    border: none;
+  }
+
+  .btn-secondary:hover {
+    background-color: #444;
+  }
+
+  .container {
+    font-size: 0.85rem;
+  }
+</style>
+
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold">Manage Fleet</h2>
     <?php if (in_array($currentRole, ['admin', 'manager'])): ?>
-      <a href="fleet_form.php" class="btn btn-danger btn-sm">Add Fleet</a>
+      <a href="fleet_form.php" class="btn btn-danger">Add Fleet</a>
     <?php endif; ?>
   </div>
 
@@ -103,8 +132,7 @@ $fleets = $stmt->fetchAll();
               <td><?= htmlspecialchars($fleet['type']) ?></td>
               <td>
                 <span class="badge 
-                  <?= $fleet['status'] === 'Active' ? 'bg-success' : 
-                      ($fleet['status'] === 'Inactive' ? 'bg-secondary' : 'bg-warning text-dark') ?>">
+                  <?= $fleet['status'] === 'Active' ? 'bg-success' : ($fleet['status'] === 'Inactive' ? 'bg-secondary' : 'bg-warning text-dark') ?>">
                   <?= htmlspecialchars($fleet['status']) ?>
                 </span>
               </td>

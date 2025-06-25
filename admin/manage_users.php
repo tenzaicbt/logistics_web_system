@@ -188,6 +188,29 @@ function redCheckIcon()
         font-size: 0.85rem;
         color: #888;
     }
+
+    .btn {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+    }
+
+    .btn-danger {
+        background-color: #e30613;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b6050e;
+    }
+
+    .btn-secondary {
+        background-color: #666;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #444;
+    }
 </style>
 
 <div class="container my-5">
@@ -203,7 +226,7 @@ function redCheckIcon()
             onfocus="this.style.borderColor='#8b0000';"
             onblur="this.style.borderColor='#b6050e';" />
         <button type="submit" class="btn-simple" style="padding: 6px 14px;">Search</button>
-        <a href="user_create.php" class="btn-simple" style="margin-left: auto; padding: 6px 14px;">Add User</a>
+        <a href="user_create.php" class="btn btn-danger" style="margin-left: auto; padding: 6px 14px;">Add User</a>
     </form>
 
     <div class="table-responsive shadow-sm">
@@ -248,7 +271,7 @@ function redCheckIcon()
                                     <?php endif; ?>
 
                                     <a href="role_management.php?user_id=<?= $user['id'] ?>" class="btn-simple">Roles</a>
-                                    <a href="edit_permissions.php?user_id=<?= $user['id'] ?>" class="btn-simple">Permissions</a>
+                                    <!-- <a href="edit_permissions.php?user_id=<?= $user['id'] ?>" class="btn-simple">Permissions</a> -->
                                     <a href="user_reset_password.php?id=<?= $user['id'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-simple" onclick="return confirm('Reset password?');">Reset PW</a>
                                     <a href="user_kick.php?id=<?= $user['id'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-simple" onclick="return confirm('Kick user?');">Kick</a>
                                 </div>

@@ -39,20 +39,24 @@ try {
   // Skip documents section if table is missing
 }
 
+// Get current logged in user role
 $currentRole = $_SESSION['role'] ?? 'user';
 
+// Define management cards visible only to appropriate roles
 $actions = [
   ['title' => 'Manage Users', 'desc' => 'Create, update or delete system users.', 'href' => 'manage_users.php', 'roles' => ['admin']],
-  ['title' => 'Manage Bookings', 'desc' => 'Handle and approve bookings.', 'href' => 'manage_bookings.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
-  ['title' => 'Manage Fleet', 'desc' => 'Update fleet data.', 'href' => 'manage_fleet.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
-  ['title' => 'Manage Shipments', 'desc' => 'View, edit and shipment data.', 'href' => 'manage_shipments.php', 'roles' => ['admin', 'manager', '']],
-  ['title' => 'Manage Containers', 'desc' => 'View, edit and container dat.', 'href' => 'manage_containers.php', 'roles' => ['admin', 'manager', '']],
+  // Removed Manage Bookings
+  // Removed Manage Fleet
+  ['title' => 'Settings', 'desc' => 'System and branding options.', 'href' => 'settings.php', 'roles' => ['admin']],
   ['title' => 'Manage Leave', 'desc' => 'Review and manage employee leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['admin', 'manager']],
-  // ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
+  ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
   ['title' => 'Bank Account Details', 'desc' => 'View and update bank account info.', 'href' => 'bank_accounts.php', 'roles' => ['manager']],
   ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'attendance.php', 'roles' => ['manager']],
+  // Add button for employer role only
+  ['title' => 'Employee Leave ', 'desc' => 'Create and manage leave for employees.', 'href' => 'employee_leave.php', 'roles' => ['employer']],
+  // Add Manage Leaves card for employees (users)
+  ['title' => 'Manage Leaves', 'desc' => 'Review and manage your leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['user']],
 ];
-
 ?>
 
 <style>
@@ -187,7 +191,7 @@ $actions = [
     </div>
   </div>
 
-  <!-- Recent Docs -->
+  <!-- Recent Docs (if available) -->
   <?php if (!empty($recentDocs)): ?>
     <div class="row g-4 mt-3">
       <div class="col-lg-12">

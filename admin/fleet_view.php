@@ -29,6 +29,31 @@ if (!$fleet) {
 }
 ?>
 
+<style>
+    .btn {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+    }
+
+    .btn-danger {
+        background-color: #e30613;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b6050e;
+    }
+
+    .btn-secondary {
+        background-color: #666;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #444;
+    }
+</style>
+
 <div class="container my-5">
   <h2 class="fw-bold mb-4">Fleet Details: <?= htmlspecialchars($fleet['fleet_name']) ?></h2>
 

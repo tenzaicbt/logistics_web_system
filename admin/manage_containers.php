@@ -1,124 +1,166 @@
 <?php
-session_start();
-require_once '../includes/db.php';
 require_once '../includes/auth.php';
+require_once '../includes/db.php';
+require_once '../includes/header.php';
 
-// Helper: Check role permission
-global $pdo;
-$userRole = $_SESSION['role'] ?? 'user';
-function can($module, $perm) {
-    global $pdo, $userRole;
-    static $cache = [];
-    if (!isset($cache[$userRole])) {
-        $stmt = $pdo->prepare("SELECT module, can_view, can_create, can_edit, can_delete FROM roles_permissions WHERE role = ?");
-        $stmt->execute([$userRole]);
-        $cache[$userRole] = array_column($stmt->fetchAll(PDO::FETCH_ASSOC), null, 'module');
-    }
-    return isset($cache[$userRole][$module]) && $cache[$userRole][$module][$perm];
+$currentRole = $_SESSION['role'] ?? 'user';
+
+if (!in_array($currentRole, ['admin', 'manager', 'employer'])) {
+    echo "<div class='alert alert-danger m-5'>Access denied.</div>";
+    require_once '../includes/admin_footer.php';
+    exit;
 }
 
-// Fetch data
-$totalFleets = $pdo->query("SELECT COUNT(*) FROM fleets")->fetchColumn();
-$totalContainers = $pdo->query("SELECT COUNT(*) FROM containers")->fetchColumn();
-$fleets = can('manage_fleet','can_view') ? $pdo->query("SELECT * FROM fleets ORDER BY id DESC")->fetchAll() : [];
-$containers = can('manage_containers','can_view') ? $pdo->query("SELECT * FROM containers ORDER BY id DESC")->fetchAll() : [];
+// Filters
+$typeFilter = $_GET['type'] ?? '';
+$statusFilter = $_GET['status'] ?? '';
+$searchQuery = trim($_GET['q'] ?? '');
+
+$where = [];
+$params = [];
+
+if ($typeFilter) {
+    $where[] = 'c.type = ?';
+    $params[] = $typeFilter;
+}
+if ($statusFilter) {
+    $where[] = 'c.status = ?';
+    $params[] = $statusFilter;
+}
+if ($searchQuery) {
+    $where[] = '(c.container_no LIKE ? OR f.fleet_name LIKE ? OR c.location LIKE ?)';
+    $params[] = "%$searchQuery%";
+    $params[] = "%$searchQuery%";
+    $params[] = "%$searchQuery%";
+}
+
+$sql = "SELECT c.*, f.fleet_name 
+        FROM containers c
+        LEFT JOIN fleets f ON c.assigned_fleet_id = f.id";
+
+if (!empty($where)) {
+    $sql .= " WHERE " . implode(' AND ', $where);
+}
+$sql .= " ORDER BY c.updated_at DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$containers = $stmt->fetchAll();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - Fleet & Containers</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #f8f9fa; }
-    .dashboard-card { box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 5px solid #dc3545; }
-    .table thead { background-color: #f1f1f1; }
-  </style>
-</head>
-<body>
-<div class="container py-5">
-  <h2 class="mb-4 text-danger">Admin Dashboard - Fleet & Containers</h2>
 
-  <div class="row mb-4">
-    <div class="col-md-6">
-      <div class="p-3 bg-white dashboard-card">
-        <h6>Total Fleets</h6>
-        <h3><?= $totalFleets ?></h3>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="p-3 bg-white dashboard-card">
-        <h6>Total Containers</h6>
-        <h3><?= $totalContainers ?></h3>
-      </div>
-    </div>
+<style>
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+  }
+  .btn-danger {
+    background-color: #e30613;
+    border: none;
+  }
+  .btn-danger:hover {
+    background-color: #b6050e;
+  }
+  .btn-secondary {
+    background-color: #666;
+    border: none;
+  }
+  .btn-secondary:hover {
+    background-color: #444;
+  }
+  .container {
+    font-size: 0.85rem;
+  }
+  h2 {
+    font-size: 1.25rem;
+  }
+</style>
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Manage Containers</h2>
+    <?php if (in_array($currentRole, ['admin', 'manager'])): ?>
+      <a href="add_container.php" class="btn btn-danger">Add Container</a>
+    <?php endif; ?>
   </div>
 
-  <?php if (!empty($fleets)): ?>
-  <div class="mt-4">
-    <h4 class="text-dark">Fleet Management</h4>
-    <table class="table table-sm table-bordered bg-white">
-      <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Reg. No</th><th>Capacity</th><th>Status</th><th>Actions</th></tr></thead>
-      <tbody>
-      <?php foreach($fleets as $f): ?>
+  <div class="card p-3 shadow-sm mb-4">
+    <form class="row g-2" method="GET">
+      <div class="col-md-3">
+        <select class="form-select" name="type">
+          <option value="">All Types</option>
+          <option value="20ft" <?= $typeFilter === '20ft' ? 'selected' : '' ?>>20ft</option>
+          <option value="40ft" <?= $typeFilter === '40ft' ? 'selected' : '' ?>>40ft</option>
+          <option value="Reefer" <?= $typeFilter === 'Reefer' ? 'selected' : '' ?>>Reefer</option>
+          <option value="Open Top" <?= $typeFilter === 'Open Top' ? 'selected' : '' ?>>Open Top</option>
+          <option value="Tank" <?= $typeFilter === 'Tank' ? 'selected' : '' ?>>Tank</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" name="status">
+          <option value="">All Statuses</option>
+          <option value="Available" <?= $statusFilter === 'Available' ? 'selected' : '' ?>>Available</option>
+          <option value="In Use" <?= $statusFilter === 'In Use' ? 'selected' : '' ?>>In Use</option>
+          <option value="Under Maintenance" <?= $statusFilter === 'Under Maintenance' ? 'selected' : '' ?>>Under Maintenance</option>
+          <option value="Damaged" <?= $statusFilter === 'Damaged' ? 'selected' : '' ?>>Damaged</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" name="q" class="form-control" placeholder="Search container no, fleet or location" value="<?= htmlspecialchars($searchQuery) ?>">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-responsive card shadow-sm">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
         <tr>
-          <td><?= $f['id'] ?></td>
-          <td><?= htmlspecialchars($f['fleet_name']) ?></td>
-          <td><?= $f['type'] ?></td>
-          <td><?= $f['registration_no'] ?></td>
-          <td><?= $f['capacity'] ?></td>
-          <td><?= $f['status'] ?></td>
-          <td>
-            <?php if (can('manage_fleet','can_edit')): ?>
-              <a href="fleet_form.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
-            <?php endif; ?>
-            <?php if (can('manage_fleet','can_delete')): ?>
-              <a href="fleet_delete.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this fleet?')">Delete</a>
-            <?php endif; ?>
-          </td>
+          <th>Container No</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Location</th>
+          <th>Fleet</th>
+          <th>Last Inspected</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
         </tr>
-      <?php endforeach; ?>
+      </thead>
+      <tbody>
+        <?php if (count($containers)): ?>
+          <?php foreach ($containers as $c): ?>
+            <tr>
+              <td><?= htmlspecialchars($c['container_no']) ?></td>
+              <td><?= htmlspecialchars($c['type']) ?></td>
+              <td>
+                <span class="badge 
+                  <?= $c['status'] === 'Available' ? 'bg-success' : ($c['status'] === 'In Use' ? 'bg-primary' : ($c['status'] === 'Under Maintenance' ? 'bg-warning text-dark' : 'bg-danger')) ?>">
+                  <?= htmlspecialchars($c['status']) ?>
+                </span>
+              </td>
+              <td><?= htmlspecialchars($c['location'] ?? '-') ?></td>
+              <td><?= htmlspecialchars($c['fleet_name'] ?? '-') ?></td>
+              <td><?= $c['last_inspected_at'] ? date('Y-m-d', strtotime($c['last_inspected_at'])) : '-' ?></td>
+              <td><?= date('Y-m-d', strtotime($c['created_at'])) ?></td>
+              <td><?= date('Y-m-d', strtotime($c['updated_at'])) ?></td>
+              <td class="text-nowrap">
+                <a href="edit_container.php?id=<?= $c['id'] ?>" class="btn btn-sm btn-outline-danger">Edit</a>
+                <?php if ($currentRole === 'admin'): ?>
+                  <a href="delete_container.php?id=<?= $c['id'] ?>" onclick="return confirm('Delete this container?')" class="btn btn-sm btn-outline-danger">Delete</a>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="9" class="text-center text-muted">No containers found.</td>
+          </tr>
+        <?php endif; ?>
       </tbody>
     </table>
   </div>
-  <?php endif; ?>
-
-  <?php if (!empty($containers)): ?>
-  <div class="mt-5">
-    <h4 class="text-dark">Container Management</h4>
-    <table class="table table-sm table-bordered bg-white">
-      <thead><tr><th>ID</th><th>Container No</th><th>Type</th><th>Status</th><th>Location</th><th>Fleet</th><th>Last Inspected</th><th>Actions</th></tr></thead>
-      <tbody>
-      <?php foreach($containers as $c):
-        $fleet = $c['assigned_fleet_id'] ? $pdo->prepare("SELECT fleet_name FROM fleets WHERE id = ?") : null;
-        $fleetName = '';
-        if ($fleet) {
-          $fleet->execute([$c['assigned_fleet_id']]);
-          $fleetName = $fleet->fetchColumn();
-        }
-      ?>
-        <tr>
-          <td><?= $c['id'] ?></td>
-          <td><?= htmlspecialchars($c['container_no']) ?></td>
-          <td><?= $c['type'] ?></td>
-          <td><?= $c['status'] ?></td>
-          <td><?= htmlspecialchars($c['location']) ?></td>
-          <td><?= htmlspecialchars($fleetName) ?></td>
-          <td><?= $c['last_inspected_at'] ?></td>
-          <td>
-            <?php if (can('manage_containers','can_edit')): ?>
-              <a href="container_form.php?id=<?= $c['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
-            <?php endif; ?>
-            <?php if (can('manage_containers','can_delete')): ?>
-              <a href="container_delete.php?id=<?= $c['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this container?')">Delete</a>
-            <?php endif; ?>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-      </tbody>
-    </table>
-  </div>
-  <?php endif; ?>
 </div>
-</body>
-</html>
+
+<?php require_once '../includes/admin_footer.php'; ?>

@@ -57,8 +57,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       WHERE id = ?
     ");
     if ($updateStmt->execute([
-      $fleet_name, $type, $registration_no, $capacity, $status,
-      $manufacturer, $model, $year_built, $location, $notes,
+      $fleet_name,
+      $type,
+      $registration_no,
+      $capacity,
+      $status,
+      $manufacturer,
+      $model,
+      $year_built,
+      $location,
+      $notes,
       $fleetId
     ])) {
       $success = true;
@@ -76,6 +84,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <style>
   .alert a {
     text-decoration: none;
+  }
+
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .btn-danger {
+    background-color: #e30613;
+    border: none;
+  }
+
+  .btn-danger:hover {
+    background-color: #b6050e;
+  }
+
+  .btn-secondary {
+    background-color: #666;
+    border: none;
+  }
+
+  .btn-secondary:hover {
+    background-color: #444;
   }
 </style>
 
@@ -157,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="mt-4 d-flex justify-content-between">
-      <a href="manage_fleet.php" class="btn btn-outline-danger">Back</a>
+      <a href="manage_fleet.php" class="btn btn-secondary">Back</a>
       <button type="submit" class="btn btn-danger">Update Fleet</button>
     </div>
   </form>

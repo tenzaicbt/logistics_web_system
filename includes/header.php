@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/db.php';
 
 $base_url = '/northport/';
-$default_logo = 'assets/images/default-logo.png'; // Make sure this file exists
+$default_logo = 'assets/images/default-logo.png';
 
 // Fetch all settings as key=>value array
 $settings = [];
@@ -17,24 +17,19 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $settings[$row['setting_key']] = $row['setting_value'];
 }
 
-// Use site_logo if exists, else logo_path, else default
 $logo_path = $settings['site_logo'] ?? $settings['logo_path'] ?? $default_logo;
-
-// Check if logo file physically exists; else fallback to default
 $logo_full_path = realpath(__DIR__ . '/../' . $logo_path);
 if (!$logo_full_path || !file_exists($logo_full_path)) {
     $logo_path = $default_logo;
 }
 
 $logo_url = $base_url . $logo_path . '?v=' . time();
-
 $company_name = $settings['company_name'] ?? 'NorthPort Logistics Pvt Ltd';
 
 $username = $_SESSION['username'] ?? null;
 $role = $_SESSION['role'] ?? null;
 $current_file = basename($_SERVER['PHP_SELF']);
 
-// Simple htmlspecialchars helper inline
 function safeOutput($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
@@ -57,7 +52,7 @@ function safeOutput($str) {
       color: #e30613 !important;
     }
     footer {
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
     .nav-link {
       color: #cc0612;
@@ -86,12 +81,11 @@ function safeOutput($str) {
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <?php if ($username): ?>
-          <li class="nav-item">
-            <a class="nav-link <?= $current_file === 'dashboard.php' ? 'active' : '' ?>"
-               href="<?= safeOutput($base_url . $role) ?>/dashboard.php">Dashboard</a>
-          </li>
-
           <?php if ($role === 'admin'): ?>
+            <li class="nav-item">
+              <a class="nav-link <?= $current_file === 'dashboard.php' ? 'active' : '' ?>"
+                 href="<?= safeOutput($base_url . $role) ?>/dashboard.php">Dashboard</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link <?= $current_file === 'manage_users.php' ? 'active' : '' ?>"
                  href="<?= safeOutput($base_url) ?>admin/manage_users.php">Users</a>
