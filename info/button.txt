@@ -40,3 +40,8 @@ btn btn-secondary
             <a href="manage_containers.php" class="btn btn-secondary">Back</a>
             <button type="submit" class="btn btn-danger">Add Container</button>
         </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+            <a href="dashboard.php" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-danger">Submit Leave</button>
+        </div>

@@ -51,7 +51,25 @@ $actions = [
   // ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
   ['title' => 'Bank Account Details', 'desc' => 'View and update bank account info.', 'href' => 'bank_accounts.php', 'roles' => ['manager']],
   ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'attendance.php', 'roles' => ['manager']],
+  ['title' => 'Manage Notifications', 'desc' => 'Manage admin notifications.', 'href' => 'admin_message.php', 'roles' => ['admin', 'manager']],
+  ['title' => 'Manage Paysheets', 'desc' => 'Manage employeer paysheets.', 'href' => 'manage_paysheets.php', 'roles' => ['admin', '']],
 ];
+
+// Stats
+$totalUsers      = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$totalShipments  = $pdo->query("SELECT COUNT(*) FROM shipments")->fetchColumn();
+$totalRevenue    = $pdo->query("SELECT SUM(amount) FROM payments WHERE status='Paid'")->fetchColumn() ?: 0;
+$totalContainers = $pdo->query("SELECT COUNT(*) FROM containers")->fetchColumn();
+
+$fleetStatusStmt = $pdo->query("SELECT status, COUNT(*) as count FROM containers GROUP BY status");
+$fleetStatus     = $fleetStatusStmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+// Admin Messages: get only Pending and count
+$newMessageCount = $pdo->query("SELECT COUNT(*) FROM admin_messages WHERE status = 'Pending'")->fetchColumn();
+
+$pendingMessages = $pdo->prepare("SELECT id, name, subject, created_at FROM admin_messages WHERE status = 'Pending' ORDER BY created_at DESC LIMIT 5");
+$pendingMessages->execute();
+$pendingMessages = $pendingMessages->fetchAll();
 
 ?>
 
@@ -65,11 +83,118 @@ $actions = [
     font-size: 1.2rem;
     font-weight: 700;
   }
+    .notification-bell {
+    position: relative;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #e30613;
+    user-select: none;
+  }
+
+  .notification-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: red;
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+  }
+
+  /* Popup box */
+  .notification-popup {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    width: 320px;
+    max-height: 350px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    display: none;
+  }
+
+  .notification-popup.show {
+    display: block;
+  }
+
+  .notification-popup-header {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background-color: #f8f9fa;
+    color: #333;
+  }
+
+  .notification-item {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.85rem;
+  }
+
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+
+  .notification-item a {
+    color: #e30613;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .notification-item a:hover {
+    text-decoration: underline;
+  }
+
+  .notification-item .subject {
+    font-weight: 500;
+  }
+
+  .notification-item small {
+    color: #666;
+  }
 </style>
 
 <div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 position-relative">
+      <h2 class="mb-4 fw-bold">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></h2>
 
-  <h2 class="mb-4 fw-bold">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></h2>
+    <?php if (in_array($_SESSION['role'], ['admin', 'manager'])): ?>
+    <div id="notificationBellWrapper" style="position: relative;">
+      <i class="fas fa-bell notification-bell" id="notificationBell" title="Pending Messages" style="cursor:pointer;"></i>
+      <?php if ($newMessageCount > 0): ?>
+        <span class="notification-count" id="notificationCount"><?= $newMessageCount ?></span>
+      <?php endif; ?>
+
+      <div class="notification-popup" id="notificationPopup" aria-live="polite" aria-label="Pending messages notifications" style="display:none; position:absolute; right:0; top:30px; width:300px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.15); border-radius:6px; z-index:1000; max-height:300px; overflow-y:auto;">
+        <div class="notification-popup-header p-2 border-bottom fw-bold">Pending Messages (<?= $newMessageCount ?>)</div>
+        <?php if ($newMessageCount == 0): ?>
+          <div class="notification-item p-2">No pending messages.</div>
+        <?php else: ?>
+          <?php foreach ($pendingMessages as $msg): ?>
+            <div class="notification-item p-2 border-bottom">
+              <div><strong><?= htmlspecialchars($msg['name']) ?></strong></div>
+              <div class="subject text-truncate"><?= htmlspecialchars($msg['subject'] ?: 'No subject') ?></div>
+              <small><?= date('d M Y, h:i A', strtotime($msg['created_at'])) ?></small><br>
+              <a href="admin_message.php#msg<?= $msg['id'] ?>">View message</a>
+            </div>
+          <?php endforeach; ?>
+          <?php if ($newMessageCount > 5): ?>
+            <div class="notification-item p-2 text-center">
+              <a href="admin_message.php">View all pending messages</a>
+            </div>
+          <?php endif; ?>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php endif; ?>
+  </div>
 
   <div class="row g-3 mb-4">
     <?php
@@ -88,6 +213,8 @@ $actions = [
       </div>
     <?php endforeach; ?>
   </div>
+</div>
+
 
   <!-- Fleet status -->
   <div class="row g-3 mb-4">
@@ -210,5 +337,23 @@ $actions = [
   <?php endif; ?>
 
 </div>
+
+<script>
+  document.getElementById('notificationBell')?.addEventListener('click', function() {
+    const popup = document.getElementById('notificationPopup');
+    if (!popup) return;
+    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+  });
+
+  // Optional: close popup if clicked outside
+  document.addEventListener('click', function(e) {
+    const popup = document.getElementById('notificationPopup');
+    const bell = document.getElementById('notificationBell');
+    if (!popup || !bell) return;
+    if (!popup.contains(e.target) && e.target !== bell) {
+      popup.style.display = 'none';
+    }
+  });
+</script>
 
 <?php require_once '../includes/admin_footer.php'; ?>

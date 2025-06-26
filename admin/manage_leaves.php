@@ -64,7 +64,11 @@ $leaves = $leavesStmt->fetchAll();
 ?>
 
 <style>
-    .btn {
+    .small-text {
+        font-size: 0.85rem;
+    }
+
+        .btn {
         font-size: 0.8rem;
         padding: 0.25rem 0.75rem;
     }
@@ -87,8 +91,69 @@ $leaves = $leavesStmt->fetchAll();
         background-color: #444;
     }
 
-    .small-text {
-        font-size: 0.85rem;
+    .btn-outline-primary {
+        color: #0d6efd;
+        border: 1px solid #0d6efd;
+        background-color: transparent;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    .btn-outline-success {
+        color: #28a745;
+        border: 1px solid #28a745;
+        background-color: transparent;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        color: #dc3545;
+        border: 1px solid #dc3545;
+        background-color: transparent;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-outline-secondary {
+        color: #6c757d;
+        border: 1px solid #6c757d;
+        background-color: transparent;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-simple {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 4px;
+        color:rgb(255, 0, 0);
+        background: transparent;
+        border: 1px rgb(253, 0, 0);
+        text-decoration: none;
+        transition: all 0.2s ease-in-out;
+    }
+/* 
+    .btn-simple:hover {
+        background-color:rgb(201, 18, 18);
+        color: white;
+    } */
+
+    .table td,
+    .table th {
+        vertical-align: middle;
     }
 </style>
 
@@ -124,7 +189,7 @@ $leaves = $leavesStmt->fetchAll();
                             <td><?= htmlspecialchars($leave['start_date']) ?></td>
                             <td><?= htmlspecialchars($leave['end_date']) ?></td>
                             <td>
-                                <a href="view_leave_reason.php?id=<?= (int)$leave['id'] ?>" class="btn btn-secondary btn-sm">View</a>
+                                <a href="view_leave_reason.php?id=<?= (int)$leave['id'] ?>" class="btn-simple">View</a>
                             </td>
                             <td>
                                 <?php
@@ -140,7 +205,7 @@ $leaves = $leavesStmt->fetchAll();
                             </td>
                             <td>
                                 <?php if ($status === 'Rejected'): ?>
-                                    <a href="/northport/admin/reject_leave_reason.php?leave_id=<?= (int)$leave['id'] ?>" class="btn btn-secondary btn-sm">View</a>
+                                    <a href="/northport/admin/reject_leave_reason.php?leave_id=<?= (int)$leave['id'] ?>" class="btn-simple">View</a>
                                 <?php else: ?>
                                     <em>-</em>
                                 <?php endif; ?>
@@ -151,20 +216,20 @@ $leaves = $leavesStmt->fetchAll();
                                     <form method="post" style="display:inline-block;">
                                         <input type="hidden" name="leave_id" value="<?= (int)$leave['id'] ?>">
                                         <input type="hidden" name="action" value="approve">
-                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                        <button type="submit" class="btn btn-outline-success btn-sm">Approve</button>
                                     </form>
 
                                     <form method="post" style="display:inline-block;" onsubmit="return confirmReject(this);">
                                         <input type="hidden" name="leave_id" value="<?= (int)$leave['id'] ?>">
                                         <input type="hidden" name="action" value="reject">
                                         <input type="hidden" name="admin_reason" value="">
-                                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">Reject</button>
                                     </form>
 
                                     <form method="post" style="display:inline-block;">
                                         <input type="hidden" name="leave_id" value="<?= (int)$leave['id'] ?>">
                                         <input type="hidden" name="action" value="cancel">
-                                        <button type="submit" class="btn btn-secondary btn-sm">Cancel</button>
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm">Cancel</button>
                                     </form>
                                 <?php else: ?>
                                     <em>No actions</em>

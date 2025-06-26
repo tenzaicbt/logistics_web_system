@@ -33,6 +33,7 @@ $current_file = basename($_SERVER['PHP_SELF']);
 function safeOutput($str) {
     return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

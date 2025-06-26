@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 24, 2025 at 07:56 PM
+-- Generation Time: Jun 26, 2025 at 01:24 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -33,8 +33,18 @@ CREATE TABLE `admin_messages` (
   `email` varchar(150) NOT NULL,
   `subject` varchar(200) DEFAULT NULL,
   `message` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  `status` enum('Pending','Solved') DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin_messages`
+--
+
+INSERT INTO `admin_messages` (`id`, `name`, `email`, `subject`, `message`, `created_at`, `seen`, `status`) VALUES
+(1, 'yohan', 'yohankoshala@gmail.com', 'gg', 'ggggg', '2025-06-26 03:19:01', 0, 'Solved'),
+(2, 'yohan koshala', 'vimash@northport.com', 'gg', 'ggggggggggggggg', '2025-06-26 04:36:29', 0, 'Solved');
 
 -- --------------------------------------------------------
 
@@ -103,6 +113,38 @@ CREATE TABLE `document_templates` (
   `last_modified_by` int(11) DEFAULT NULL,
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `employee_leaves`
+--
+
+CREATE TABLE `employee_leaves` (
+  `id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `leave_type` varchar(50) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `reason` text DEFAULT NULL,
+  `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending',
+  `admin_reason` text DEFAULT NULL,
+  `employer_reject_reason` text DEFAULT NULL,
+  `cancelled` tinyint(1) NOT NULL DEFAULT 0,
+  `cancelled_at` datetime DEFAULT NULL,
+  `requested_on` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `rejected_by` int(11) DEFAULT NULL,
+  `rejected_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `employee_leaves`
+--
+
+INSERT INTO `employee_leaves` (`id`, `employee_id`, `leave_type`, `start_date`, `end_date`, `reason`, `status`, `admin_reason`, `employer_reject_reason`, `cancelled`, `cancelled_at`, `requested_on`, `created_at`, `updated_at`, `rejected_by`, `rejected_at`) VALUES
+(1, 4, 'Sick', '2025-06-26', '2025-06-26', 'want leave', 'Rejected', 'cant give leave at this time', NULL, 0, NULL, '2025-06-25 20:22:51', '2025-06-25 14:52:51', '2025-06-25 14:54:56', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -202,6 +244,30 @@ CREATE TABLE `payments` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `paysheets`
+--
+
+CREATE TABLE `paysheets` (
+  `id` int(11) NOT NULL,
+  `employer_id` int(11) NOT NULL,
+  `uploaded_by` int(11) DEFAULT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `month` varchar(20) NOT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `paysheets`
+--
+
+INSERT INTO `paysheets` (`id`, `employer_id`, `uploaded_by`, `file_path`, `month`, `notes`, `created_at`) VALUES
+(1, 4, 2, '../uploads/paysheets/1750935188_Pay-slip-template.pdf', 'june 2025', '', '2025-06-26 16:23:08'),
+(2, 4, 2, '../uploads/paysheets/1750935588_Pay-slip-template.pdf', 'july 2025', 'july 2025 paysheets', '2025-06-26 16:29:48');
 
 -- --------------------------------------------------------
 
@@ -401,6 +467,12 @@ ALTER TABLE `document_templates`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `employee_leaves`
+--
+ALTER TABLE `employee_leaves`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `fleets`
 --
 ALTER TABLE `fleets`
@@ -430,6 +502,14 @@ ALTER TABLE `notifications`
 --
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `paysheets`
+--
+ALTER TABLE `paysheets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_employer` (`employer_id`),
+  ADD KEY `fk_uploaded_by` (`uploaded_by`);
 
 --
 -- Indexes for table `roles_permissions`
@@ -463,7 +543,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin_messages`
 --
 ALTER TABLE `admin_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `bookings`
@@ -488,6 +568,12 @@ ALTER TABLE `documents`
 --
 ALTER TABLE `document_templates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `employee_leaves`
+--
+ALTER TABLE `employee_leaves`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `fleets`
@@ -520,6 +606,12 @@ ALTER TABLE `payments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `paysheets`
+--
+ALTER TABLE `paysheets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `roles_permissions`
 --
 ALTER TABLE `roles_permissions`
@@ -542,6 +634,17 @@ ALTER TABLE `shipments`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `paysheets`
+--
+ALTER TABLE `paysheets`
+  ADD CONSTRAINT `fk_employer` FOREIGN KEY (`employer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_uploaded_by` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

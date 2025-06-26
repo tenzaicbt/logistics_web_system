@@ -54,6 +54,7 @@ $actions = [
   ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'attendance.php', 'roles' => ['manager']],
   // Add button for employer role only
   ['title' => 'Employee Leave ', 'desc' => 'Create and manage leave for employees.', 'href' => 'employee_leave.php', 'roles' => ['employer']],
+  ['title' => 'Paysheets Details ', 'desc' => 'Monthly paysheets details.', 'href' => 'employer_paysheets.php', 'roles' => ['employer']],
   // Add Manage Leaves card for employees (users)
   ['title' => 'Manage Leaves', 'desc' => 'Review and manage your leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['user']],
 ];
@@ -123,7 +124,7 @@ $actions = [
   </div>
 
   <!-- Recent Users -->
-  <div class="row g-4">
+  <!-- <div class="row g-4">
     <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Users</div>
@@ -136,10 +137,10 @@ $actions = [
           <?php endforeach; ?>
         </ul>
       </div>
-    </div>
+    </div> -->
 
     <!-- Recent Shipments -->
-    <div class="col-lg-6">
+    <!-- <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Shipments</div>
         <ul class="list-group list-group-flush">
@@ -152,10 +153,10 @@ $actions = [
         </ul>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <div class="row g-4 mt-3">
-    <!-- Payments -->
+  <!-- <div class="row g-4 mt-3">
+
     <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Payments</div>
@@ -173,10 +174,10 @@ $actions = [
           <?php endforeach; ?>
         </ul>
       </div>
-    </div>
+    </div> -->
 
     <!-- Logs -->
-    <div class="col-lg-6">
+    <!-- <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Logs</div>
         <ul class="list-group list-group-flush">
@@ -189,7 +190,7 @@ $actions = [
         </ul>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Recent Docs (if available) -->
   <?php if (!empty($recentDocs)): ?>
