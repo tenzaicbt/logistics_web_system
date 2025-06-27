@@ -82,9 +82,9 @@ if ($currentRole === 'admin') {
         background-color: #444;
     }
 
-    .container {
+    /* .container {
         font-size: 0.85rem;
-    }
+    } */
 
     h2 {
         font-size: 1.25rem;

@@ -68,9 +68,9 @@ $fleets = $stmt->fetchAll();
     background-color: #444;
   }
 
-  .container {
+  /* .container {
     font-size: 0.85rem;
-  }
+  } */
 </style>
 
 <div class="container my-5">

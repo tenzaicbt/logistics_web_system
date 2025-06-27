@@ -1,3 +1,49 @@
 <?php
-// .keep - placeholder
+require_once '../includes/auth.php';
+require_once '../includes/db.php';
+require_once '../includes/header.php';
+
+if ($_SESSION['role'] !== 'admin') {
+    echo "<div class='alert alert-danger m-5'>Access denied.</div>";
+    require_once '../includes/footer.php';
+    exit;
+}
+
+$logs = $pdo->query("SELECT l.*, u.username 
+                     FROM logs l 
+                     LEFT JOIN users u ON l.user_id = u.id 
+                     ORDER BY l.created_at DESC 
+                     LIMIT 100")->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+<div class="container my-5">
+    <h2 class="fw-bold mb-4">LOGS VIEW</h2>
+    <div class="table-responsive card shadow-sm">
+        <table class="table table-bordered table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>IP</th>
+                    <th>User Agent</th>
+                    <th>Date/Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($logs as $log): ?>
+                    <tr>
+                        <td><?= $log['id'] ?></td>
+                        <td><?= htmlspecialchars($log['username'] ?? 'Unknown') ?></td>
+                        <td><?= htmlspecialchars($log['action']) ?></td>
+                        <td><?= $log['ip_address'] ?></td>
+                        <td><?= htmlspecialchars($log['user_agent']) ?></td>
+                        <td><?= $log['created_at'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php require_once '../includes/footer.php'; ?>

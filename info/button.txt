@@ -34,6 +34,17 @@ btn btn-secondary
 }
 
 
+<h2 class="page-title">SETTIGNS</h2>
+
+    .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color:rgb(0, 0, 0);
+    margin-bottom: 1rem;
+}
+
+
 
 
         <div class="mt-4 d-flex justify-content-between">
@@ -45,3 +56,20 @@ btn btn-secondary
             <a href="dashboard.php" class="btn btn-secondary">Back</a>
             <button type="submit" class="btn btn-danger">Submit Leave</button>
         </div>
+
+
+
+
+        LOGS 
+
+// LOGS
+function logAction($pdo, $userId, $action)
+{
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, ip_address, user_agent) VALUES (?, ?, ?, ?)");
+    $stmt->execute([
+        $userId,
+        $action,
+        $_SERVER['REMOTE_ADDR'],
+        $_SERVER['HTTP_USER_AGENT'] ?? null
+    ]);
+}

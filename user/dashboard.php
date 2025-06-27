@@ -34,6 +34,10 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+  .container {
+    font-size: rem;
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -262,7 +266,7 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if (!empty($user['date_of_birth'])): ?>
       <p><strong>Date of Birth:</strong> <?= htmlspecialchars($user['date_of_birth']) ?></p>
     <?php endif; ?>
-    <p><strong>Role:</strong> <?= htmlspecialchars($user['role']) ?></p>
+    <!-- <p><strong>Role:</strong> <?= htmlspecialchars($user['role']) ?></p> -->
     <?php if (!empty($user['notes'])): ?>
       <p><strong>Notes:</strong> <?= nl2br(htmlspecialchars($user['notes'])) ?></p>
     <?php endif; ?>
@@ -273,7 +277,7 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
   <p class="description">Welcome to NorthPort Logistics. Use the options below to book shipments or track your orders.</p>
 
   <a href="book_shipment.php" class="btn" role="button">Book a Shipment</a>
-  <a href="track_shipment.php" class="btn" role="button">Track Shipment</a>
+  <a href="view_shipment.php" class="btn" role="button">View Shipment</a>
   <a href="my_invoices.php" class="btn" role="button">View Invoices</a>
   <a href="upload_documents.php" class="btn" role="button">Upload Documents</a>
 

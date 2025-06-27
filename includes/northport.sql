@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2025 at 01:24 PM
+-- Generation Time: Jun 27, 2025 at 01:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -44,7 +44,9 @@ CREATE TABLE `admin_messages` (
 
 INSERT INTO `admin_messages` (`id`, `name`, `email`, `subject`, `message`, `created_at`, `seen`, `status`) VALUES
 (1, 'yohan', 'yohankoshala@gmail.com', 'gg', 'ggggg', '2025-06-26 03:19:01', 0, 'Solved'),
-(2, 'yohan koshala', 'vimash@northport.com', 'gg', 'ggggggggggggggg', '2025-06-26 04:36:29', 0, 'Solved');
+(2, 'yohan koshala', 'vimash@northport.com', 'gg', 'ggggggggggggggg', '2025-06-26 04:36:29', 0, 'Solved'),
+(3, 'yohan', 'yohankoshala@gmail.com', 'gg', 'create p', '2025-06-26 11:58:25', 0, 'Pending'),
+(4, 'yohan', 'vimash@northport.com', 'gg', 'maleeeessaaaa', '2025-06-27 03:17:11', 0, 'Solved');
 
 -- --------------------------------------------------------
 
@@ -144,7 +146,8 @@ CREATE TABLE `employee_leaves` (
 --
 
 INSERT INTO `employee_leaves` (`id`, `employee_id`, `leave_type`, `start_date`, `end_date`, `reason`, `status`, `admin_reason`, `employer_reject_reason`, `cancelled`, `cancelled_at`, `requested_on`, `created_at`, `updated_at`, `rejected_by`, `rejected_at`) VALUES
-(1, 4, 'Sick', '2025-06-26', '2025-06-26', 'want leave', 'Rejected', 'cant give leave at this time', NULL, 0, NULL, '2025-06-25 20:22:51', '2025-06-25 14:52:51', '2025-06-25 14:54:56', NULL, NULL);
+(1, 4, 'Sick', '2025-06-26', '2025-06-26', 'want leave', 'Rejected', 'cant give leave at this time', NULL, 0, NULL, '2025-06-25 20:22:51', '2025-06-25 14:52:51', '2025-06-25 14:54:56', NULL, NULL),
+(2, 4, 'Casual', '2025-06-29', '2025-06-30', 'i want leave', 'Pending', NULL, NULL, 0, NULL, '2025-06-27 08:59:15', '2025-06-27 03:29:15', '2025-06-27 03:29:15', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -173,7 +176,7 @@ CREATE TABLE `fleets` (
 --
 
 INSERT INTO `fleets` (`id`, `fleet_name`, `type`, `registration_no`, `capacity`, `status`, `created_at`, `updated_at`, `manufacturer`, `model`, `year_built`, `location`, `notes`) VALUES
-(1, 'Pacific Voyager', 'Vessel', 'PV-2025-001', 5000, 'Active', '2025-06-24 23:11:08', '2025-06-24 23:22:42', 'Oceanic Shipyards', 'Voyager X200', 2018, 'Singapore Port', '');
+(1, 'Pacific Voyager', 'Vessel', 'PV-2025-001', 5000, 'Active', '2025-06-24 23:11:08', '2025-06-27 08:55:48', 'Oceanic Shipyards', 'Voyager X200', 2018, 'Singapore Port', '');
 
 -- --------------------------------------------------------
 
@@ -267,7 +270,8 @@ CREATE TABLE `paysheets` (
 
 INSERT INTO `paysheets` (`id`, `employer_id`, `uploaded_by`, `file_path`, `month`, `notes`, `created_at`) VALUES
 (1, 4, 2, '../uploads/paysheets/1750935188_Pay-slip-template.pdf', 'june 2025', '', '2025-06-26 16:23:08'),
-(2, 4, 2, '../uploads/paysheets/1750935588_Pay-slip-template.pdf', 'july 2025', 'july 2025 paysheets', '2025-06-26 16:29:48');
+(2, 4, 2, '../uploads/paysheets/1750935588_Pay-slip-template.pdf', 'july 2025', 'july 2025 paysheets', '2025-06-26 16:29:48'),
+(3, 4, 2, '../uploads/paysheets/1750939262_Pay-slip-template.pdf', 'june 2025', 'ffffff', '2025-06-26 17:31:02');
 
 -- --------------------------------------------------------
 
@@ -325,48 +329,14 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `updated_at`) VALUES
-(1, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-23 08:35:21'),
-(2, 'logo_path', 'assets/images/logo.png', '2025-06-20 05:29:08'),
-(3, 'footer_text', '', '2025-06-23 08:35:21'),
-(4, 'site_logo', 'assets/images/site_logo_1750489895.png', '2025-06-20 20:11:35'),
-(5, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-23 08:35:21'),
-(6, 'footer_contact_phone', '+94 11 2517445', '2025-06-23 08:35:21'),
-(7, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-23 08:35:21'),
-(8, 'footer_address_line2', 'Sri Lanka', '2025-06-23 08:35:21'),
-(9, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-24 14:21:25'),
-(10, 'footer_text', '', '2025-06-24 14:21:25'),
-(11, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-24 14:21:25'),
-(12, 'footer_contact_phone', '+94 11 2517445', '2025-06-24 14:21:25'),
-(13, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-24 14:21:25'),
-(14, 'footer_address_line2', 'Sri Lanka', '2025-06-24 14:21:25'),
-(15, 'footer_social_facebook', '', '2025-06-24 14:21:25'),
-(16, 'footer_social_twitter', '', '2025-06-24 14:21:25'),
-(17, 'footer_social_linkedin', '', '2025-06-24 14:21:25'),
-(18, 'footer_social_instagram', '', '2025-06-24 14:21:25'),
-(19, 'footer_shortcut_1_name', '', '2025-06-24 14:21:25'),
-(20, 'footer_shortcut_1_url', '', '2025-06-24 14:21:25'),
-(21, 'footer_shortcut_2_name', '', '2025-06-24 14:21:25'),
-(22, 'footer_shortcut_2_url', '', '2025-06-24 14:21:25'),
-(23, 'footer_shortcut_3_name', '', '2025-06-24 14:21:25'),
-(24, 'footer_shortcut_3_url', '', '2025-06-24 14:21:25'),
-(25, 'site_logo', 'assets/images/site_logo_1750774885.png', '2025-06-24 14:21:25'),
-(26, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-24 14:21:30'),
-(27, 'footer_text', '', '2025-06-24 14:21:30'),
-(28, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-24 14:21:30'),
-(29, 'footer_contact_phone', '+94 11 2517445', '2025-06-24 14:21:30'),
-(30, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-24 14:21:30'),
-(31, 'footer_address_line2', 'Sri Lanka', '2025-06-24 14:21:30'),
-(32, 'footer_social_facebook', '', '2025-06-24 14:21:30'),
-(33, 'footer_social_twitter', '', '2025-06-24 14:21:30'),
-(34, 'footer_social_linkedin', '', '2025-06-24 14:21:30'),
-(35, 'footer_social_instagram', '', '2025-06-24 14:21:30'),
-(36, 'footer_shortcut_1_name', '', '2025-06-24 14:21:30'),
-(37, 'footer_shortcut_1_url', '', '2025-06-24 14:21:30'),
-(38, 'footer_shortcut_2_name', '', '2025-06-24 14:21:30'),
-(39, 'footer_shortcut_2_url', '', '2025-06-24 14:21:30'),
-(40, 'footer_shortcut_3_name', '', '2025-06-24 14:21:30'),
-(41, 'footer_shortcut_3_url', '', '2025-06-24 14:21:30'),
-(42, 'site_logo', 'assets/images/site_logo_1750774890.png', '2025-06-24 14:21:30');
+(1, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-27 09:46:01'),
+(2, 'logo_path', 'assets/images/logo.png', '2025-06-26 12:11:14'),
+(3, 'footer_text', '', '2025-06-27 09:46:01'),
+(4, 'site_logo', 'assets/images/site_logo_1750940130.png', '2025-06-26 12:15:30'),
+(5, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-27 09:46:01'),
+(6, 'footer_contact_phone', '+94 11 2517446', '2025-06-27 09:46:01'),
+(7, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-27 09:46:01'),
+(8, 'footer_address_line2', 'Sri Lanka', '2025-06-27 09:46:01');
 
 -- --------------------------------------------------------
 
@@ -386,7 +356,17 @@ CREATE TABLE `shipments` (
   `departure_date` date DEFAULT NULL,
   `arrival_date` date DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `sender_name` varchar(100) DEFAULT NULL,
+  `sender_address` varchar(255) DEFAULT NULL,
+  `sender_contact` varchar(50) DEFAULT NULL,
+  `recipient_name` varchar(100) DEFAULT NULL,
+  `recipient_address` varchar(255) DEFAULT NULL,
+  `recipient_contact` varchar(50) DEFAULT NULL,
+  `package_contents` text DEFAULT NULL,
+  `package_weight` varchar(50) DEFAULT NULL,
+  `package_value` varchar(50) DEFAULT NULL,
+  `delivery_type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -521,7 +501,8 @@ ALTER TABLE `roles_permissions`
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_setting_key` (`setting_key`);
 
 --
 -- Indexes for table `shipments`
@@ -543,7 +524,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin_messages`
 --
 ALTER TABLE `admin_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `bookings`
@@ -573,7 +554,7 @@ ALTER TABLE `document_templates`
 -- AUTO_INCREMENT for table `employee_leaves`
 --
 ALTER TABLE `employee_leaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `fleets`
@@ -609,7 +590,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `paysheets`
 --
 ALTER TABLE `paysheets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles_permissions`
@@ -621,13 +602,13 @@ ALTER TABLE `roles_permissions`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `shipments`
 --
 ALTER TABLE `shipments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`

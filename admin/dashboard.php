@@ -42,16 +42,18 @@ try {
 $currentRole = $_SESSION['role'] ?? 'user';
 
 $actions = [
-  ['title' => 'Manage Users', 'desc' => 'Create, update or delete system users.', 'href' => 'manage_users.php', 'roles' => ['admin']],
+
   ['title' => 'Manage Bookings', 'desc' => 'Handle and approve bookings.', 'href' => 'manage_bookings.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
   ['title' => 'Manage Fleet', 'desc' => 'Update fleet data.', 'href' => 'manage_fleet.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
   ['title' => 'Manage Shipments', 'desc' => 'View, edit and shipment data.', 'href' => 'manage_shipments.php', 'roles' => ['admin', 'manager', '']],
   ['title' => 'Manage Containers', 'desc' => 'View, edit and container dat.', 'href' => 'manage_containers.php', 'roles' => ['admin', 'manager', '']],
-  ['title' => 'Manage Leave', 'desc' => 'Review and manage employee leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['admin', 'manager']],
+
   // ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
+  ['title' => 'Manage Users', 'desc' => 'Create, update or delete system users.', 'href' => 'manage_users.php', 'roles' => ['admin']],
+  ['title' => 'Manage Leave', 'desc' => 'Review and manage employee leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['admin', 'manager']],
+  ['title' => 'Manage Notifications', 'desc' => 'Manage admin notifications.', 'href' => 'admin_message.php', 'roles' => ['admin', 'manager']],
   ['title' => 'Bank Account Details', 'desc' => 'View and update bank account info.', 'href' => 'bank_accounts.php', 'roles' => ['manager']],
   ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'attendance.php', 'roles' => ['manager']],
-  ['title' => 'Manage Notifications', 'desc' => 'Manage admin notifications.', 'href' => 'admin_message.php', 'roles' => ['admin', 'manager']],
   ['title' => 'Manage Paysheets', 'desc' => 'Manage employeer paysheets.', 'href' => 'manage_paysheets.php', 'roles' => ['admin', '']],
 ];
 
@@ -79,11 +81,13 @@ $pendingMessages = $pendingMessages->fetchAll();
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     border-radius: 6px;
   }
+
   .card-small .h4 {
     font-size: 1.2rem;
     font-weight: 700;
   }
-    .notification-bell {
+
+  .notification-bell {
     position: relative;
     font-size: 1.5rem;
     cursor: pointer;
@@ -163,39 +167,40 @@ $pendingMessages = $pendingMessages->fetchAll();
 
 <div class="container my-5">
   <div class="d-flex justify-content-between align-items-center mb-4 position-relative">
-      <h2 class="mb-4 fw-bold">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></h2>
+    <h2 class="mb-4 fw-bold">Welcome, <?= htmlspecialchars($_SESSION['username']) ?></h2>
 
     <?php if (in_array($_SESSION['role'], ['admin', 'manager'])): ?>
-    <div id="notificationBellWrapper" style="position: relative;">
-      <i class="fas fa-bell notification-bell" id="notificationBell" title="Pending Messages" style="cursor:pointer;"></i>
-      <?php if ($newMessageCount > 0): ?>
-        <span class="notification-count" id="notificationCount"><?= $newMessageCount ?></span>
-      <?php endif; ?>
-
-      <div class="notification-popup" id="notificationPopup" aria-live="polite" aria-label="Pending messages notifications" style="display:none; position:absolute; right:0; top:30px; width:300px; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.15); border-radius:6px; z-index:1000; max-height:300px; overflow-y:auto;">
-        <div class="notification-popup-header p-2 border-bottom fw-bold">Pending Messages (<?= $newMessageCount ?>)</div>
-        <?php if ($newMessageCount == 0): ?>
-          <div class="notification-item p-2">No pending messages.</div>
-        <?php else: ?>
-          <?php foreach ($pendingMessages as $msg): ?>
-            <div class="notification-item p-2 border-bottom">
-              <div><strong><?= htmlspecialchars($msg['name']) ?></strong></div>
-              <div class="subject text-truncate"><?= htmlspecialchars($msg['subject'] ?: 'No subject') ?></div>
-              <small><?= date('d M Y, h:i A', strtotime($msg['created_at'])) ?></small><br>
-              <a href="admin_message.php#msg<?= $msg['id'] ?>">View message</a>
-            </div>
-          <?php endforeach; ?>
-          <?php if ($newMessageCount > 5): ?>
-            <div class="notification-item p-2 text-center">
-              <a href="admin_message.php">View all pending messages</a>
-            </div>
-          <?php endif; ?>
+      <div id="notificationBellWrapper" style="position: relative;">
+        <i class="fas fa-bell notification-bell" id="notificationBell" title="Pending Messages" style="cursor:pointer;"></i>
+        <?php if ($newMessageCount > 0): ?>
+          <span class="notification-count" id="notificationCount"><?= $newMessageCount ?></span>
         <?php endif; ?>
-      </div>
-    </div>
-    <?php endif; ?>
-  </div>
 
+        <div class="notification-popup" id="notificationPopup" aria-live="polite" aria-label="Pending messages notifications" style="display:none;">
+          <div class="notification-popup-header p-2 border-bottom fw-bold">Pending Messages (<?= $newMessageCount ?>)</div>
+          <?php if ($newMessageCount == 0): ?>
+            <div class="notification-item p-2">No pending messages.</div>
+          <?php else: ?>
+            <?php foreach ($pendingMessages as $msg): ?>
+              <div class="notification-item p-2 border-bottom">
+                <div><strong><?= htmlspecialchars($msg['name']) ?></strong></div>
+                <div class="subject text-truncate"><?= htmlspecialchars($msg['subject'] ?: 'No subject') ?></div>
+                <small><?= date('d M Y, h:i A', strtotime($msg['created_at'])) ?></small><br>
+                <a href="admin_message.php#msg<?= $msg['id'] ?>">View message</a>
+              </div>
+            <?php endforeach; ?>
+            <?php if ($newMessageCount > 5): ?>
+              <div class="notification-item p-2 text-center">
+                <a href="admin_message.php">View all pending messages</a>
+              </div>
+            <?php endif; ?>
+          <?php endif; ?>
+        </div> <!-- notificationPopup -->
+      </div> <!-- notificationBellWrapper -->
+    <?php endif; ?>
+  </div> <!-- d-flex container -->
+
+  <!-- Dashboard Stats -->
   <div class="row g-3 mb-4">
     <?php
     $stats = [
@@ -213,10 +218,8 @@ $pendingMessages = $pendingMessages->fetchAll();
       </div>
     <?php endforeach; ?>
   </div>
-</div>
 
-
-  <!-- Fleet status -->
+  <!-- Fleet Status -->
   <div class="row g-3 mb-4">
     <?php
     $statuses = ['Available', 'In Use', 'Under Maintenance', 'Damaged'];
@@ -230,7 +233,7 @@ $pendingMessages = $pendingMessages->fetchAll();
     <?php endforeach; ?>
   </div>
 
-  <!-- Management cards -->
+  <!-- Management Cards -->
   <div class="row g-3 mb-5">
     <?php foreach ($actions as $a): ?>
       <?php if (in_array($currentRole, $a['roles'])): ?>
@@ -245,7 +248,7 @@ $pendingMessages = $pendingMessages->fetchAll();
     <?php endforeach; ?>
   </div>
 
-  <!-- Recent Users -->
+  <!-- Recent Users and Shipments -->
   <div class="row g-4">
     <div class="col-lg-6">
       <div class="card shadow-sm">
@@ -261,7 +264,6 @@ $pendingMessages = $pendingMessages->fetchAll();
       </div>
     </div>
 
-    <!-- Recent Shipments -->
     <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Shipments</div>
@@ -277,8 +279,8 @@ $pendingMessages = $pendingMessages->fetchAll();
     </div>
   </div>
 
-  <div class="row g-4 mt-3">
-    <!-- Payments -->
+  <!-- Payments and Logs -->
+  <!-- <div class="row g-4 mt-3">
     <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Payments</div>
@@ -296,10 +298,9 @@ $pendingMessages = $pendingMessages->fetchAll();
           <?php endforeach; ?>
         </ul>
       </div>
-    </div>
+    </div> -->
 
-    <!-- Logs -->
-    <div class="col-lg-6">
+    <!-- <div class="col-lg-6">
       <div class="card shadow-sm">
         <div class="card-header fw-bold">Recent Logs</div>
         <ul class="list-group list-group-flush">
@@ -312,10 +313,10 @@ $pendingMessages = $pendingMessages->fetchAll();
         </ul>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <!-- Recent Docs -->
-  <?php if (!empty($recentDocs)): ?>
+  <!-- Uploaded Documents -->
+  <!-- <?php if (!empty($recentDocs)): ?>
     <div class="row g-4 mt-3">
       <div class="col-lg-12">
         <div class="card shadow-sm">
@@ -335,8 +336,7 @@ $pendingMessages = $pendingMessages->fetchAll();
       </div>
     </div>
   <?php endif; ?>
-
-</div>
+</div> container -->
 
 <script>
   document.getElementById('notificationBell')?.addEventListener('click', function() {
@@ -345,7 +345,6 @@ $pendingMessages = $pendingMessages->fetchAll();
     popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
   });
 
-  // Optional: close popup if clicked outside
   document.addEventListener('click', function(e) {
     const popup = document.getElementById('notificationPopup');
     const bell = document.getElementById('notificationBell');

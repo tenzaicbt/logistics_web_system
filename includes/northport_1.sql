@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 26, 2025 at 01:25 PM
+-- Generation Time: Jun 27, 2025 at 01:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -286,7 +286,17 @@ CREATE TABLE `shipments` (
   `departure_date` date DEFAULT NULL,
   `arrival_date` date DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
-  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `sender_name` varchar(100) DEFAULT NULL,
+  `sender_address` varchar(255) DEFAULT NULL,
+  `sender_contact` varchar(50) DEFAULT NULL,
+  `recipient_name` varchar(100) DEFAULT NULL,
+  `recipient_address` varchar(255) DEFAULT NULL,
+  `recipient_contact` varchar(50) DEFAULT NULL,
+  `package_contents` text DEFAULT NULL,
+  `package_weight` varchar(50) DEFAULT NULL,
+  `package_value` varchar(50) DEFAULT NULL,
+  `delivery_type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -411,7 +421,8 @@ ALTER TABLE `roles_permissions`
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_setting_key` (`setting_key`);
 
 --
 -- Indexes for table `shipments`

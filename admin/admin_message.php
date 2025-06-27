@@ -27,31 +27,50 @@ if ($currentRole === 'admin' && isset($_GET['toggle_status'], $_GET['id'])) {
 // Fetch all messages
 $stmt = $pdo->query("SELECT * FROM admin_messages ORDER BY created_at DESC");
 $messages = $stmt->fetchAll();
+
+// LOGS
+function logAction($pdo, $userId, $action)
+{
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, ip_address, user_agent) VALUES (?, ?, ?, ?)");
+    $stmt->execute([
+        $userId,
+        $action,
+        $_SERVER['REMOTE_ADDR'],
+        $_SERVER['HTTP_USER_AGENT'] ?? null
+    ]);
+}
 ?>
 
 <style>
     .small-text {
         font-size: 0.85rem;
     }
+
     .btn {
         font-size: 0.8rem;
         padding: 0.25rem 0.75rem;
     }
+
     .btn-danger {
         background-color: #e30613;
         border: none;
     }
+
     .btn-danger:hover {
         background-color: #b6050e;
     }
+
     .btn-success {
         background-color: #28a745;
         border: none;
     }
+
     .btn-success:hover {
         background-color: #218838;
     }
-    .table th, .table td {
+
+    .table th,
+    .table td {
         vertical-align: middle !important;
     }
 </style>
@@ -109,10 +128,5 @@ $messages = $stmt->fetchAll();
     <?php endif; ?>
 </div>
 
-
-        <div class="mt-4 d-flex justify-content-between">
-            <a href="manage_containers.php" class="btn btn-secondary">Back</a>
-            <button type="admin/dashboard.php" class="btn btn-secondary">Back</button>
-        </div>
 
 <?php require_once '../includes/admin_footer.php'; ?>

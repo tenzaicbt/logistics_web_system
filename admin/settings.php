@@ -75,6 +75,18 @@ $logo_path = (!empty($settings['site_logo']) && file_exists('../' . $settings['s
     ? '../' . $settings['site_logo']
     : '../assets/images/default-logo.png';
 $logo_url = htmlspecialchars($logo_path) . '?v=' . time();
+
+// LOGS
+function logAction($pdo, $userId, $action)
+{
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, ip_address, user_agent) VALUES (?, ?, ?, ?)");
+    $stmt->execute([
+        $userId,
+        $action,
+        $_SERVER['REMOTE_ADDR'],
+        $_SERVER['HTTP_USER_AGENT'] ?? null
+    ]);
+}
 ?>
 
 <!-- Minimalist and Neat Form Style -->
@@ -83,10 +95,11 @@ $logo_url = htmlspecialchars($logo_path) . '?v=' . time();
         font-size: 0.85rem !important;
     }
 
-    h2 {
-        font-size: 1.2rem !important;
-        font-weight: 700;
-    }
+h2 {
+    font-size: 2rem !important;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
 
     .btn {
         padding: 0.35rem 0.85rem;
@@ -130,10 +143,22 @@ $logo_url = htmlspecialchars($logo_path) . '?v=' . time();
     .btn-secondary:hover {
         background-color: #444;
     }
+    .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color:rgb(37, 36, 36);
+    margin-bottom: 1rem;
+}
+
 </style>
 
-<div class="container my-5">
-    <h2 class="mb-4 fw-bold">SETTINGS</h2>
+<div class="container my-5" style="position: relative;">
+    <a href="information.php" title="System & Developer Info" 
+       style="position: absolute; top: 0; right: 0; font-size: 1.8rem; color:rgb(236, 0, 0); text-decoration: none; cursor: pointer;">
+       &#9410;
+    </a>
+    <h2 class="page-title">SETTIGNS</h2>
 
     <?php if ($success): ?>
         <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
@@ -187,8 +212,4 @@ $logo_url = htmlspecialchars($logo_path) . '?v=' . time();
     </form>
 </div>
 
-<footer class="text-center py-3 mt-4">
-    <div class="footer-bottom small text-muted">
-        &copy; <?= date('Y') ?> NorthPort Logistics Pvt Ltd. All rights reserved.
-    </div>
-</footer>
+<?php require_once '../includes/admin_footer.php'; ?>

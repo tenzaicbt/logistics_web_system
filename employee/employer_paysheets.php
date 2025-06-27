@@ -37,9 +37,9 @@ $paysheets = $stmt->fetchAll(PDO::FETCH_ASSOC);
     background-color: #666;
     color: #fff;
   }
-  .container {
+  /* .container {
     font-size: 0.85rem;
-  }
+  } */
   h2 {
     font-size: 1.25rem;
   }

@@ -61,6 +61,18 @@ $leavesStmt = $pdo->prepare("
 ");
 $leavesStmt->execute();
 $leaves = $leavesStmt->fetchAll();
+
+// LOGS
+function logAction($pdo, $userId, $action)
+{
+    $stmt = $pdo->prepare("INSERT INTO logs (user_id, action, ip_address, user_agent) VALUES (?, ?, ?, ?)");
+    $stmt->execute([
+        $userId,
+        $action,
+        $_SERVER['REMOTE_ADDR'],
+        $_SERVER['HTTP_USER_AGENT'] ?? null
+    ]);
+}
 ?>
 
 <style>
