@@ -214,7 +214,7 @@ function redCheckIcon()
 </style>
 
 <div class="container my-5">
-    <h2 class="mb-4 fw-bold">MANAGE USER</h2>
+    <h2 class="mb-4 fw-bold">Manage Users</h2>
     <div class="row g-2 mb-4"></div>
     <form method="get" action="manage_users.php" role="search" aria-label="Search users" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 20px;">
         <input

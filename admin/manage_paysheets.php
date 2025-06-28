@@ -87,7 +87,7 @@ if ($currentRole === 'admin') {
     } */
 
     h2 {
-        font-size: 1.25rem;
+        font-size: 2rem;
     }
 </style>
 

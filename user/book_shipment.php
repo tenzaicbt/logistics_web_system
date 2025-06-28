@@ -112,7 +112,7 @@ $containers = $pdo->query("SELECT id, container_no, type FROM containers WHERE s
 
 <div class="container my-5">
     <div class="mb-4 fw-bold">
-        <h2 class="fw-bold">BOOK A SHIPMENT</h2>
+        <h2 class="fw-bold">Shipments Bookings</h2>
     </div>
 
     <?php if ($success): ?>

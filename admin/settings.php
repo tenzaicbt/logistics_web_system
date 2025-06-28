@@ -146,7 +146,7 @@ h2 {
     .page-title {
     font-size: 2.5rem;
     font-weight: 700;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     color:rgb(37, 36, 36);
     margin-bottom: 1rem;
 }
@@ -158,7 +158,7 @@ h2 {
        style="position: absolute; top: 0; right: 0; font-size: 1.8rem; color:rgb(236, 0, 0); text-decoration: none; cursor: pointer;">
        &#9410;
     </a>
-    <h2 class="page-title">SETTIGNS</h2>
+    <h2 class="page-title">Settings</h2>
 
     <?php if ($success): ?>
         <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>

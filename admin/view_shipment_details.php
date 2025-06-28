@@ -179,7 +179,7 @@ if (!$shipment) {
     </div>
 
     <div class="mt-4">
-        <a href="view_shipment.php" class="btn btn-back">Back to Shipments</a>
+        <a href="manage_shipments.php" class="btn btn-back">Back to Shipments</a>
     </div>
 </div>
 

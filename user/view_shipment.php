@@ -3,7 +3,7 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-if ($_SESSION['role'] !== 'admin') {
+if ($_SESSION['role'] !== 'user') {
     echo "<div class='alert alert-danger m-5'>Access denied.</div>";
     require_once '../includes/footer.php';
     exit;
@@ -52,7 +52,7 @@ $shipments = $stmt->fetchAll();
 </style>
 
 <div class="container my-5">
-  <h2 class="fw-bold mb-4">ALL SHIPMENTS (Admin View)</h2>
+  <h2 class="fw-bold mb-4">All Shipments</h2>
 
   <form class="row g-2 mb-4">
     <div class="col-md-3">
@@ -85,13 +85,11 @@ $shipments = $stmt->fetchAll();
       <thead class="table-light">
         <tr>
           <th>Shipment No</th>
-          <th>User</th>
           <th>Container</th>
           <th>Origin → Destination</th>
           <th>Dates</th>
           <th>Delivery Type</th>
           <th>Status</th>
-          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -100,7 +98,6 @@ $shipments = $stmt->fetchAll();
         <?php else: foreach ($shipments as $s): ?>
           <tr>
             <td><?= htmlspecialchars($s['shipment_id']) ?></td>
-            <td><?= htmlspecialchars($s['username'] ?? '-') ?></td>
             <td><?= htmlspecialchars($s['container_no'] ?? '-') ?></td>
             <td><?= htmlspecialchars($s['origin']) ?> → <?= htmlspecialchars($s['destination']) ?></td>
             <td>
@@ -115,11 +112,6 @@ $shipments = $stmt->fetchAll();
                     ($s['status'] === 'Pending' ? 'bg-warning text-dark' : 'bg-danger')) ?>">
                 <?= htmlspecialchars($s['status']) ?>
               </span>
-            </td>
-            <td class="text-nowrap">
-              <a href="view_shipment_details.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
-              <a href="shipment_edit.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
-              <a href="shipment_delete.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this shipment?')">Delete</a>
             </td>
           </tr>
         <?php endforeach; endif; ?>

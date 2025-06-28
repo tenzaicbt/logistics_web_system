@@ -42,18 +42,16 @@ try {
 $currentRole = $_SESSION['role'] ?? 'user';
 
 $actions = [
-
+  // ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
   ['title' => 'Manage Bookings', 'desc' => 'Handle and approve bookings.', 'href' => 'manage_bookings.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
   ['title' => 'Manage Fleet', 'desc' => 'Update fleet data.', 'href' => 'manage_fleet.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
   ['title' => 'Manage Shipments', 'desc' => 'View, edit and shipment data.', 'href' => 'manage_shipments.php', 'roles' => ['admin', 'manager', '']],
   ['title' => 'Manage Containers', 'desc' => 'View, edit and container dat.', 'href' => 'manage_containers.php', 'roles' => ['admin', 'manager', '']],
-
-  // ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
   ['title' => 'Manage Users', 'desc' => 'Create, update or delete system users.', 'href' => 'manage_users.php', 'roles' => ['admin']],
   ['title' => 'Manage Leave', 'desc' => 'Review and manage employee leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['admin', 'manager']],
   ['title' => 'Manage Notifications', 'desc' => 'Manage admin notifications.', 'href' => 'admin_message.php', 'roles' => ['admin', 'manager']],
   ['title' => 'Bank Account Details', 'desc' => 'View and update bank account info.', 'href' => 'bank_accounts.php', 'roles' => ['manager']],
-  ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'attendance.php', 'roles' => ['manager']],
+  ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'manage_attendance.php', 'roles' => ['manager']],
   ['title' => 'Manage Paysheets', 'desc' => 'Manage employeer paysheets.', 'href' => 'manage_paysheets.php', 'roles' => ['admin', '']],
 ];
 
