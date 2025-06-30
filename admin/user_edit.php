@@ -90,7 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   select.form-select,
   textarea.form-control {
     font-size: 0.8rem;
-    padding: 0.5rem 0.5rem;
     border-radius: 4px;
     margin-bottom: 0.75rem;
   }
@@ -126,10 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     font-size: 0.8rem;
   }
 
-  footer {
-    font-size: 0.75rem;
-    color: #777;
-  }
 </style>
 
 

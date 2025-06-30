@@ -1,33 +1,4 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Jun 27, 2025 at 01:37 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `northport`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admin_messages`
---
-
-CREATE TABLE `admin_messages` (
+TABLE `admin_messages` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(150) NOT NULL,
@@ -38,13 +9,36 @@ CREATE TABLE `admin_messages` (
   `status` enum('Pending','Solved') DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
+TABLE `attendances` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `check_in_time` time DEFAULT NULL,
+  `check_out_time` time DEFAULT NULL,
+  `status` enum('Present','Absent','Late','Leave','Remote') NOT NULL DEFAULT 'Present',
+  `remarks` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `device_info` varchar(255) DEFAULT NULL,
+  `is_manual_entry` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Table structure for table `bookings`
---
+TABLE `bank_details` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `bank_name` varchar(255) NOT NULL,
+  `branch_name` varchar(255) NOT NULL,
+  `account_number` varchar(50) NOT NULL,
+  `account_name` varchar(255) NOT NULL,
+  `currency` varchar(10) NOT NULL DEFAULT 'LKR',
+  `swift_code` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `bookings` (
+TABLE `bookings` (
   `id` int(11) NOT NULL,
   `booking_ref` varchar(50) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -56,13 +50,7 @@ CREATE TABLE `bookings` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `containers`
---
-
-CREATE TABLE `containers` (
+TABLE `containers` (
   `id` int(11) NOT NULL,
   `container_no` varchar(50) NOT NULL,
   `type` enum('20ft','40ft','Reefer','Open Top','Tank') NOT NULL,
@@ -74,13 +62,7 @@ CREATE TABLE `containers` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `documents`
---
-
-CREATE TABLE `documents` (
+TABLE `documents` (
   `id` int(11) NOT NULL,
   `shipment_id` int(11) NOT NULL,
   `document_type` enum('Bill of Lading','Invoice','Packing List','Commercial Invoice','Other') NOT NULL,
@@ -91,13 +73,7 @@ CREATE TABLE `documents` (
   `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `document_templates`
---
-
-CREATE TABLE `document_templates` (
+TABLE `document_templates` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `type` enum('Bill of Lading','Invoice','Packing List','Other') NOT NULL,
@@ -106,13 +82,7 @@ CREATE TABLE `document_templates` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `employee_leaves`
---
-
-CREATE TABLE `employee_leaves` (
+TABLE `employee_leaves` (
   `id` int(11) NOT NULL,
   `employee_id` int(11) NOT NULL,
   `leave_type` varchar(50) NOT NULL,
@@ -131,13 +101,7 @@ CREATE TABLE `employee_leaves` (
   `rejected_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `fleets`
---
-
-CREATE TABLE `fleets` (
+TABLE `fleets` (
   `id` int(11) NOT NULL,
   `fleet_name` varchar(100) NOT NULL,
   `type` enum('Vessel','Truck') NOT NULL,
@@ -153,13 +117,7 @@ CREATE TABLE `fleets` (
   `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `invoices`
---
-
-CREATE TABLE `invoices` (
+TABLE `invoices` (
   `id` int(11) NOT NULL,
   `booking_id` int(11) NOT NULL,
   `invoice_number` varchar(50) NOT NULL,
@@ -171,13 +129,7 @@ CREATE TABLE `invoices` (
   `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `logs`
---
-
-CREATE TABLE `logs` (
+TABLE `logs` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `action` varchar(255) NOT NULL,
@@ -186,13 +138,7 @@ CREATE TABLE `logs` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `notifications`
---
-
-CREATE TABLE `notifications` (
+TABLE `notifications` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -201,13 +147,7 @@ CREATE TABLE `notifications` (
   `sent_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `payments`
---
-
-CREATE TABLE `payments` (
+TABLE `payments` (
   `id` int(11) NOT NULL,
   `booking_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -223,13 +163,7 @@ CREATE TABLE `payments` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `paysheets`
---
-
-CREATE TABLE `paysheets` (
+TABLE `paysheets` (
   `id` int(11) NOT NULL,
   `employer_id` int(11) NOT NULL,
   `uploaded_by` int(11) DEFAULT NULL,
@@ -239,13 +173,7 @@ CREATE TABLE `paysheets` (
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `roles_permissions`
---
-
-CREATE TABLE `roles_permissions` (
+ TABLE `roles_permissions` (
   `id` int(11) NOT NULL,
   `role` enum('admin','manager','employer','user') NOT NULL,
   `module` varchar(100) NOT NULL,
@@ -255,26 +183,14 @@ CREATE TABLE `roles_permissions` (
   `can_delete` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `settings`
---
-
-CREATE TABLE `settings` (
+TABLE `settings` (
   `id` int(11) NOT NULL,
   `setting_key` varchar(100) NOT NULL,
   `setting_value` text DEFAULT NULL,
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `shipments`
---
-
-CREATE TABLE `shipments` (
+TABLE `shipments` (
   `id` int(11) NOT NULL,
   `shipment_id` varchar(50) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -299,13 +215,7 @@ CREATE TABLE `shipments` (
   `delivery_type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
+TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -331,223 +241,3 @@ CREATE TABLE `users` (
   `nic_passport_number` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `admin_messages`
---
-ALTER TABLE `admin_messages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `bookings`
---
-ALTER TABLE `bookings`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `booking_ref` (`booking_ref`);
-
---
--- Indexes for table `containers`
---
-ALTER TABLE `containers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `documents`
---
-ALTER TABLE `documents`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `document_templates`
---
-ALTER TABLE `document_templates`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `employee_leaves`
---
-ALTER TABLE `employee_leaves`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `fleets`
---
-ALTER TABLE `fleets`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `invoices`
---
-ALTER TABLE `invoices`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `invoice_number` (`invoice_number`);
-
---
--- Indexes for table `logs`
---
-ALTER TABLE `logs`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `notifications`
---
-ALTER TABLE `notifications`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payments`
---
-ALTER TABLE `payments`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `paysheets`
---
-ALTER TABLE `paysheets`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_employer` (`employer_id`),
-  ADD KEY `fk_uploaded_by` (`uploaded_by`);
-
---
--- Indexes for table `roles_permissions`
---
-ALTER TABLE `roles_permissions`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `settings`
---
-ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_setting_key` (`setting_key`);
-
---
--- Indexes for table `shipments`
---
-ALTER TABLE `shipments`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `admin_messages`
---
-ALTER TABLE `admin_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `bookings`
---
-ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `containers`
---
-ALTER TABLE `containers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `documents`
---
-ALTER TABLE `documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `document_templates`
---
-ALTER TABLE `document_templates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `employee_leaves`
---
-ALTER TABLE `employee_leaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `fleets`
---
-ALTER TABLE `fleets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `invoices`
---
-ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `logs`
---
-ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `notifications`
---
-ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `payments`
---
-ALTER TABLE `payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `paysheets`
---
-ALTER TABLE `paysheets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `roles_permissions`
---
-ALTER TABLE `roles_permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `settings`
---
-ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `shipments`
---
-ALTER TABLE `shipments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `paysheets`
---
-ALTER TABLE `paysheets`
-  ADD CONSTRAINT `fk_employer` FOREIGN KEY (`employer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_uploaded_by` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

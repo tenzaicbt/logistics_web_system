@@ -273,7 +273,7 @@ function redCheckIcon()
                                     <a href="role_management.php?user_id=<?= $user['id'] ?>" class="btn-simple">Roles</a>
                                     <!-- <a href="edit_permissions.php?user_id=<?= $user['id'] ?>" class="btn-simple">Permissions</a> -->
                                     <a href="user_reset_password.php?id=<?= $user['id'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-simple" onclick="return confirm('Reset password?');">Reset PW</a>
-                                    <a href="user_kick.php?id=<?= $user['id'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-simple" onclick="return confirm('Kick user?');">Kick</a>
+                                    <a href="view_employer_info.php?id=<?= $user['id'] ?>" class="btn-simple">Info</a>
                                 </div>
                             </td>
 

@@ -53,6 +53,7 @@ $actions = [
   ['title' => 'Bank Account Details', 'desc' => 'View and update bank account info.', 'href' => 'bank_accounts.php', 'roles' => ['manager']],
   ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'manage_attendance.php', 'roles' => ['manager']],
   ['title' => 'Manage Paysheets', 'desc' => 'Manage employeer paysheets.', 'href' => 'manage_paysheets.php', 'roles' => ['admin', '']],
+  ['title' => 'Attendance', 'desc' => 'View employeers attendance.', 'href' => 'view_attendance.php', 'roles' => ['admin']],
 ];
 
 // Stats
@@ -161,6 +162,28 @@ $pendingMessages = $pendingMessages->fetchAll();
   .notification-item small {
     color: #666;
   }
+      .btn {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+    }
+
+    .btn-danger {
+        background-color: #e30613;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b6050e;
+    }
+
+    .btn-secondary {
+        background-color: #666;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #444;
+    }
 </style>
 
 <div class="container my-5">
@@ -239,7 +262,7 @@ $pendingMessages = $pendingMessages->fetchAll();
           <div class="card h-100 p-3 shadow-sm d-flex flex-column">
             <h6 class="fw-bold"><?= htmlspecialchars($a['title']) ?></h6>
             <p class="text-muted small flex-grow-1"><?= htmlspecialchars($a['desc']) ?></p>
-            <a href="<?= htmlspecialchars($a['href']) ?>" class="btn btn-outline-secondary btn-sm mt-auto">Access</a>
+            <a href="<?= htmlspecialchars($a['href']) ?>" class="btn btn-danger btn-sm mt-auto">Access</a>
           </div>
         </div>
       <?php endif; ?>
@@ -353,4 +376,5 @@ $pendingMessages = $pendingMessages->fetchAll();
   });
 </script>
 
+ <div class="row g-6 mt-5"></div>
 <?php require_once '../includes/admin_footer.php'; ?>

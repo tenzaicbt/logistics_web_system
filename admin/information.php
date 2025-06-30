@@ -3,7 +3,6 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
-// Count total records in major tables
 function getTableCount($pdo, $table)
 {
     try {
@@ -28,159 +27,94 @@ $counts = [
 $displayErrors = ini_get('display_errors');
 $sessionCookieParams = session_get_cookie_params();
 $poweredByExposed = in_array('X-Powered-By', headers_list());
-$uploadsWritable = is_writable(__DIR__ . '/../uploads'); // adjust path if needed
+$uploadsWritable = is_writable(__DIR__ . '/../uploads');
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
+<style>
+    .section-title {
+        font-weight: 700;
+        color: #b6050e;
+        border-bottom: 2px solid #ccc;
+        margin-bottom: 10px;
+        padding-bottom: 4px;
+        font-size: 1.1rem;
+    }
 
-<head>
-    <meta charset="UTF-8" />
-    <title>System Info - ExploreSri</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-        body {
-            background-color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-        }
+    .info-label {
+        font-weight: 600;
+        color: #444;
+        width: 200px;
+        display: inline-block;
+    }
 
-        /* .container {
-            padding-top: 0px;
-            max-width: 1000px;
-        } */
+    .info-row {
+        padding: 5px 0;
+    }
+        .btn {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+    }
 
-        .card {
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-        }
+    .btn-danger {
+        background-color: #e30613;
+        border: none;
+    }
 
-        .card-header {
-            background-color:rgb(163, 7, 7);
-            color: white;
-            font-weight: bold;
-        }
+    .btn-danger:hover {
+        background-color: #b6050e;
+    }
 
-        .badge {
-            font-size: 0.85rem;
-        }
+    .btn-secondary {
+        background-color: #666;
+        border: none;
+    }
 
-        .developer-info p {
-            margin: 0;
-        }
+    .btn-secondary:hover {
+        background-color: #444;
+    }
+</style>
 
-        .table-summary td {
-            font-weight: 500;
-        }
+<div class="container my-5">
+    <h2 class="fw-bold mb-4">System Information</h2>
 
-        .text-muted small {
-            font-size: 0.85rem;
-        }
-    </style>
-</head>
+    <div class="section-title">Developer Info</div>
+    <div class="info-row"><span class="info-label">Developer:</span> Yohan Koshala</div>
+    <div class="info-row"><span class="info-label">Location:</span> Sri Lanka</div>
+    <div class="info-row"><span class="info-label">Version:</span> NorthPort Logistics ERP 1.0</div>
+    <div class="info-row"><span class="info-label">Last Update:</span> June 2025</div>
 
-<body>
-    <div class="container">
-        <h3 class="mb-4 text-center">System Information</h3>
+    <div class="section-title mt-5">Server & PHP Info</div>
+    <div class="info-row"><span class="info-label">PHP Version:</span> <?= phpversion(); ?></div>
+    <div class="info-row"><span class="info-label">MySQL Version:</span> <?= $pdo->getAttribute(PDO::ATTR_SERVER_VERSION); ?></div>
+    <div class="info-row"><span class="info-label">Server Software:</span> <?= htmlspecialchars($_SERVER['SERVER_SOFTWARE'] ?? 'N/A'); ?></div>
+    <div class="info-row"><span class="info-label">Operating System:</span> <?= php_uname(); ?></div>
 
-        <!-- Developer Info -->
-        <div class="card">
-            <div class="card-header">Developer Info</div>
-            <div class="card-body developer-info">
-                <p><strong>Developer:</strong> Yohan Koshala</p>
-                <p><strong>Location:</strong> Sri Lanka</p>
-                <div class="mt-3">
-                    <span class="badge bg-dark">ExploreSri Version 1.0</span>
-                    <span class="badge bg-secondary">Last Update: June 2025</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Server Info -->
-        <div class="card">
-            <div class="card-header">Server & PHP Info</div>
-            <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-4">PHP Version</dt>
-                    <dd class="col-sm-8"><?= phpversion(); ?></dd>
-
-                    <dt class="col-sm-4">MySQL Version</dt>
-                    <dd class="col-sm-8"><?= $pdo->getAttribute(PDO::ATTR_SERVER_VERSION); ?></dd>
-
-                    <dt class="col-sm-4">Server Software</dt>
-                    <dd class="col-sm-8"><?= htmlspecialchars($_SERVER['SERVER_SOFTWARE'] ?? 'N/A'); ?></dd>
-
-                    <dt class="col-sm-4">Operating System</dt>
-                    <dd class="col-sm-8"><?= php_uname(); ?></dd>
-                </dl>
-            </div>
-        </div>
-
-        <!-- System Status -->
-        <div class="card">
-            <div class="card-header">System Status & Security</div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        Session Status:
-                        <?= session_status() === PHP_SESSION_ACTIVE
-                            ? '<span class="text-success fw-bold">Active</span>'
-                            : '<span class="text-danger fw-bold">Inactive</span>' ?>
-                    </li>
-                    <li class="list-group-item">
-                        HTTPS:
-                        <span class="text-warning fw-bold">Check manually on server</span>
-                    </li>
-                    <li class="list-group-item">
-                        Admin Auth:
-                        <span class="text-success fw-bold">Secured (Session)</span>
-                    </li>
-                    <li class="list-group-item">
-                        Database Connection:
-                        <span class="text-success fw-bold">Connected</span>
-                    </li>
-                    <li class="list-group-item">
-                        Prepared Queries:
-                        <span class="text-info fw-bold">Recommended</span>
-                    </li>
-                    <li class="list-group-item">
-                        Display Errors:
-                        <?= $displayErrors
-                            ? '<span class="text-danger fw-bold">ON (Should be OFF in production)</span>'
-                            : '<span class="text-success fw-bold">OFF</span>' ?>
-                    </li>
-                    <li class="list-group-item">
-                        Session Cookies (HTTPOnly):
-                        <?= $sessionCookieParams['httponly']
-                            ? '<span class="text-success fw-bold">Enabled</span>'
-                            : '<span class="text-danger fw-bold">Disabled</span>' ?>
-                    </li>
-                    <li class="list-group-item">
-                        Session Cookies (Secure):
-                        <?= $sessionCookieParams['secure']
-                            ? '<span class="text-success fw-bold">Enabled</span>'
-                            : '<span class="text-warning fw-bold">Not forced</span>' ?>
-                    </li>
-                    <li class="list-group-item">
-                        X-Powered-By Header:
-                        <?= $poweredByExposed
-                            ? '<span class="text-warning fw-bold">Exposed (Can leak PHP version)</span>'
-                            : '<span class="text-success fw-bold">Hidden</span>' ?>
-                    </li>
-                    <li class="list-group-item">
-                        Uploads Directory Writable:
-                        <?= $uploadsWritable
-                            ? '<span class="text-warning fw-bold">Writable (Restrict in production)</span>'
-                            : '<span class="text-success fw-bold">Safe</span>' ?>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="text-center mt-4">
-            <a href="dashboard.php" class="btn btn-dark">Back to Dashboard</a>
-        </div>
+    <div class="section-title mt-5">System Status & Security</div>
+    <div class="info-row"><span class="info-label">Session Status:</span>
+        <?= session_status() === PHP_SESSION_ACTIVE ? '<span class="text-success fw-bold">Active</span>' : '<span class="text-danger fw-bold">Inactive</span>' ?>
     </div>
-</body>
+    <div class="info-row"><span class="info-label">HTTPS:</span> <span class="text-warning fw-bold">Check manually on server</span></div>
+    <div class="info-row"><span class="info-label">Admin Auth:</span> <span class="text-success fw-bold">Secured (Session)</span></div>
+    <div class="info-row"><span class="info-label">Database Connection:</span> <span class="text-success fw-bold">Connected</span></div>
+    <div class="info-row"><span class="info-label">Prepared Queries:</span> <span class="text-info fw-bold">Recommended</span></div>
+    <div class="info-row"><span class="info-label">Display Errors:</span>
+        <?= $displayErrors ? '<span class="text-danger fw-bold">ON</span>' : '<span class="text-success fw-bold">OFF</span>' ?>
+    </div>
+    <div class="info-row"><span class="info-label">Session Cookies (HTTPOnly):</span>
+        <?= $sessionCookieParams['httponly'] ? '<span class="text-success fw-bold">Enabled</span>' : '<span class="text-danger fw-bold">Disabled</span>' ?>
+    </div>
+    <div class="info-row"><span class="info-label">Session Cookies (Secure):</span>
+        <?= $sessionCookieParams['secure'] ? '<span class="text-success fw-bold">Enabled</span>' : '<span class="text-warning fw-bold">Not forced</span>' ?>
+    </div>
+    <div class="info-row"><span class="info-label">X-Powered-By Header:</span>
+        <?= $poweredByExposed ? '<span class="text-warning fw-bold">Exposed</span>' : '<span class="text-success fw-bold">Hidden</span>' ?>
+    </div>
+    <div class="info-row"><span class="info-label">Uploads Writable:</span>
+        <?= $uploadsWritable ? '<span class="text-warning fw-bold">Writable</span>' : '<span class="text-success fw-bold">Safe</span>' ?>
+    </div>
 
-</html>
+<div class="container my-5"></div>
+    <a href="dashboard.php" class="btn btn-secondary"> Back to Dashboard</a>
+</div>
+
+<?php require_once '../includes/admin_footer.php'; ?>

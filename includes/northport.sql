@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2025 at 01:37 PM
+-- Generation Time: Jun 30, 2025 at 11:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -47,6 +47,54 @@ INSERT INTO `admin_messages` (`id`, `name`, `email`, `subject`, `message`, `crea
 (2, 'yohan koshala', 'vimash@northport.com', 'gg', 'ggggggggggggggg', '2025-06-26 04:36:29', 0, 'Solved'),
 (3, 'yohan', 'yohankoshala@gmail.com', 'gg', 'create p', '2025-06-26 11:58:25', 0, 'Pending'),
 (4, 'yohan', 'vimash@northport.com', 'gg', 'maleeeessaaaa', '2025-06-27 03:17:11', 0, 'Solved');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendances`
+--
+
+CREATE TABLE `attendances` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `check_in_time` time DEFAULT NULL,
+  `check_out_time` time DEFAULT NULL,
+  `status` enum('Present','Absent','Late','Leave','Remote') NOT NULL DEFAULT 'Present',
+  `remarks` varchar(255) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `device_info` varchar(255) DEFAULT NULL,
+  `is_manual_entry` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_details`
+--
+
+CREATE TABLE `bank_details` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `bank_name` varchar(255) NOT NULL,
+  `branch_name` varchar(255) NOT NULL,
+  `account_number` varchar(50) NOT NULL,
+  `account_name` varchar(255) NOT NULL,
+  `currency` varchar(10) NOT NULL DEFAULT 'LKR',
+  `swift_code` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bank_details`
+--
+
+INSERT INTO `bank_details` (`id`, `user_id`, `bank_name`, `branch_name`, `account_number`, `account_name`, `currency`, `swift_code`, `created_at`, `updated_at`) VALUES
+(1, 4, 'Commercial Bank PLC', 'Ratmalana', '80086111', 'Christy Philip', 'LKR', NULL, '2025-06-30 08:54:45', '2025-06-30 08:56:50');
 
 -- --------------------------------------------------------
 
@@ -422,6 +470,20 @@ ALTER TABLE `admin_messages`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `attendances`
+--
+ALTER TABLE `attendances`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_user_date` (`user_id`,`date`);
+
+--
+-- Indexes for table `bank_details`
+--
+ALTER TABLE `bank_details`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `bookings`
 --
 ALTER TABLE `bookings`
@@ -527,6 +589,18 @@ ALTER TABLE `admin_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `attendances`
+--
+ALTER TABLE `attendances`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bank_details`
+--
+ALTER TABLE `bank_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
@@ -619,6 +693,12 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `bank_details`
+--
+ALTER TABLE `bank_details`
+  ADD CONSTRAINT `bank_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `paysheets`

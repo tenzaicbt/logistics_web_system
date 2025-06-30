@@ -245,6 +245,7 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
   <?php if (!empty($user['profile_pic'])): ?>
     <img src="<?= htmlspecialchars($user['profile_pic']) ?>" alt="Profile Picture of <?= htmlspecialchars($user['username']) ?>" class="profile-pic" />
   <?php endif; ?>
+  
 
   <div class="user-info" aria-label="User Profile Information">
     <h2><?= htmlspecialchars($user['username']) ?></h2>
@@ -299,4 +300,5 @@ $documents = $docStmt->fetchAll(PDO::FETCH_ASSOC);
   </section>
 </div>
 </div>
+
 <?php require_once '../includes/footer.php'; ?>
