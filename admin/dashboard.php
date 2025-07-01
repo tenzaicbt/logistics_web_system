@@ -162,28 +162,37 @@ $pendingMessages = $pendingMessages->fetchAll();
   .notification-item small {
     color: #666;
   }
-      .btn {
-        font-size: 0.8rem;
-        padding: 0.25rem 0.75rem;
-    }
 
-    .btn-danger {
-        background-color: #e30613;
-        border: none;
-    }
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+  }
 
-    .btn-danger:hover {
-        background-color: #b6050e;
-    }
+  .btn-danger {
+    background-color: #e30613;
+    border: none;
+  }
 
-    .btn-secondary {
-        background-color: #666;
-        border: none;
-    }
+  .btn-danger:hover {
+    background-color: #b6050e;
+  }
 
-    .btn-secondary:hover {
-        background-color: #444;
-    }
+  .btn-secondary {
+    background-color: #666;
+    border: none;
+  }
+
+  .btn-secondary:hover {
+    background-color: #444;
+  }
+
+  canvas#shipmentsChart {
+    min-height: 140px;
+  }
+
+  canvas {
+    min-height: 200px;
+  }
 </style>
 
 <div class="container my-5">
@@ -254,6 +263,48 @@ $pendingMessages = $pendingMessages->fetchAll();
     <?php endforeach; ?>
   </div>
 
+  <!-- Three‑Chart Row (Small Versions) -->
+  <div class="row g-4 mb-5">
+    <!-- 1) Shipments (Last 7 Days) – thin bar -->
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-bold">Shipments (Last 7 Days)</div>
+        <div class="card-body p-2">
+          <canvas
+            id="shipmentsChart"
+            style="width:100%; height:60px; display:block;">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2) Bookings vs Shipments – small doughnut -->
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-bold">Bookings vs Shipments</div>
+        <div class="card-body d-flex justify-content-center align-items-center p-2">
+          <canvas
+            id="bookingsShipmentsChart"
+            style="width:100px; height:100px;">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3) Fleet vs Containers – small doughnut -->
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header fw-bold">Fleet vs Containers</div>
+        <div class="card-body d-flex justify-content-center align-items-center p-2">
+          <canvas
+            id="fleetContainersChart"
+            style="width:100px; height:100px;">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Management Cards -->
   <div class="row g-3 mb-5">
     <?php foreach ($actions as $a): ?>
@@ -300,81 +351,146 @@ $pendingMessages = $pendingMessages->fetchAll();
     </div>
   </div>
 
-  <!-- Payments and Logs -->
-  <!-- <div class="row g-4 mt-3">
-    <div class="col-lg-6">
-      <div class="card shadow-sm">
-        <div class="card-header fw-bold">Recent Payments</div>
-        <ul class="list-group list-group-flush">
-          <?php foreach ($recentPayments as $pay): ?>
-            <li class="list-group-item d-flex justify-content-between">
-              <div><strong><?= htmlspecialchars($pay['username'] ?? 'Unknown') ?></strong><br>
-                <small><?= htmlspecialchars($pay['payment_method']) ?> - <?= htmlspecialchars($pay['status']) ?></small>
-              </div>
-              <div class="text-end">
-                <div><?= number_format($pay['amount'], 2) . ' ' . htmlspecialchars($pay['currency']) ?></div>
-                <small><?= $pay['paid_at'] ? date('M d, Y', strtotime($pay['paid_at'])) : 'Unpaid' ?></small>
-              </div>
-            </li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
-    </div> -->
+  <script>
+    document.getElementById('notificationBell')?.addEventListener('click', function() {
+      const popup = document.getElementById('notificationPopup');
+      if (!popup) return;
+      popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+    });
 
-    <!-- <div class="col-lg-6">
-      <div class="card shadow-sm">
-        <div class="card-header fw-bold">Recent Logs</div>
-        <ul class="list-group list-group-flush">
-          <?php foreach ($recentLogs as $log): ?>
-            <li class="list-group-item d-flex justify-content-between">
-              <div><strong><?= htmlspecialchars($log['username'] ?? 'Unknown') ?></strong><br><small><?= htmlspecialchars($log['action']) ?></small></div>
-              <small><?= date('M d, Y', strtotime($log['created_at'])) ?></small>
-            </li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
-    </div>
-  </div> -->
+    document.addEventListener('click', function(e) {
+      const popup = document.getElementById('notificationPopup');
+      const bell = document.getElementById('notificationBell');
+      if (!popup || !bell) return;
+      if (!popup.contains(e.target) && e.target !== bell) {
+        popup.style.display = 'none';
+      }
+    });
+  </script>
 
-  <!-- Uploaded Documents -->
-  <!-- <?php if (!empty($recentDocs)): ?>
-    <div class="row g-4 mt-3">
-      <div class="col-lg-12">
-        <div class="card shadow-sm">
-          <div class="card-header fw-bold">Recent Uploaded Documents</div>
-          <ul class="list-group list-group-flush">
-            <?php foreach ($recentDocs as $doc): ?>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div><strong><?= htmlspecialchars($doc['document_type']) ?></strong> by <?= htmlspecialchars($doc['username'] ?? 'Unknown') ?></div>
-                <div class="text-end">
-                  <a href="../uploads/<?= htmlspecialchars($doc['file_path']) ?>" target="_blank" class="me-2">View</a>
-                  <small><?= date('M d, Y', strtotime($doc['uploaded_at'])) ?></small>
-                </div>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-      </div>
-    </div>
-  <?php endif; ?>
-</div> container -->
+ <!-- Chart.js (load once) -->
+<!-- Chart.js core + DataLabels plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
 <script>
-  document.getElementById('notificationBell')?.addEventListener('click', function() {
-    const popup = document.getElementById('notificationPopup');
-    if (!popup) return;
-    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
-  });
+(() => {
+  // —— 1) Shipments Bar Chart (colors unchanged) ——  
+  const sCtx = document.getElementById('shipmentsChart')?.getContext('2d');
+  let sChart;
+  function refreshShipments() {
+    if (!sCtx) return;
+    fetch('../api/shipments_chart_data.php')
+      .then(r=>r.json())
+      .then(({labels,data})=>{
+        if (sChart) {
+          sChart.data.labels = labels;
+          sChart.data.datasets[0].data = data;
+          sChart.update();
+        } else {
+          sChart = new Chart(sCtx, {
+            type:'bar',
+            data:{ labels, datasets:[{
+              label:'Shipments',
+              data,
+              backgroundColor:'#e30613DD'
+            }]},
+            options:{
+              responsive:true, maintainAspectRatio:false,
+              animation:{ duration:800, easing:'easeOutQuart' },
+              scales:{ x:{display:false}, y:{beginAtZero:true} },
+              plugins:{ legend:{display:false} }
+            }
+          });
+        }
+      })
+      .catch(console.error);
+  }
+  refreshShipments();
+  setInterval(refreshShipments,30000);
 
-  document.addEventListener('click', function(e) {
-    const popup = document.getElementById('notificationPopup');
-    const bell = document.getElementById('notificationBell');
-    if (!popup || !bell) return;
-    if (!popup.contains(e.target) && e.target !== bell) {
-      popup.style.display = 'none';
+  // —— 2) Doughnut builder with custom colors & labels ——  
+  function makeDoughnut(ctxId, apiUrl, colors) {
+    const canvas = document.getElementById(ctxId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let chart;
+    function load() {
+      fetch(apiUrl)
+        .then(r=>r.json())
+        .then(({labels,data})=>{
+          const total = data.reduce((sum,v)=>sum+v,0);
+          const dataset = {
+            data,
+            backgroundColor: colors,       // ← YOUR CUSTOM SLICE COLORS
+            borderColor: colors.map(c=>c),
+            borderWidth:1
+          };
+          if (chart) {
+            chart.data.labels = labels;
+            chart.data.datasets[0] = dataset;
+            chart.update();
+          } else {
+            chart = new Chart(ctx, {
+              type:'doughnut',
+              data:{ labels, datasets:[dataset] },
+              options:{
+                responsive:true, maintainAspectRatio:false,
+                animation:{ duration:800, easing:'easeOutBounce' },
+                plugins:{
+                  legend:{
+                    position:'bottom',
+                    labels:{ boxWidth:12, font:{size:10}, color:'#333' }  // legend label color
+                  },
+                  tooltip:{
+                    callbacks:{
+                      label:ctx=>{
+                        const v = ctx.parsed;
+                        const pct = total ? ((v/total*100).toFixed(1)+'%') : '0%';
+                        return `${ctx.label}: ${v} (${pct})`;
+                      }
+                    }
+                  },
+                  datalabels:{ 
+                    color:'#ffffff',        // ← IN‑SLICE TEXT COLOR
+                    font:{ weight:'bold', size:11 },
+                    formatter:(v, ctx)=>{
+                      const pct = total ? ((v/total*100).toFixed(0)+'%') : '0%';
+                      // return either value, percent, or both on separate lines:
+                      return `${v}\n${pct}`;  // change to `${pct}` if you only want % 
+                    },
+                    anchor:'center',
+                    align:'center',
+                    clamp:true
+                  }
+                }
+              },
+              plugins:[ ChartDataLabels ]
+            });
+          }
+        })
+        .catch(console.error);
     }
-  });
+    load();
+    setInterval(load,30000);
+  }
+
+  // —— 3) Initialize your two doughnuts with new palettes ——  
+  makeDoughnut(
+    'bookingsShipmentsChart',
+    '../api/bookings_vs_shipments.php',
+    ['#ff6384', '#36a2eb']    // ← e.g. pink & blue
+  );
+
+  makeDoughnut(
+    'fleetContainersChart',
+    '../api/fleet_vs_containers.php',
+    ['#4bc0c0', '#ff9f40']    // ← e.g. teal & orange
+  );
+})();
 </script>
 
- <div class="row g-6 mt-5"></div>
-<?php require_once '../includes/admin_footer.php'; ?>
+
+
+  <div class="row g-6 mt-5"></div>
+  <?php require_once '../includes/admin_footer.php'; ?>

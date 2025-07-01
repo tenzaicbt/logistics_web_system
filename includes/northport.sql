@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 30, 2025 at 11:02 AM
+-- Generation Time: Jul 01, 2025 at 04:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -45,7 +45,7 @@ CREATE TABLE `admin_messages` (
 INSERT INTO `admin_messages` (`id`, `name`, `email`, `subject`, `message`, `created_at`, `seen`, `status`) VALUES
 (1, 'yohan', 'yohankoshala@gmail.com', 'gg', 'ggggg', '2025-06-26 03:19:01', 0, 'Solved'),
 (2, 'yohan koshala', 'vimash@northport.com', 'gg', 'ggggggggggggggg', '2025-06-26 04:36:29', 0, 'Solved'),
-(3, 'yohan', 'yohankoshala@gmail.com', 'gg', 'create p', '2025-06-26 11:58:25', 0, 'Pending'),
+(3, 'yohan', 'yohankoshala@gmail.com', 'gg', 'create p', '2025-06-26 11:58:25', 0, 'Solved'),
 (4, 'yohan', 'vimash@northport.com', 'gg', 'maleeeessaaaa', '2025-06-27 03:17:11', 0, 'Solved');
 
 -- --------------------------------------------------------
@@ -94,7 +94,7 @@ CREATE TABLE `bank_details` (
 --
 
 INSERT INTO `bank_details` (`id`, `user_id`, `bank_name`, `branch_name`, `account_number`, `account_name`, `currency`, `swift_code`, `created_at`, `updated_at`) VALUES
-(1, 4, 'Commercial Bank PLC', 'Ratmalana', '80086111', 'Christy Philip', 'LKR', NULL, '2025-06-30 08:54:45', '2025-06-30 08:56:50');
+(1, 4, 'Commercial Bank PLC', 'Ratmalana', '8008683111', 'Christy Philip', 'LKR', NULL, '2025-06-30 08:54:45', '2025-06-30 09:52:32');
 
 -- --------------------------------------------------------
 
@@ -131,6 +131,17 @@ CREATE TABLE `containers` (
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `containers`
+--
+
+INSERT INTO `containers` (`id`, `container_no`, `type`, `status`, `location`, `assigned_fleet_id`, `last_inspected_at`, `created_at`, `updated_at`) VALUES
+(1, 'CNT-2025-001', '40ft', 'Available', 'Colombo Port', 1, '2025-05-01', '2025-06-30 15:41:44', '2025-07-01 12:18:10'),
+(2, 'CNT-2025-002', 'Reefer', 'Available', 'Storage Yard B', NULL, '2025-04-15', '2025-06-30 15:41:44', '2025-06-30 15:41:44'),
+(3, 'CNT-2025-003', '20ft', 'Under Maintenance', 'Repair Bay 3', 3, '2025-06-01', '2025-06-30 15:41:44', '2025-06-30 15:41:44'),
+(4, 'CNT-2025-004', 'Open Top', 'Damaged', 'Colombo Port', NULL, '2025-03-10', '2025-06-30 15:41:44', '2025-06-30 15:41:44'),
+(5, 'CNT-2025-005', 'Tank', 'Available', 'Jaffna Terminal', 5, '2025-06-15', '2025-06-30 15:41:44', '2025-06-30 15:41:44');
 
 -- --------------------------------------------------------
 
@@ -224,7 +235,12 @@ CREATE TABLE `fleets` (
 --
 
 INSERT INTO `fleets` (`id`, `fleet_name`, `type`, `registration_no`, `capacity`, `status`, `created_at`, `updated_at`, `manufacturer`, `model`, `year_built`, `location`, `notes`) VALUES
-(1, 'Pacific Voyager', 'Vessel', 'PV-2025-001', 5000, 'Active', '2025-06-24 23:11:08', '2025-06-27 08:55:48', 'Oceanic Shipyards', 'Voyager X200', 2018, 'Singapore Port', '');
+(1, 'Pacific Voyager', 'Vessel', 'PV-2025-001', 5000, 'Active', '2025-06-24 23:11:08', '2025-06-27 08:55:48', 'Oceanic Shipyards', 'Voyager X200', 2018, 'Singapore Port', ''),
+(2, 'Ocean Carrier A', 'Vessel', 'OC-A-1234', 5000, 'Active', '2025-06-30 15:41:34', '2025-06-30 15:41:34', 'MarineWorks', 'X500', 2015, 'Colombo Port', 'Flagship vessel'),
+(3, 'Harbor Hauler B', 'Vessel', 'HH-B-5678', 3000, 'Inactive', '2025-06-30 15:41:34', '2025-06-30 15:41:34', 'OceanX', 'SeaGo 300', 2010, 'Galle Dock', 'Retired from regular use'),
+(4, 'Highway Express', 'Truck', 'HX-T-7777', 12000, 'Under Maintenance', '2025-06-30 15:41:34', '2025-06-30 15:41:34', 'Volvo', 'FH16', 2019, 'Warehouse 5', 'Needs tire replacement'),
+(5, 'Mountain Mover', 'Truck', 'MM-T-8899', 8000, 'Active', '2025-06-30 15:41:34', '2025-06-30 15:41:34', 'Isuzu', 'GigaMax', 2020, 'Kandy Depot', 'Reliable for heavy cargo'),
+(6, 'Island Runner', 'Vessel', 'IR-V-3210', 4000, 'Active', '2025-06-30 15:41:34', '2025-06-30 15:41:34', 'ShipLine', 'AquaPro', 2017, 'Trincomalee Bay', 'Short-distance ferry service');
 
 -- --------------------------------------------------------
 
@@ -377,14 +393,14 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `updated_at`) VALUES
-(1, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-06-27 09:46:01'),
+(1, 'company_name', 'NorthPort Logistics Pvt Ltd', '2025-07-01 08:05:18'),
 (2, 'logo_path', 'assets/images/logo.png', '2025-06-26 12:11:14'),
-(3, 'footer_text', '', '2025-06-27 09:46:01'),
-(4, 'site_logo', 'assets/images/site_logo_1750940130.png', '2025-06-26 12:15:30'),
-(5, 'footer_contact_email', 'info@northportlogistics.com', '2025-06-27 09:46:01'),
-(6, 'footer_contact_phone', '+94 11 2517446', '2025-06-27 09:46:01'),
-(7, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-06-27 09:46:01'),
-(8, 'footer_address_line2', 'Sri Lanka', '2025-06-27 09:46:01');
+(3, 'footer_text', '', '2025-07-01 08:05:18'),
+(4, 'site_logo', 'assets/images/site_logo_1751357118.png', '2025-07-01 08:05:18'),
+(5, 'footer_contact_email', 'info@northportlogistics.com', '2025-07-01 08:05:18'),
+(6, 'footer_contact_phone', '+94 11 2517446', '2025-07-01 08:05:18'),
+(7, 'footer_address_line1', 'No. 46, Kesbewa Road, Boralesgamuwa Colombo – 10290', '2025-07-01 08:05:18'),
+(8, 'footer_address_line2', 'Sri Lanka', '2025-07-01 08:05:18');
 
 -- --------------------------------------------------------
 
@@ -416,6 +432,17 @@ CREATE TABLE `shipments` (
   `package_value` varchar(50) DEFAULT NULL,
   `delivery_type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `shipments`
+--
+
+INSERT INTO `shipments` (`id`, `shipment_id`, `user_id`, `booking_id`, `container_id`, `origin`, `destination`, `status`, `departure_date`, `arrival_date`, `created_at`, `updated_at`, `sender_name`, `sender_address`, `sender_contact`, `recipient_name`, `recipient_address`, `recipient_contact`, `package_contents`, `package_weight`, `package_value`, `delivery_type`) VALUES
+(1, 'SHIP-2025-001', 1, 10, 1, 'Colombo', 'Dubai', 'Delivered', '2025-04-01', '2025-04-10', '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'ABC Exports', '123 Ocean Road, Colombo', '0771234567', 'XYZ Imports', '78 Bay Street, Dubai', '+971502345678', 'Electronics and gadgets', '1500', '25000', 'Air Freight'),
+(2, 'SHIP-2025-002', 2, 12, 2, 'Hambantota', 'Chennai', 'In Transit', '2025-06-20', NULL, '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'Sun Lanka Pvt Ltd', 'Port Access Road, Hambantota', '0762345678', 'IndoSea Traders', 'Chennai Port, India', '+91-9876543210', 'Marine spare parts', '800', '18000', 'Sea Freight'),
+(3, 'SHIP-2025-003', 3, 15, 3, 'Galle', 'Singapore', 'Pending', '2025-07-10', NULL, '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'Galle Textiles', '456 Lighthouse Ave, Galle', '0753456789', 'Singapore Retail Hub', '2 Temasek Blvd, Singapore', '+65 61234567', 'Fabric rolls and accessories', '1200', '15000', 'Air Freight'),
+(4, 'SHIP-2025-004', 4, 18, NULL, 'Trincomalee', 'Jakarta', 'Cancelled', '2025-05-15', NULL, '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'Trinco Steel Co.', 'Industrial Zone, Trincomalee', '0787654321', 'Jakarta Construction Ltd', 'Jakarta Industrial Estate', '+62 812345678', 'Steel bars and rods', '3500', '40000', 'Sea Freight'),
+(5, 'SHIP-2025-005', 5, 20, 5, 'Jaffna', 'Kuala Lumpur', 'Delivered', '2025-03-01', '2025-03-12', '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'North Lanka Herbs', '456 Palmyrah Rd, Jaffna', '0749988776', 'KL Herbal Market', 'Jalan Ampang, Kuala Lumpur', '+60 1123456789', 'Medicinal herbs and oils', '900', '11000', 'Land + Sea Freight');
 
 -- --------------------------------------------------------
 
@@ -457,7 +484,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `role`, `is_act
 (1, 'Yohan Koshala', 'yohankoshala@gmail.com', '$2y$10$ZEvAE7pZ4HgM5qyQ4iGPjuXqPQxGAtwjJrRztLihtRcam2c2criKO', 'user', 1, '2025-06-23 11:26:47', '2025-06-24 03:29:43', '0766446354', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro Technologies (PVT) Ltd', '', '2000-01-21', NULL, '', NULL, NULL, NULL, NULL),
 (2, 'admin', 'admin@northport.com', '$2y$10$x2mFCP.UpSdTOctE3r9SRuD5tfWPw6A3UaP7frAspSiQ5egaQVtsm', 'admin', 1, '2025-06-23 12:38:27', '2025-06-24 03:21:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 'Vimash Kavinda', 'vimash@northport.com', '$2y$10$KYSmusBrhFjJVlnLs4GESOZQy9w6odqbaHeNPXyGl5msxnF1ND/5q', 'manager', 1, '2025-06-24 03:41:06', '2025-06-24 03:41:06', '0766446355', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro (PVT) Ltd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'Christy Philip', 'philip@northport.com', '$2y$10$M.2aRUl1T/vX3FZi2OjYkOu7cs.mATiMxIvy1JMNmgR2tx67Oj5Vm', 'employer', 1, '2025-06-24 17:20:33', '2025-06-24 17:20:33', '0766446366', NULL, NULL, 'western Province', '10360', 'sri lanka', 'Aramex (PVT) Ltd', NULL, '2000-01-24', NULL, NULL, NULL, NULL, NULL, NULL);
+(4, 'Christy Philip', 'philip@northport.com', '$2y$10$M.2aRUl1T/vX3FZi2OjYkOu7cs.mATiMxIvy1JMNmgR2tx67Oj5Vm', 'employer', 1, '2025-06-24 17:20:33', '2025-06-30 09:27:41', '0766446366', 'No 73, Mount Lavinia', 'colombo', 'western Province', '10360', 'sri lanka', 'Aramex (PVT) Ltd', NULL, '2000-01-24', NULL, '', '', '', NULL, '');
 
 --
 -- Indexes for dumped tables
@@ -610,7 +637,7 @@ ALTER TABLE `bookings`
 -- AUTO_INCREMENT for table `containers`
 --
 ALTER TABLE `containers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `documents`
@@ -634,7 +661,7 @@ ALTER TABLE `employee_leaves`
 -- AUTO_INCREMENT for table `fleets`
 --
 ALTER TABLE `fleets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `invoices`
@@ -676,13 +703,13 @@ ALTER TABLE `roles_permissions`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `shipments`
 --
 ALTER TABLE `shipments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

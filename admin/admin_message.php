@@ -14,15 +14,23 @@ $currentRole = $_SESSION['role'] ?? 'user';
 
 // Handle status toggle (only for admin)
 if ($currentRole === 'admin' && isset($_GET['toggle_status'], $_GET['id'])) {
-    $id = (int)$_GET['id'];
-    $newStatus = $_GET['toggle_status'] === 'Solved' ? 'Solved' : 'Pending';
+    $id        = (int) $_GET['id'];
+    $newStatus = ($_GET['toggle_status'] === 'Solved') ? 'Solved' : 'Pending';
 
-    $stmt = $pdo->prepare("UPDATE admin_messages SET status = ? WHERE id = ?");
+    $stmt = $pdo->prepare(
+        "UPDATE admin_messages SET status = ? WHERE id = ?"
+    );
     $stmt->execute([$newStatus, $id]);
 
-    header('Location: admin_message.php');
+    $baseUrl = strtok($_SERVER['REQUEST_URI'], '?');      // /admin/admin_message.php
+    $params  = $_GET;
+    unset($params['id'], $params['toggle_status']);       // toss the temp stuff
+    $qs = $params ? ('?' . http_build_query($params)) : '';
+
+    header("Location: {$baseUrl}{$qs}");
     exit;
 }
+
 
 // Fetch all messages
 $stmt = $pdo->query("SELECT * FROM admin_messages ORDER BY created_at DESC");
