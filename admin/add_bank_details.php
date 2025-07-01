@@ -35,15 +35,21 @@ $errors  = [];
 $user_id = $bank_id = $branch_name = $account_number = $account_name = $swift_code = '';
 $currency = 'LKR';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user_id        = (int)($_POST['user_id']   ?? 0);
-    $bank_id        = (int)($_POST['bank_name'] ?? 0);
-    $branch_name    = trim($_POST['branch_name']    ?? '');
-    $account_number = trim($_POST['account_number'] ?? '');
-    $account_name   = trim($_POST['account_name']   ?? '');
-    $currency       = strtoupper(trim($_POST['currency'] ?? 'LKR'));
-    $swift_code     = trim($_POST['swift_code']     ?? '');
+// Automatically set the user_id for employer (only allows them to use their own ID)
+if ($role === 'employer') {
+    $user_id = $myId;
+}
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $user_id        = (int)($_POST['user_id'] ?? 0);
+    $bank_id        = (int)($_POST['bank_name'] ?? 0);
+    $branch_name    = trim($_POST['branch_name'] ?? '');
+    $account_number = trim($_POST['account_number'] ?? '');
+    $account_name   = trim($_POST['account_name'] ?? '');
+    $currency       = strtoupper(trim($_POST['currency'] ?? 'LKR'));
+    $swift_code     = trim($_POST['swift_code'] ?? '');
+
+    // Employer cannot choose other users, so we enforce $user_id
     if ($role === 'employer') {
         $user_id = $myId;
     }
@@ -80,9 +86,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $success = true;
+        // Reset input fields after success
         $user_id = $bank_id = $branch_name = $account_number = $account_name = $swift_code = '';
         $currency = 'LKR';
     }
+}
+
+// Fetch bank accounts depending on the role
+if ($role === 'employer') {
+    // If the user is an employer, only show their own bank account details
+    $bankAccountsStmt = $pdo->prepare("
+        SELECT b.*, u.username
+        FROM bank_details b
+        JOIN users u ON u.id = b.user_id
+        WHERE b.user_id = ?
+    ");
+    $bankAccountsStmt->execute([$myId]);
+    $bankAccounts = $bankAccountsStmt->fetchAll(PDO::FETCH_ASSOC);  // Fetch as array
+} elseif (in_array($role, ['admin', 'manager'])) {
+    // If the user is an admin or manager, show all bank accounts
+    $bankAccountsStmt = $pdo->query("
+        SELECT b.*, u.username
+        FROM bank_details b
+        JOIN users u ON u.id = b.user_id
+    ");
+    $bankAccounts = $bankAccountsStmt->fetchAll(PDO::FETCH_ASSOC);  // Fetch as array
+} else {
+    $bankAccounts = [];
 }
 ?>
 
@@ -90,7 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <style>
-    
   body {
     font-family: 'Segoe UI', sans-serif;
   }
@@ -158,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <form method="POST" class="mt-3">
     <div class="row mb-3">
-      <?php if(in_array($role,['admin','manager'])): ?>
+      <?php if(in_array($role, ['admin', 'manager'])): ?>
         <div class="col-md-6">
           <label class="form-label">User</label>
           <select name="user_id" class="form-select select2" required>
@@ -171,6 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </select>
         </div>
       <?php else: ?>
+        <!-- For Employers: Automatically set user_id to their own ID -->
         <input type="hidden" name="user_id" value="<?=$myId?>">
       <?php endif; ?>
 
@@ -195,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php
             if($bank_id && isset($branchesData[$bank_id])){
               foreach($branchesData[$bank_id] as $br){
-                $sel = ($br['name']===$branch_name)?'selected':''; ?>
+                $sel = ($br['name'] === $branch_name) ? 'selected' : ''; ?>
                 <option value="<?=htmlspecialchars($br['name'])?>" <?=$sel?>>
                   <?=htmlspecialchars($br['name'])?>
                 </option>
@@ -234,11 +264,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="d-flex justify-content-between mt-4">
-      <a href="bank_accounts.php" class="btn btn-secondary">Back</a>
+      <?php if(in_array($role, ['admin', 'manager'])): ?>
+        <a href="bank_accounts.php" class="btn btn-secondary">Back</a>
+      <?php elseif($role === 'employer'): ?>
+        <a href="dashboard.php" class="btn btn-secondary">Back</a>
+      <?php endif; ?>
       <button type="submit" class="btn btn-danger">Save</button>
     </div>
   </form>
 </div>
+
+<!-- Bank Account Table -->
+<?php if ($role === 'employer'): ?>
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">My Bank Account</h2>
+  </div>
+
+  <div class="table-responsive card shadow-sm">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>User</th>
+          <th>Bank Name</th>
+          <th>Branch</th>
+          <th>Account Name</th>
+          <th>Account No</th>
+          <th>SWIFT</th>
+          <th>Currency</th>
+          <th>Created</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php if (count($bankAccounts)): ?>
+          <?php foreach ($bankAccounts as $b): ?>
+            <tr>
+              <td><?= htmlspecialchars($b['username']) ?></td>
+              <td><?= htmlspecialchars($b['bank_name']) ?></td>
+              <td><?= htmlspecialchars($b['branch_name'] ?? '-') ?></td>
+              <td><?= htmlspecialchars($b['account_name']) ?></td>
+              <td><?= htmlspecialchars($b['account_number']) ?></td>
+              <td><?= htmlspecialchars($b['swift_code'] ?? '-') ?></td>
+              <td><?= htmlspecialchars($b['currency']) ?></td>
+              <td><?= date('Y-m-d', strtotime($b['created_at'])) ?></td>
+              <td><?= date('Y-m-d', strtotime($b['updated_at'])) ?></td>
+              <td class="text-nowrap">
+                <a href="edit_bank_details.php?id=<?= $b['id'] ?>" class="btn btn-sm btn-outline-danger">Edit</a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr>
+            <td colspan="10" class="text-center text-muted">You have not added any bank account details.</td>
+          </tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+<?php endif; ?>
+
 
 <!-- Select2 + branch dropdown logic -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

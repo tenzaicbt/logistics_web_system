@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 01, 2025 at 04:08 PM
+-- Generation Time: Jul 01, 2025 at 06:05 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -94,7 +94,8 @@ CREATE TABLE `bank_details` (
 --
 
 INSERT INTO `bank_details` (`id`, `user_id`, `bank_name`, `branch_name`, `account_number`, `account_name`, `currency`, `swift_code`, `created_at`, `updated_at`) VALUES
-(1, 4, 'Commercial Bank PLC', 'Ratmalana', '8008683111', 'Christy Philip', 'LKR', NULL, '2025-06-30 08:54:45', '2025-06-30 09:52:32');
+(1, 4, 'Commercial Bank PLC', 'Ratmalana', '8008683111', 'Christy Philip', 'LKR', NULL, '2025-07-01 15:49:29', '2025-07-01 15:49:29'),
+(2, 3, 'Amana Bank PLC', 'Pettah', '8008683180', 'Vimash Kavinda', 'LKR', NULL, '2025-07-01 16:04:33', '2025-07-01 16:04:33');
 
 -- --------------------------------------------------------
 
@@ -438,11 +439,11 @@ CREATE TABLE `shipments` (
 --
 
 INSERT INTO `shipments` (`id`, `shipment_id`, `user_id`, `booking_id`, `container_id`, `origin`, `destination`, `status`, `departure_date`, `arrival_date`, `created_at`, `updated_at`, `sender_name`, `sender_address`, `sender_contact`, `recipient_name`, `recipient_address`, `recipient_contact`, `package_contents`, `package_weight`, `package_value`, `delivery_type`) VALUES
-(1, 'SHIP-2025-001', 1, 10, 1, 'Colombo', 'Dubai', 'Delivered', '2025-04-01', '2025-04-10', '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'ABC Exports', '123 Ocean Road, Colombo', '0771234567', 'XYZ Imports', '78 Bay Street, Dubai', '+971502345678', 'Electronics and gadgets', '1500', '25000', 'Air Freight'),
-(2, 'SHIP-2025-002', 2, 12, 2, 'Hambantota', 'Chennai', 'In Transit', '2025-06-20', NULL, '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'Sun Lanka Pvt Ltd', 'Port Access Road, Hambantota', '0762345678', 'IndoSea Traders', 'Chennai Port, India', '+91-9876543210', 'Marine spare parts', '800', '18000', 'Sea Freight'),
-(3, 'SHIP-2025-003', 3, 15, 3, 'Galle', 'Singapore', 'Pending', '2025-07-10', NULL, '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'Galle Textiles', '456 Lighthouse Ave, Galle', '0753456789', 'Singapore Retail Hub', '2 Temasek Blvd, Singapore', '+65 61234567', 'Fabric rolls and accessories', '1200', '15000', 'Air Freight'),
-(4, 'SHIP-2025-004', 4, 18, NULL, 'Trincomalee', 'Jakarta', 'Cancelled', '2025-05-15', NULL, '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'Trinco Steel Co.', 'Industrial Zone, Trincomalee', '0787654321', 'Jakarta Construction Ltd', 'Jakarta Industrial Estate', '+62 812345678', 'Steel bars and rods', '3500', '40000', 'Sea Freight'),
-(5, 'SHIP-2025-005', 5, 20, 5, 'Jaffna', 'Kuala Lumpur', 'Delivered', '2025-03-01', '2025-03-12', '2025-06-30 15:43:40', '2025-06-30 15:43:40', 'North Lanka Herbs', '456 Palmyrah Rd, Jaffna', '0749988776', 'KL Herbal Market', 'Jalan Ampang, Kuala Lumpur', '+60 1123456789', 'Medicinal herbs and oils', '900', '11000', 'Land + Sea Freight');
+(1, 'SHIP-2025-001', 1, 10, 1, 'Colombo', 'Dubai', 'Pending', '2025-04-01', '2025-04-10', '2025-06-30 15:43:40', '2025-07-01 19:49:07', 'ABC Exports', '123 Ocean Road, Colombo', '0771234567', 'XYZ Imports', '78 Bay Street, Dubai', '+971502345678', 'Electronics and gadgets', '1500', '25000', 'Air Freight'),
+(2, 'SHIP-2025-002', 2, 12, 2, 'Hambantota', 'Chennai', 'Delivered', '2025-06-20', NULL, '2025-06-30 15:43:40', '2025-07-01 19:49:09', 'Sun Lanka Pvt Ltd', 'Port Access Road, Hambantota', '0762345678', 'IndoSea Traders', 'Chennai Port, India', '+91-9876543210', 'Marine spare parts', '800', '18000', 'Sea Freight'),
+(3, 'SHIP-2025-003', 3, 15, 3, 'Galle', 'Singapore', 'In Transit', '2025-07-10', NULL, '2025-06-30 15:43:40', '2025-07-01 19:48:52', 'Galle Textiles', '456 Lighthouse Ave, Galle', '0753456789', 'Singapore Retail Hub', '2 Temasek Blvd, Singapore', '+65 61234567', 'Fabric rolls and accessories', '1200', '15000', 'Air Freight'),
+(4, 'SHIP-2025-004', 4, 18, NULL, 'Trincomalee', 'Jakarta', 'Cancelled', '2025-05-15', NULL, '2025-06-30 15:43:40', '2025-07-01 19:49:14', 'Trinco Steel Co.', 'Industrial Zone, Trincomalee', '0787654321', 'Jakarta Construction Ltd', 'Jakarta Industrial Estate', '+62 812345678', 'Steel bars and rods', '3500', '40000', 'Sea Freight'),
+(5, 'SHIP-2025-005', 5, 20, 5, 'Jaffna', 'Kuala Lumpur', 'Delivered', '2025-03-01', '2025-03-12', '2025-06-30 15:43:40', '2025-07-01 19:46:26', 'North Lanka Herbs', '456 Palmyrah Rd, Jaffna', '0749988776', 'KL Herbal Market', 'Jalan Ampang, Kuala Lumpur', '+60 1123456789', 'Medicinal herbs and oils', '900', '11000', 'Land + Sea Freight');
 
 -- --------------------------------------------------------
 
@@ -625,7 +626,7 @@ ALTER TABLE `attendances`
 -- AUTO_INCREMENT for table `bank_details`
 --
 ALTER TABLE `bank_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `bookings`

@@ -67,7 +67,7 @@ $leaves = $stmt->fetchAll();
     .content-small .form-control,
     .content-small .form-select,
     .content-small .btn {
-        font-size: 0.8rem;
+        font-size: 0.95rem;
     }
 </style>
 

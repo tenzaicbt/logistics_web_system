@@ -43,17 +43,20 @@ $currentRole = $_SESSION['role'] ?? 'user';
 
 $actions = [
   // ['title' => 'Employee Leave', 'desc' => 'Manage employee leave requests.', 'href' => 'employee_leave.php', 'roles' => ['manager']],
-  ['title' => 'Manage Bookings', 'desc' => 'Handle and approve bookings.', 'href' => 'manage_bookings.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
-  ['title' => 'Manage Fleet', 'desc' => 'Update fleet data.', 'href' => 'manage_fleet.php', 'roles' => ['admin', 'manager', 'employer', 'user']],
+  ['title' => 'Manage Bookings', 'desc' => 'Handle and approve bookings.', 'href' => 'manage_bookings.php', 'roles' => ['admin', 'manager']],
+  ['title' => 'Manage Fleet', 'desc' => 'Update fleet data.', 'href' => 'manage_fleet.php', 'roles' => ['admin', 'manager']],
   ['title' => 'Manage Shipments', 'desc' => 'View, edit and shipment data.', 'href' => 'manage_shipments.php', 'roles' => ['admin', 'manager', '']],
   ['title' => 'Manage Containers', 'desc' => 'View, edit and container dat.', 'href' => 'manage_containers.php', 'roles' => ['admin', 'manager', '']],
   ['title' => 'Manage Users', 'desc' => 'Create, update or delete system users.', 'href' => 'manage_users.php', 'roles' => ['admin']],
   ['title' => 'Manage Leave', 'desc' => 'Review and manage employee leave requests.', 'href' => 'manage_leaves.php', 'roles' => ['admin', 'manager']],
-  ['title' => 'Manage Notifications', 'desc' => 'Manage admin notifications.', 'href' => 'admin_message.php', 'roles' => ['admin', 'manager']],
   ['title' => 'Bank Account Details', 'desc' => 'View and update bank account info.', 'href' => 'bank_accounts.php', 'roles' => ['manager']],
   ['title' => 'Attendance', 'desc' => 'Manage attendance (optional integration).', 'href' => 'manage_attendance.php', 'roles' => ['manager']],
   ['title' => 'Manage Paysheets', 'desc' => 'Manage employeer paysheets.', 'href' => 'manage_paysheets.php', 'roles' => ['admin', '']],
   ['title' => 'Attendance', 'desc' => 'View employeers attendance.', 'href' => 'view_attendance.php', 'roles' => ['admin']],
+  ['title' => 'Manage Notifications', 'desc' => 'Manage admin notifications.', 'href' => 'admin_message.php', 'roles' => ['admin', 'manager']],
+  ['title' => 'Employee Leave ', 'desc' => 'Create and manage leave for employees.', 'href' => 'employee_leave.php', 'roles' => ['employer']],
+  ['title' => 'Paysheets Details ', 'desc' => 'Monthly paysheets details.', 'href' => 'employer_paysheets.php', 'roles' => ['employer']],
+  ['title' => 'Bank Details ', 'desc' => 'Add Bank details and more ', 'href' => 'add_bank_details.php', 'roles' => ['employer']],
 ];
 
 // Stats
@@ -320,6 +323,7 @@ $pendingMessages = $pendingMessages->fetchAll();
     <?php endforeach; ?>
   </div>
 
+  <?php if ($currentRole == 'admin' || $currentRole == 'manager'): ?>
   <!-- Recent Users and Shipments -->
   <div class="row g-4">
     <div class="col-lg-6">
@@ -350,6 +354,7 @@ $pendingMessages = $pendingMessages->fetchAll();
       </div>
     </div>
   </div>
+<?php endif; ?>
 
   <script>
     document.getElementById('notificationBell')?.addEventListener('click', function() {
@@ -368,7 +373,6 @@ $pendingMessages = $pendingMessages->fetchAll();
     });
   </script>
 
- <!-- Chart.js (load once) -->
 <!-- Chart.js core + DataLabels plugin -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
