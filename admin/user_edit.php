@@ -73,11 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     font-size: 0.85rem;
   }
 
-  h2 {
-    font-size: 1.1rem;
-    color: #e30613;
-    font-weight: 700;
-  }
 
   label.form-label {
     font-size: 0.75rem;
@@ -129,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 <div class="container my-5">
-    <h2 class="mb-4 fw-bold">EDIT USER</h2>
+    <h2 class="mb-4 fw-bold">Edit User</h2>
 
     <?php if (!empty($errors)): ?>
         <div class="alert alert-danger">
@@ -230,8 +225,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
-<footer class="text-center py-4 mt-5">
-    <div class="text-muted small">
-        &copy; <?= date('Y') ?> NorthPort Logistics Pvt Ltd. All rights reserved.
-    </div>
-</footer>
+  <div class="row g-6 mt-5"></div>
+  <?php require_once '../includes/admin_footer.php'; ?>

@@ -271,7 +271,7 @@ $pendingMessages = $pendingMessages->fetchAll();
     <!-- 1) Shipments (Last 7 Days) – thin bar -->
     <div class="col-md-4">
       <div class="card shadow-sm h-100">
-        <div class="card-header fw-bold">Shipments (Last 7 Days)</div>
+        <div class="card-header fw-bold">Shipments (Monthly)</div>
         <div class="card-body p-2">
           <canvas
             id="shipmentsChart"
@@ -284,7 +284,7 @@ $pendingMessages = $pendingMessages->fetchAll();
     <!-- 2) Bookings vs Shipments – small doughnut -->
     <div class="col-md-4">
       <div class="card shadow-sm h-100">
-        <div class="card-header fw-bold">Bookings vs Shipments</div>
+        <div class="card-header fw-bold">Shipments Status</div>
         <div class="card-body d-flex justify-content-center align-items-center p-2">
           <canvas
             id="bookingsShipmentsChart"
@@ -379,117 +379,189 @@ $pendingMessages = $pendingMessages->fetchAll();
 
 <script>
 (() => {
-  // —— 1) Shipments Bar Chart (colors unchanged) ——  
+  // —— 1) Enhanced Shipments Bar Chart ——  
   const sCtx = document.getElementById('shipmentsChart')?.getContext('2d');
   let sChart;
+
   function refreshShipments() {
     if (!sCtx) return;
+
     fetch('../api/shipments_chart_data.php')
-      .then(r=>r.json())
-      .then(({labels,data})=>{
+      .then(r => r.json())
+      .then(({ labels, data }) => {
+        const gradient = sCtx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, '#e30613');
+        gradient.addColorStop(1, '#f87070');
+
+        const dataset = {
+          label: 'Shipments',
+          data,
+          backgroundColor: gradient,
+          borderRadius: 8,
+          hoverBackgroundColor: '#b6050e',
+          barThickness: 28
+        };
+
         if (sChart) {
           sChart.data.labels = labels;
-          sChart.data.datasets[0].data = data;
+          sChart.data.datasets[0] = dataset;
           sChart.update();
         } else {
           sChart = new Chart(sCtx, {
-            type:'bar',
-            data:{ labels, datasets:[{
-              label:'Shipments',
-              data,
-              backgroundColor:'#e30613DD'
-            }]},
-            options:{
-              responsive:true, maintainAspectRatio:false,
-              animation:{ duration:800, easing:'easeOutQuart' },
-              scales:{ x:{display:false}, y:{beginAtZero:true} },
-              plugins:{ legend:{display:false} }
-            }
+            type: 'bar',
+            data: {
+              labels,
+              datasets: [dataset]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: {
+                duration: 900,
+                easing: 'easeOutQuart'
+              },
+              scales: {
+                x: {
+                  ticks: {
+                    font: { size: 11 },
+                    color: '#333'
+                  },
+                  grid: { display: false }
+                },
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    font: { size: 11 },
+                    color: '#333'
+                  },
+                  grid: {
+                    color: '#eee'
+                  }
+                }
+              },
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: ctx => `Shipments: ${ctx.parsed.y}`
+                  }
+                },
+                datalabels: {
+                  anchor: 'end',
+                  align: 'top',
+                  color: '#333',
+                  font: {
+                    weight: 'bold',
+                    size: 10
+                  },
+                  formatter: v => v
+                }
+              }
+            },
+            plugins: [ChartDataLabels]
           });
         }
       })
       .catch(console.error);
   }
-  refreshShipments();
-  setInterval(refreshShipments,30000);
 
-  // —— 2) Doughnut builder with custom colors & labels ——  
+  refreshShipments();
+  setInterval(refreshShipments, 30000);
+
+  // —— 2) Doughnut Chart Builder ——  
   function makeDoughnut(ctxId, apiUrl, colors) {
     const canvas = document.getElementById(ctxId);
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let chart;
+
     function load() {
       fetch(apiUrl)
-        .then(r=>r.json())
-        .then(({labels,data})=>{
-          const total = data.reduce((sum,v)=>sum+v,0);
+        .then(r => r.json())
+        .then(({ labels, data }) => {
+          const total = data.reduce((sum, v) => sum + v, 0);
+
           const dataset = {
             data,
-            backgroundColor: colors,       // ← YOUR CUSTOM SLICE COLORS
-            borderColor: colors.map(c=>c),
-            borderWidth:1
+            backgroundColor: colors,
+            borderColor: colors.map(c => c),
+            borderWidth: 1
           };
+
           if (chart) {
             chart.data.labels = labels;
             chart.data.datasets[0] = dataset;
             chart.update();
           } else {
             chart = new Chart(ctx, {
-              type:'doughnut',
-              data:{ labels, datasets:[dataset] },
-              options:{
-                responsive:true, maintainAspectRatio:false,
-                animation:{ duration:800, easing:'easeOutBounce' },
-                plugins:{
-                  legend:{
-                    position:'bottom',
-                    labels:{ boxWidth:12, font:{size:10}, color:'#333' }  // legend label color
+              type: 'doughnut',
+              data: {
+                labels,
+                datasets: [dataset]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                  duration: 800,
+                  easing: 'easeOutBounce'
+                },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: {
+                      boxWidth: 12,
+                      font: { size: 10 },
+                      color: '#333'
+                    }
                   },
-                  tooltip:{
-                    callbacks:{
-                      label:ctx=>{
+                  tooltip: {
+                    callbacks: {
+                      label: ctx => {
                         const v = ctx.parsed;
-                        const pct = total ? ((v/total*100).toFixed(1)+'%') : '0%';
+                        const pct = total ? ((v / total * 100).toFixed(1) + '%') : '0%';
                         return `${ctx.label}: ${v} (${pct})`;
                       }
                     }
                   },
-                  datalabels:{ 
-                    color:'#ffffff',        // ← IN‑SLICE TEXT COLOR
-                    font:{ weight:'bold', size:11 },
-                    formatter:(v, ctx)=>{
-                      const pct = total ? ((v/total*100).toFixed(0)+'%') : '0%';
-                      // return either value, percent, or both on separate lines:
-                      return `${v}\n${pct}`;  // change to `${pct}` if you only want % 
+                  datalabels: {
+                    color: '#ffffff',
+                    font: {
+                      weight: 'bold',
+                      size: 11
                     },
-                    anchor:'center',
-                    align:'center',
-                    clamp:true
+                    formatter: (v, ctx) => {
+                      const pct = total ? ((v / total * 100).toFixed(0) + '%') : '0%';
+                      return `${v}\n${pct}`;
+                    },
+                    anchor: 'center',
+                    align: 'center',
+                    clamp: true
                   }
                 }
               },
-              plugins:[ ChartDataLabels ]
+              plugins: [ChartDataLabels]
             });
           }
         })
         .catch(console.error);
     }
+
     load();
-    setInterval(load,30000);
+    setInterval(load, 30000);
   }
 
-  // —— 3) Initialize your two doughnuts with new palettes ——  
+  // —— 3) Initialize Doughnut Charts ——  
   makeDoughnut(
     'bookingsShipmentsChart',
     '../api/bookings_vs_shipments.php',
-    ['#ff6384', '#36a2eb']    // ← e.g. pink & blue
+    ['#1f77b4', '#ff7f0e', '#6c757d', '#FF0000'] // Blue & Orange
   );
 
   makeDoughnut(
     'fleetContainersChart',
     '../api/fleet_vs_containers.php',
-    ['#4bc0c0', '#ff9f40']    // ← e.g. teal & orange
+    ['#28a745', '#6c757d', '#FF0000'] // Green, Gray, Red
   );
 })();
 </script>

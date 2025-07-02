@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="container my-5">
     <div class="mb-4 fw-bold">
-        <h2 class="fw-bold">EDIT SHIPMENT</h2>
+        <h2 class="fw-bold">Edit Shipments</h2>
     </div>
 
     <?php if ($success): ?>

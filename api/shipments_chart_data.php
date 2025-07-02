@@ -1,23 +1,21 @@
 <?php
-// api/shipments_status.php
+// api/monthly_shipments.php
 require_once __DIR__ . '/../includes/db.php';
 
 $stmt = $pdo->query("
-  SELECT status, COUNT(*) AS cnt
-    FROM shipments
-   GROUP BY status
+  SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS count
+  FROM shipments
+  GROUP BY month
+  ORDER BY month
 ");
-$rows = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-// Ensure all four statuses appear (even if zero)
-$all = ['Pending','In Transit','Delivered','Cancelled'];
-$data = [];
-foreach($all as $s) {
-  $data[$s] = isset($rows[$s]) ? (int)$rows[$s] : 0;
-}
+$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$labels = array_column($data, 'month');
+$counts = array_map('intval', array_column($data, 'count'));
 
 header('Content-Type: application/json');
 echo json_encode([
-  'labels' => array_keys($data),
-  'data'   => array_values($data),
+  'labels' => $labels,
+  'data' => $counts
 ]);

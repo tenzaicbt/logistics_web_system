@@ -79,48 +79,93 @@ if (
 ?>
 
 <style>
-    .btn, .form-control, .form-select { font-size: 0.85rem; }
-    h2 { font-size: 1.5rem; font-weight: bold; }
-    .btn { padding: 0.25rem 0.75rem; }
-    .btn-danger { background-color: #e30613; border: none; }
-    .btn-danger:hover { background-color: #b6050e; }
-    .btn-secondary { background-color: #666; border: none; }
-    .btn-secondary:hover { background-color: #444; }
+    .btn,
+    .form-control,
+    .form-select {
+        font-size: 0.85rem;
+    }
+
+    .btn {
+        padding: 0.25rem 0.75rem;
+    }
+
+    .btn-danger {
+        background-color: #e30613;
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background-color: #b6050e;
+    }
+
+    .btn-secondary {
+        background-color: #666;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #444;
+    }
+
+
 </style>
+
 
 <div class="container my-5">
     <h2 class="fw-bold mb-4">Manage Shipments</h2>
+<!-- Shipment Filters -->
+<form class="row gy-2 gx-3 align-items-center mb-4" method="get">
 
-    <form class="row g-2 mb-4" method="get">
-        <div class="col-md-3">
-            <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" class="form-control" placeholder="Search by shipment, origin, destination">
-        </div>
-        <div class="col-md-2">
-            <select name="status" class="form-select">
-                <option value="">All Status</option>
-                <option value="Pending" <?= $status === 'Pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="In Transit" <?= $status === 'In Transit' ? 'selected' : '' ?>>In Transit</option>
-                <option value="Delivered" <?= $status === 'Delivered' ? 'selected' : '' ?>>Delivered</option>
-                <option value="Cancelled" <?= $status === 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select name="type" class="form-select">
-                <option value="">All Delivery Types</option>
-                <option value="Standard" <?= $type === 'Standard' ? 'selected' : '' ?>>Standard</option>
-                <option value="Express" <?= $type === 'Express' ? 'selected' : '' ?>>Express</option>
-                <option value="Overnight" <?= $type === 'Overnight' ? 'selected' : '' ?>>Overnight</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-outline-secondary w-100">Filter</button>
-        </div>
-        <?php if ($role === 'admin'): ?>
-            <div class="col-md-3 text-end">
-                <a href="create_shipment.php" class="btn btn-danger">Create Shipment</a>
-            </div>
-        <?php endif; ?>
-    </form>
+  <!-- Search -->
+  <div class="col-md-3">
+    <div class="input-group input-group-sm">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text"
+             name="q"
+             value="<?= htmlspecialchars($search) ?>"
+             class="form-control"
+             placeholder="Search: shipment, origin, destination">
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="col-md-2">
+    <select name="status" class="form-select form-select-sm">
+      <option value="">All Status</option>
+      <option value="Pending"     <?= $status === 'Pending'     ? 'selected' : '' ?>>🟡 Pending</option>
+      <option value="In Transit"  <?= $status === 'In Transit'  ? 'selected' : '' ?>>🔵 In Transit</option>
+      <option value="Delivered"   <?= $status === 'Delivered'   ? 'selected' : '' ?>>🟢 Delivered</option>
+      <option value="Cancelled"   <?= $status === 'Cancelled'   ? 'selected' : '' ?>>🔴 Cancelled</option>
+    </select>
+  </div>
+
+  <!-- Delivery Type -->
+  <div class="col-md-2">
+    <select name="type" class="form-select form-select-sm">
+      <option value="">All Delivery Types</option>
+      <option value="Standard"   <?= $type === 'Standard'   ? 'selected' : '' ?>>Standard</option>
+      <option value="Express"    <?= $type === 'Express'    ? 'selected' : '' ?>>Express</option>
+      <option value="Overnight"  <?= $type === 'Overnight'  ? 'selected' : '' ?>>Overnight</option>
+    </select>
+  </div>
+
+  <!-- Filter Button -->
+  <div class="col-md-2 d-grid">
+    <button class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-funnel-fill me-1"></i> Filter
+    </button>
+  </div>
+
+  <!-- Create Shipment (Admin only) -->
+  <?php if ($role === 'admin'): ?>
+    <div class="col-md-3 text-end">
+      <a href="create_shipment.php" class="btn btn-sm btn-danger">
+        <i class="bi bi-plus-circle me-1"></i> Create Shipment
+      </a>
+    </div>
+  <?php endif; ?>
+
+</form>
 
     <div class="table-responsive card shadow-sm">
         <table class="table table-hover mb-0">
@@ -139,44 +184,45 @@ if (
             </thead>
             <tbody>
                 <?php if (!$shipments): ?>
-                    <tr><td colspan="8" class="text-center text-muted py-4">No shipments found.</td></tr>
-                <?php else: foreach ($shipments as $s): ?>
                     <tr>
-                        <td><?= htmlspecialchars($s['shipment_id']) ?></td>
-                        <td><?= htmlspecialchars($s['container_no'] ?? '-') ?></td> <!-- ✅ Container value displayed -->
-                        <?php if ($role !== 'user'): ?><td><?= htmlspecialchars($s['username']) ?></td><?php endif; ?>
-                        <td><?= htmlspecialchars($s['origin']) ?> → <?= htmlspecialchars($s['destination']) ?></td>
-                        <td><?= date('Y-m-d', strtotime($s['departure_date'])) ?> → <?= date('Y-m-d', strtotime($s['arrival_date'])) ?></td>
-                        <td><?= htmlspecialchars($s['delivery_type']) ?></td>
-                        <td>
-                            <?php if ($role === 'admin'): ?>
-                                <form method="POST" class="m-0">
-                                    <input type="hidden" name="shipment_id" value="<?= $s['id'] ?>">
-                                    <input type="hidden" name="update_status" value="1">
-                                    <select name="new_status" class="form-select form-select-sm" onchange="this.form.submit()">
-                                        <?php foreach (['Pending', 'In Transit', 'Delivered', 'Cancelled'] as $option): ?>
-                                            <option value="<?= $option ?>" <?= ($s['status'] === $option ? 'selected' : '') ?>><?= $option ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </form>
-                            <?php else: ?>
-                                <span class="badge <?= $s['status'] === 'Delivered' ? 'bg-success' :
-                                                     ($s['status'] === 'In Transit' ? 'bg-primary' :
-                                                     ($s['status'] === 'Pending' ? 'bg-warning text-dark' : 'bg-danger')) ?>">
-                                    <?= htmlspecialchars($s['status']) ?>
-                                </span>
-                            <?php endif; ?>
-                        </td>
-                        
-                        <td class="text-nowrap">
-                            <a href="view_shipment_details.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
-                            <?php if ($role === 'admin' || ($role === 'user' && $s['status'] === 'Pending')): ?>
-                                <a href="edit_shipment.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                <a href="cancel_shipment.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Cancel this shipment?')">Cancel</a>
-                            <?php endif; ?>
-                        </td>
+                        <td colspan="8" class="text-center text-muted py-4">No shipments found.</td>
                     </tr>
-                <?php endforeach; endif; ?>
+                    <?php else: foreach ($shipments as $s): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($s['shipment_id']) ?></td>
+                            <td><?= htmlspecialchars($s['container_no'] ?? '-') ?></td> <!-- ✅ Container value displayed -->
+                            <?php if ($role !== 'user'): ?><td><?= htmlspecialchars($s['username']) ?></td><?php endif; ?>
+                            <td><?= htmlspecialchars($s['origin']) ?> → <?= htmlspecialchars($s['destination']) ?></td>
+                            <td><?= date('Y-m-d', strtotime($s['departure_date'])) ?> → <?= date('Y-m-d', strtotime($s['arrival_date'])) ?></td>
+                            <td><?= htmlspecialchars($s['delivery_type']) ?></td>
+                            <td>
+                                <?php if ($role === 'admin'): ?>
+                                    <form method="POST" class="m-0">
+                                        <input type="hidden" name="shipment_id" value="<?= $s['id'] ?>">
+                                        <input type="hidden" name="update_status" value="1">
+                                        <select name="new_status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <?php foreach (['Pending', 'In Transit', 'Delivered', 'Cancelled'] as $option): ?>
+                                                <option value="<?= $option ?>" <?= ($s['status'] === $option ? 'selected' : '') ?>><?= $option ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="badge <?= $s['status'] === 'Delivered' ? 'bg-success' : ($s['status'] === 'In Transit' ? 'bg-primary' : ($s['status'] === 'Pending' ? 'bg-warning text-dark' : 'bg-danger')) ?>">
+                                        <?= htmlspecialchars($s['status']) ?>
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+
+                            <td class="text-nowrap">
+                                <a href="view_shipment_details.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-primary">View</a>
+                                <?php if ($role === 'admin' || ($role === 'user' && $s['status'] === 'Pending')): ?>
+                                    <a href="edit_shipment.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="cancel_shipment.php?id=<?= $s['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Cancel this shipment?')">Cancel</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                <?php endforeach;
+                endif; ?>
             </tbody>
         </table>
     </div>

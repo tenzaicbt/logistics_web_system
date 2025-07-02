@@ -72,15 +72,6 @@ $containers = $pdo->query("SELECT id, container_no, type FROM containers WHERE s
         font-size: 0.85rem;
     }
 
-    h4 {
-        font-size: 1.1rem;
-    }
-
-    h6 {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #555;
-    }
 
     /* .container {
         font-size: 0.85rem;
@@ -112,7 +103,7 @@ $containers = $pdo->query("SELECT id, container_no, type FROM containers WHERE s
 
 <div class="container my-5">
     <div class="mb-4 fw-bold">
-        <h2 class="fw-bold">BOOK A SHIPMENT</h2>
+        <h2 class="fw-bold">Book Shipments</h2>
     </div>
 
     <?php if ($success): ?>

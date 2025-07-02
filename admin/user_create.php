@@ -2,6 +2,7 @@
 session_start();
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
+include '../includes/header.php';
 
 $errors = [];
 
@@ -28,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nic_passport     = trim($_POST['nic_passport_number'] ?? '');
   $is_active        = 1;
 
-  // Basic validations
   if (!$username) $errors[] = "Username is required.";
   if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Valid email is required.";
   if (!$password) $errors[] = "Password is required.";
@@ -44,14 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (empty($errors)) {
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
     $stmt = $pdo->prepare("INSERT INTO users (
-            username, email, password_hash, role, is_active, created_at, updated_at,
-            phone, street_address, city, state, postal_code, country,
-            company_name, profile_pic, date_of_birth, notes,
-            department, job_title, date_of_joining, nic_passport_number
-        ) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
+        username, email, password_hash, role, is_active, created_at, updated_at,
+        phone, street_address, city, state, postal_code, country,
+        company_name, profile_pic, date_of_birth, notes,
+        department, job_title, date_of_joining, nic_passport_number
+    ) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([
       $username,
       $email,
@@ -73,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $date_of_joining ?: null,
       $nic_passport ?: null
     ]);
-
     $_SESSION['success'] = "Registration successful.";
     header("Location: manage_users.php");
     exit;
@@ -83,14 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Register User - NorthPort</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/northport/assets/css/animations.css">
-  <script src="/northport/assets/js/animations.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       background-color: #fff;
@@ -99,172 +93,120 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       font-size: 0.85rem;
     }
 
-    .login-container {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
+    .form-label, .form-control, .form-select, .btn {
+      font-size: 0.85rem;
+    }
+
+    .btn-danger {
+      background-color: #e30613;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background-color: #b6050e;
+    }
+
+    .btn-secondary {
+      background-color: #666;
+      border: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #444;
+    }
+
+    .container {
+      font-size: 0.90rem;
+      max-width: 960px;
     }
 
     h3 {
-      text-align: center;
       color: #e30613;
-      font-weight: 700;
-      margin-bottom: 1.2rem;
-      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
     }
 
-    .form-label {
+    .section-title {
       font-weight: 600;
-      font-size: 0.75rem;
-      margin-bottom: 0.2rem;
-    }
-
-    input.form-control,
-    textarea.form-control,
-    select.form-control {
-      font-size: 0.8rem;
-      padding: 0.3rem 0.5rem;
-      border-radius: 4px;
-      margin-bottom: 0.75rem;
-    }
-
-    .btn-primary {
-      background-color: transparent;
-      border: 2px solid #e30613;
-      color: #e30613;
-      font-weight: 600;
-      font-size: 0.8rem;
-      padding: 0.4rem;
-    }
-
-    .btn-primary:hover {
-      background-color: #b6050e;
-      border-color: #b6050e;
-      color: white;
+      font-size: 0.9rem;
+      margin: 1rem 0 0.5rem;
     }
 
     .alert {
       font-size: 0.8rem;
-      padding: 0.5rem 0.75rem;
-      max-width: 720px;
-      margin: 0 auto 1rem auto;
-    }
-
-    small {
-      font-size: 0.75rem;
-    }
-
-    a {
-      color: #cc0612;
-      font-size: 0.75rem;
-    }
-
-    a:hover {
-      color: #b6050e;
-      text-decoration: underline;
     }
   </style>
 </head>
 
 <body>
-  <div class="login-container">
-    <h3>REGISTER NEW USER</h3>
+<div class="container my-5">
+    <div class="mb-4 fw-bold">
+        <h2 class="fw-bold">User Register</h2>
+    </div>
 
     <?php if (!empty($errors)): ?>
       <div class="alert alert-danger">
-        <ul class="mb-0">
-          <?php foreach ($errors as $e): ?>
-            <li><?= htmlspecialchars($e) ?></li>
-          <?php endforeach; ?>
-        </ul>
+        <ul class="mb-0"><?php foreach ($errors as $e): ?><li><?= htmlspecialchars($e) ?></li><?php endforeach; ?></ul>
       </div>
     <?php endif; ?>
 
-    <div class="container my-2">
-      <form method="post" novalidate>
-        <div class="row g-4">
-
-          <div class="col-md-6">
-            <label class="form-label">Username *</label>
-            <input type="text" name="username" class="form-control" required value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
-
-            <label class="form-label">Email *</label>
-            <input type="email" name="email" class="form-control" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
-
-            <label class="form-label">Password *</label>
-            <input type="password" name="password" class="form-control" required>
-
-            <label class="form-label">Confirm Password *</label>
-            <input type="password" name="confirm_password" class="form-control" required>
-
-            <label class="form-label">Role *</label>
-            <select name="role" class="form-control" required>
-              <?php
-              $roles = ['admin', 'manager', 'employer', 'user'];
-              $selectedRole = $_POST['role'] ?? 'user';
-              foreach ($roles as $r) {
-                echo "<option value=\"$r\" " . ($selectedRole === $r ? 'selected' : '') . ">$r</option>";
-              }
-              ?>
-            </select>
-
-            <label class="form-label">Phone</label>
-            <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
-
-            <label class="form-label">Street Address</label>
-            <input type="text" name="street_address" class="form-control" value="<?= htmlspecialchars($_POST['street_address'] ?? '') ?>">
-
-            <label class="form-label">City</label>
-            <input type="text" name="city" class="form-control" value="<?= htmlspecialchars($_POST['city'] ?? '') ?>">
-
-            <label class="form-label">NIC / Passport Number</label>
-            <input type="text" name="nic_passport_number" class="form-control" value="<?= htmlspecialchars($_POST['nic_passport_number'] ?? '') ?>">
-          </div>
-
-
-          <div class="col-md-6">
-            <label class="form-label">State</label>
-            <input type="text" name="state" class="form-control" value="<?= htmlspecialchars($_POST['state'] ?? '') ?>">
-
-            <label class="form-label">Postal Code</label>
-            <input type="text" name="postal_code" class="form-control" value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
-
-            <label class="form-label">Country</label>
-            <input type="text" name="country" class="form-control" value="<?= htmlspecialchars($_POST['country'] ?? '') ?>">
-
-            <label class="form-label">Company Name</label>
-            <input type="text" name="company_name" class="form-control" value="<?= htmlspecialchars($_POST['company_name'] ?? '') ?>">
-
-            <label class="form-label">Profile Picture URL</label>
-            <input type="text" name="profile_pic" class="form-control" value="<?= htmlspecialchars($_POST['profile_pic'] ?? '') ?>">
-
-            <label class="form-label">Date of Birth</label>
-            <input type="date" name="date_of_birth" class="form-control" value="<?= htmlspecialchars($_POST['date_of_birth'] ?? '') ?>">
-            <label class="form-label">Department</label>
-            <input type="text" name="department" class="form-control" value="<?= htmlspecialchars($_POST['department'] ?? '') ?>">
-            <label class="form-label">Job Title</label>
-            <input type="text" name="job_title" class="form-control" value="<?= htmlspecialchars($_POST['job_title'] ?? '') ?>">
-            <label class="form-label">Date of Joining</label>
-            <input type="date" name="date_of_joining" class="form-control" value="<?= htmlspecialchars($_POST['date_of_joining'] ?? '') ?>">
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100 mt-3">Register</button>
-      </form>
-
-      <div class="mt-3 text-center">
-        <small><a href="manage_users.php">Back</a></small>
+    <form method="post" novalidate>
+      <div class="section-title">Account Information</div>
+      <div class="row g-3">
+        <div class="col-md-4"><input name="username" class="form-control" placeholder="Username" required value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"></div>
+        <div class="col-md-4"><input type="email" name="email" class="form-control" placeholder="Email" required value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"></div>
+        <div class="col-md-2"><input type="password" name="password" class="form-control" placeholder="Password" required></div>
+        <div class="col-md-2"><input type="password" name="confirm_password" class="form-control" placeholder="Confirm" required></div>
       </div>
-    </div>
+
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <select name="role" class="form-select" required>
+            <option value="">-- Select Role --</option>
+            <?php foreach (['admin', 'manager', 'employer', 'user'] as $r): ?>
+              <option value="<?= $r ?>" <?= (($_POST['role'] ?? 'user') === $r ? 'selected' : '') ?>><?= ucfirst($r) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="col-md-4"><input name="phone" class="form-control" placeholder="Phone" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>"></div>
+        <div class="col-md-4"><input name="street_address" class="form-control" placeholder="Street Address" value="<?= htmlspecialchars($_POST['street_address'] ?? '') ?>"></div>
+      </div>
+
+      <div class="section-title">Location Details</div>
+      <div class="row g-3">
+        <div class="col-md-3"><input name="city" class="form-control" placeholder="City" value="<?= htmlspecialchars($_POST['city'] ?? '') ?>"></div>
+        <div class="col-md-3"><input name="state" class="form-control" placeholder="State" value="<?= htmlspecialchars($_POST['state'] ?? '') ?>"></div>
+        <div class="col-md-3"><input name="postal_code" class="form-control" placeholder="Postal Code" value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>"></div>
+        <div class="col-md-3"><input name="country" class="form-control" placeholder="Country" value="<?= htmlspecialchars($_POST['country'] ?? '') ?>"></div>
+      </div>
+
+      <div class="section-title">Employment Details</div>
+      <div class="row g-3">
+        <div class="col-md-4"><input name="company_name" class="form-control" placeholder="Company Name" value="<?= htmlspecialchars($_POST['company_name'] ?? '') ?>"></div>
+        <div class="col-md-4"><input name="department" class="form-control" placeholder="Department" value="<?= htmlspecialchars($_POST['department'] ?? '') ?>"></div>
+        <div class="col-md-4"><input name="job_title" class="form-control" placeholder="Job Title" value="<?= htmlspecialchars($_POST['job_title'] ?? '') ?>"></div>
+      </div>
+
+      <div class="row g-3 mt-2">
+        <div class="col-md-4"><input type="date" name="date_of_joining" class="form-control" value="<?= htmlspecialchars($_POST['date_of_joining'] ?? '') ?>"></div>
+        <div class="col-md-4"><input type="date" name="date_of_birth" class="form-control" value="<?= htmlspecialchars($_POST['date_of_birth'] ?? '') ?>"></div>
+        <div class="col-md-4"><input name="nic_passport_number" class="form-control" placeholder="NIC / Passport No." value="<?= htmlspecialchars($_POST['nic_passport_number'] ?? '') ?>"></div>
+      </div>
+
+      <div class="section-title">Other Details</div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><input name="profile_pic" class="form-control" placeholder="Profile Picture URL" value="<?= htmlspecialchars($_POST['profile_pic'] ?? '') ?>"></div>
+        <div class="col-md-6"><textarea name="notes" class="form-control" placeholder="Notes"><?= htmlspecialchars($_POST['notes'] ?? '') ?></textarea></div>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-between">
+        <a href="manage_users.php" class="btn btn-secondary">Back</a>
+        <button type="submit" class="btn btn-danger">Register</button>
+      </div>
+    </form>
   </div>
+
+  <?php require_once '../includes/admin_footer.php'; ?>
 </body>
-
 </html>
-
-<footer class="text-center py-3 mt-2">
-  <div class="footer-bottom">
-    &copy; <?= date('Y') ?> NorthPort Logistics Pvt Ltd. All rights reserved.
-  </div>
-</footer>

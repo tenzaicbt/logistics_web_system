@@ -76,9 +76,7 @@ function logAction($pdo, $userId, $action)
 ?>
 
 <style>
-    .small-text {
-        font-size: 0.85rem;
-    }
+
 
         .btn {
         font-size: 0.8rem;

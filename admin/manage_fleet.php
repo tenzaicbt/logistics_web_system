@@ -71,6 +71,7 @@ $fleets = $stmt->fetchAll();
   /* .container {
     font-size: 0.85rem;
   } */
+   
 </style>
 
 <div class="container my-5">
@@ -81,31 +82,53 @@ $fleets = $stmt->fetchAll();
     <?php endif; ?>
   </div>
 
-  <div class="card p-3 shadow-sm mb-4">
-    <form class="row g-2" method="GET">
-      <div class="col-md-3">
-        <select class="form-select" name="type">
-          <option value="">All Types</option>
-          <option value="Truck" <?= $typeFilter === 'Truck' ? 'selected' : '' ?>>Truck</option>
-          <option value="Vessel" <?= $typeFilter === 'Vessel' ? 'selected' : '' ?>>Vessel</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select class="form-select" name="status">
-          <option value="">All Statuses</option>
-          <option value="Active" <?= $statusFilter === 'Active' ? 'selected' : '' ?>>Active</option>
-          <option value="Inactive" <?= $statusFilter === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-          <option value="Under Maintenance" <?= $statusFilter === 'Under Maintenance' ? 'selected' : '' ?>>Under Maintenance</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <input type="text" name="q" class="form-control" placeholder="Search by name or registration" value="<?= htmlspecialchars($searchQuery) ?>">
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-outline-secondary w-100">Filter</button>
-      </div>
-    </form>
+    <!-- Filter Bar ------------------------------------------------>
+<form class="row gy-2 gx-3 align-items-center mb-4" method="get">
+
+  <!-- Fleet Type --------------------------------------------->
+  <div class="col-md-3">
+    <label class="visually-hidden" for="filterType">Type</label>
+    <select id="filterType" name="type" class="form-select form-select-sm">
+      <option value="">All Types</option>
+      <option value="Truck"   <?= $typeFilter   === 'Truck'   ? 'selected' : '' ?>>Truck</option>
+      <option value="Vessel"  <?= $typeFilter   === 'Vessel'  ? 'selected' : '' ?>>Vessel</option>
+    </select>
   </div>
+
+  <!-- Status ------------------------------------------------->
+  <div class="col-md-3">
+    <label class="visually-hidden" for="filterStatus">Status</label>
+    <select id="filterStatus" name="status" class="form-select form-select-sm">
+      <option value="">All Statuses</option>
+      <option value="Active"            <?= $statusFilter === 'Active'            ? 'selected' : '' ?>>Active</option>
+      <option value="Inactive"          <?= $statusFilter === 'Inactive'          ? 'selected' : '' ?>>Inactive</option>
+      <option value="Under Maintenance" <?= $statusFilter === 'Under Maintenance' ? 'selected' : '' ?>>Maintenance</option>
+    </select>
+  </div>
+
+  <!-- Search Box --------------------------------------------->
+  <div class="col-md-4">
+    <label class="visually-hidden" for="filterSearch">Search</label>
+    <div class="input-group input-group-sm">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input id="filterSearch"
+             type="text"
+             name="q"
+             class="form-control"
+             placeholder="Name or Registration…"
+             value="<?= htmlspecialchars($searchQuery) ?>">
+    </div>
+  </div>
+
+  <!-- Submit -------------------------------------------------->
+  <div class="col-md-2 d-grid">
+    <button class="btn btn-sm btn-outline-secondary" type="submit">
+      <i class="bi bi-funnel-fill me-1"></i> Filter
+    </button>
+  </div>
+
+</form>
+
 
   <div class="table-responsive card shadow-sm">
     <table class="table table-hover mb-0">

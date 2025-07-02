@@ -1,12 +1,23 @@
 <?php
-// api/bookings_vs_shipments.php
+// api/shipments_status.php
 require_once __DIR__ . '/../includes/db.php';
 
-$totalBookings  = (int)$pdo->query("SELECT COUNT(*) FROM bookings")->fetchColumn();
-$totalShipments = (int)$pdo->query("SELECT COUNT(*) FROM shipments")->fetchColumn();
+$stmt = $pdo->query("
+  SELECT status, COUNT(*) AS count
+  FROM shipments
+  GROUP BY status
+");
+
+$rows = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+$all = ['Pending', 'In Transit', 'Delivered', 'Cancelled'];
+$data = [];
+foreach ($all as $status) {
+  $data[$status] = isset($rows[$status]) ? (int)$rows[$status] : 0;
+}
 
 header('Content-Type: application/json');
 echo json_encode([
-  'labels' => ['Bookings','Shipments'],
-  'data'   => [$totalBookings, $totalShipments],
+  'labels' => array_keys($data),
+  'data' => array_values($data)
 ]);

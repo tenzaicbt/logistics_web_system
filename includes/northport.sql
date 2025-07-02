@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 01, 2025 at 06:05 PM
+-- Generation Time: Jul 02, 2025 at 02:29 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -439,11 +439,11 @@ CREATE TABLE `shipments` (
 --
 
 INSERT INTO `shipments` (`id`, `shipment_id`, `user_id`, `booking_id`, `container_id`, `origin`, `destination`, `status`, `departure_date`, `arrival_date`, `created_at`, `updated_at`, `sender_name`, `sender_address`, `sender_contact`, `recipient_name`, `recipient_address`, `recipient_contact`, `package_contents`, `package_weight`, `package_value`, `delivery_type`) VALUES
-(1, 'SHIP-2025-001', 1, 10, 1, 'Colombo', 'Dubai', 'Pending', '2025-04-01', '2025-04-10', '2025-06-30 15:43:40', '2025-07-01 19:49:07', 'ABC Exports', '123 Ocean Road, Colombo', '0771234567', 'XYZ Imports', '78 Bay Street, Dubai', '+971502345678', 'Electronics and gadgets', '1500', '25000', 'Air Freight'),
-(2, 'SHIP-2025-002', 2, 12, 2, 'Hambantota', 'Chennai', 'Delivered', '2025-06-20', NULL, '2025-06-30 15:43:40', '2025-07-01 19:49:09', 'Sun Lanka Pvt Ltd', 'Port Access Road, Hambantota', '0762345678', 'IndoSea Traders', 'Chennai Port, India', '+91-9876543210', 'Marine spare parts', '800', '18000', 'Sea Freight'),
-(3, 'SHIP-2025-003', 3, 15, 3, 'Galle', 'Singapore', 'In Transit', '2025-07-10', NULL, '2025-06-30 15:43:40', '2025-07-01 19:48:52', 'Galle Textiles', '456 Lighthouse Ave, Galle', '0753456789', 'Singapore Retail Hub', '2 Temasek Blvd, Singapore', '+65 61234567', 'Fabric rolls and accessories', '1200', '15000', 'Air Freight'),
-(4, 'SHIP-2025-004', 4, 18, NULL, 'Trincomalee', 'Jakarta', 'Cancelled', '2025-05-15', NULL, '2025-06-30 15:43:40', '2025-07-01 19:49:14', 'Trinco Steel Co.', 'Industrial Zone, Trincomalee', '0787654321', 'Jakarta Construction Ltd', 'Jakarta Industrial Estate', '+62 812345678', 'Steel bars and rods', '3500', '40000', 'Sea Freight'),
-(5, 'SHIP-2025-005', 5, 20, 5, 'Jaffna', 'Kuala Lumpur', 'Delivered', '2025-03-01', '2025-03-12', '2025-06-30 15:43:40', '2025-07-01 19:46:26', 'North Lanka Herbs', '456 Palmyrah Rd, Jaffna', '0749988776', 'KL Herbal Market', 'Jalan Ampang, Kuala Lumpur', '+60 1123456789', 'Medicinal herbs and oils', '900', '11000', 'Land + Sea Freight');
+(1, 'SHIP-2025-001', 1, 10, 1, 'Colombo', 'Dubai', 'In Transit', '2025-04-01', '2025-04-10', '2025-06-30 15:43:40', '2025-07-02 13:59:33', 'ABC Exports', '123 Ocean Road, Colombo', '0771234567', 'XYZ Imports', '78 Bay Street, Dubai', '+971502345678', 'Electronics and gadgets', '1500', '25000', 'Air Freight'),
+(2, 'SHIP-2025-002', 2, 12, 2, 'Hambantota', 'Chennai', 'Cancelled', '2025-06-20', NULL, '2025-06-30 15:43:40', '2025-07-02 14:00:04', 'Sun Lanka Pvt Ltd', 'Port Access Road, Hambantota', '0762345678', 'IndoSea Traders', 'Chennai Port, India', '+91-9876543210', 'Marine spare parts', '800', '18000', 'Sea Freight'),
+(3, 'SHIP-2025-003', 3, 15, 3, 'Galle', 'Singapore', 'Delivered', '2025-07-10', NULL, '2025-06-30 15:43:40', '2025-07-02 13:59:39', 'Galle Textiles', '456 Lighthouse Ave, Galle', '0753456789', 'Singapore Retail Hub', '2 Temasek Blvd, Singapore', '+65 61234567', 'Fabric rolls and accessories', '1200', '15000', 'Air Freight'),
+(5, 'SHIP-2025-005', 5, 20, 5, 'Jaffna', 'Kuala Lumpur', 'Delivered', '2025-03-01', '2025-03-12', '2025-06-30 15:43:40', '2025-07-02 13:59:43', 'North Lanka Herbs', '456 Palmyrah Rd, Jaffna', '0749988776', 'KL Herbal Market', 'Jalan Ampang, Kuala Lumpur', '+60 1123456789', 'Medicinal herbs and oils', '900', '11000', 'Land + Sea Freight'),
+(6, 'SHP-6864AE84278D3', 2, NULL, 2, 'Colombo Port', 'Chittagong Port', 'Pending', '2025-07-05', '2025-07-10', '2025-07-02 09:29:00', '2025-07-02 09:29:00', 'John Perera', '124/A Main Street, Colombo 07, Sri Lanka', '077 123 4567', 'Ayesha Karim', '45 Gulshan Avenue, Dhaka 1212, Bangladesh', '880 1711 654321', 'Electronic Gadgets', '12.5', '150,000', 'Standard');
 
 -- --------------------------------------------------------
 
@@ -485,7 +485,8 @@ INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `role`, `is_act
 (1, 'Yohan Koshala', 'yohankoshala@gmail.com', '$2y$10$ZEvAE7pZ4HgM5qyQ4iGPjuXqPQxGAtwjJrRztLihtRcam2c2criKO', 'user', 1, '2025-06-23 11:26:47', '2025-06-24 03:29:43', '0766446354', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro Technologies (PVT) Ltd', '', '2000-01-21', NULL, '', NULL, NULL, NULL, NULL),
 (2, 'admin', 'admin@northport.com', '$2y$10$x2mFCP.UpSdTOctE3r9SRuD5tfWPw6A3UaP7frAspSiQ5egaQVtsm', 'admin', 1, '2025-06-23 12:38:27', '2025-06-24 03:21:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 'Vimash Kavinda', 'vimash@northport.com', '$2y$10$KYSmusBrhFjJVlnLs4GESOZQy9w6odqbaHeNPXyGl5msxnF1ND/5q', 'manager', 1, '2025-06-24 03:41:06', '2025-06-24 03:41:06', '0766446355', 'No 73, Mount Lavinia', 'colombo', 'western province', '10390', 'Sri Lanka', 'Tecro (PVT) Ltd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'Christy Philip', 'philip@northport.com', '$2y$10$M.2aRUl1T/vX3FZi2OjYkOu7cs.mATiMxIvy1JMNmgR2tx67Oj5Vm', 'employer', 1, '2025-06-24 17:20:33', '2025-06-30 09:27:41', '0766446366', 'No 73, Mount Lavinia', 'colombo', 'western Province', '10360', 'sri lanka', 'Aramex (PVT) Ltd', NULL, '2000-01-24', NULL, '', '', '', NULL, '');
+(4, 'Christy Philip', 'philip@northport.com', '$2y$10$M.2aRUl1T/vX3FZi2OjYkOu7cs.mATiMxIvy1JMNmgR2tx67Oj5Vm', 'employer', 1, '2025-06-24 17:20:33', '2025-07-02 04:35:57', '0766446366', 'No 73, Mount Lavinia', 'colombo', 'western Province', '10360', 'sri lanka', 'Aramex (PVT) Ltd', NULL, '2000-01-24', NULL, '', '', '', NULL, ''),
+(5, 'Tharindu Darshana', 'tharindu@northport.com', '$2y$10$3Z.u6ndC2F0ECsKx4.AeSOyj4zOvi8/b8hi6IOLdebyUp0Nqx1CdW', 'employer', 1, '2025-07-02 06:35:23', '2025-07-02 06:35:23', '0766446366', 'No 73, Mount Lavinia', 'colombo', NULL, '10390', 'Sri Lanka', 'NorthPort Logistics Pvt Ltd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -710,13 +711,13 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `shipments`
 --
 ALTER TABLE `shipments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

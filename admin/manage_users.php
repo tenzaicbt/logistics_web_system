@@ -236,7 +236,7 @@ function redCheckIcon()
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <!-- <th>Role</th> -->
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -269,10 +269,10 @@ function redCheckIcon()
 
                                         <button class="btn-simple" disabled>Delete</button>
                                     <?php endif; ?>
-
-                                    <a href="role_management.php?user_id=<?= $user['id'] ?>" class="btn-simple">Roles</a>
+<!-- 
+                                    <a href="role_management.php?user_id=<?= $user['id'] ?>" class="btn-simple">Roles</a> -->
                                     <!-- <a href="edit_permissions.php?user_id=<?= $user['id'] ?>" class="btn-simple">Permissions</a> -->
-                                    <a href="user_reset_password.php?id=<?= $user['id'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-simple" onclick="return confirm('Reset password?');">Reset PW</a>
+                                    <!-- <a href="user_reset_password.php?id=<?= $user['id'] ?>&redirect=<?= urlencode($_SERVER['REQUEST_URI']) ?>" class="btn-simple" onclick="return confirm('Reset password?');">Reset PW</a> -->
                                     <a href="view_employer_info.php?id=<?= $user['id'] ?>" class="btn-simple">Info</a>
                                 </div>
                             </td>

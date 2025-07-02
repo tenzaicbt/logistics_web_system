@@ -3,8 +3,16 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/header.php';
 
+// Only allow users with role 'user' (normal users)
 if ($_SESSION['role'] !== 'user') {
     echo "<div class='alert alert-danger m-5'>Access denied.</div>";
+    require_once '../includes/footer.php';
+    exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+if (!$userId) {
+    echo "<div class='alert alert-danger m-5'>User not logged in.</div>";
     require_once '../includes/footer.php';
     exit;
 }
@@ -13,8 +21,8 @@ $search = trim($_GET['q'] ?? '');
 $status = $_GET['status'] ?? '';
 $type = $_GET['type'] ?? '';
 
-$where = [];
-$params = [];
+$where = ['s.user_id = ?'];  // Restrict to logged-in user
+$params = [$userId];
 
 if ($search) {
     $where[] = '(s.shipment_id LIKE ? OR s.origin LIKE ? OR s.destination LIKE ? OR u.username LIKE ?)';
@@ -52,11 +60,11 @@ $shipments = $stmt->fetchAll();
 </style>
 
 <div class="container my-5">
-  <h2 class="fw-bold mb-4">All Shipments</h2>
+  <h2 class="fw-bold mb-4">My Shipments</h2>
 
-  <form class="row g-2 mb-4">
+  <form class="row g-2 mb-4" method="get">
     <div class="col-md-3">
-      <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" class="form-control" placeholder="Search shipment, origin, destination, user">
+      <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" class="form-control" placeholder="Search shipment, origin, destination">
     </div>
     <div class="col-md-2">
       <select name="status" class="form-select">
@@ -76,7 +84,7 @@ $shipments = $stmt->fetchAll();
       </select>
     </div>
     <div class="col-md-2">
-      <button class="btn btn-outline-secondary w-100">Filter</button>
+      <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
     </div>
   </form>
 
@@ -94,17 +102,17 @@ $shipments = $stmt->fetchAll();
       </thead>
       <tbody>
         <?php if (!$shipments): ?>
-          <tr><td colspan="8" class="text-center text-muted py-4">No shipments found.</td></tr>
+          <tr><td colspan="6" class="text-center text-muted py-4">No shipments found.</td></tr>
         <?php else: foreach ($shipments as $s): ?>
           <tr>
             <td><?= htmlspecialchars($s['shipment_id']) ?></td>
             <td><?= htmlspecialchars($s['container_no'] ?? '-') ?></td>
             <td><?= htmlspecialchars($s['origin']) ?> → <?= htmlspecialchars($s['destination']) ?></td>
             <td>
-              <?= date('Y-m-d', strtotime($s['departure_date'])) ?> → 
-              <?= date('Y-m-d', strtotime($s['arrival_date'])) ?>
+              <?= $s['departure_date'] ? date('Y-m-d', strtotime($s['departure_date'])) : '-' ?> → 
+              <?= $s['arrival_date'] ? date('Y-m-d', strtotime($s['arrival_date'])) : '-' ?>
             </td>
-            <td><?= htmlspecialchars($s['delivery_type']) ?></td>
+            <td><?= htmlspecialchars($s['delivery_type'] ?? '-') ?></td>
             <td>
               <span class="badge 
                 <?= $s['status'] === 'Delivered' ? 'bg-success' : 

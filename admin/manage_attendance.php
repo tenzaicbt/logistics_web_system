@@ -112,48 +112,52 @@ if ($role === 'admin' || $role === 'manager') {
 <div class="container my-5">
     <h2 class="fw-bold mb-4">Manage Attendance</h2>
 
-    <form method="GET" class="row g-2 mb-4 align-items-end">
-        <?php if ($role === 'admin' || $role === 'manager'): ?>
-            <div class="col-md-3">
-                <label for="user_id" class="form-label">User</label>
-                <select id="user_id" name="user_id" class="form-select">
-                    <option value="">All Users</option>
-                    <?php foreach ($users as $user): ?>
-                        <option value="<?= $user['id'] ?>" <?= $filterUser == $user['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($user['username']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        <?php endif; ?>
-        
-        <div class="col-md-2">
-            <label for="date_from" class="form-label">Date From</label>
-            <input type="date" id="date_from" name="date_from" class="form-control" value="<?= htmlspecialchars($filterDateFrom) ?>">
-        </div>
-        
-        <div class="col-md-2">
-            <label for="date_to" class="form-label">Date To</label>
-            <input type="date" id="date_to" name="date_to" class="form-control" value="<?= htmlspecialchars($filterDateTo) ?>">
-        </div>
-        
-        <div class="col-md-2">
-            <label for="status" class="form-label">Status</label>
-            <select id="status" name="status" class="form-select">
-                <option value="">All Status</option>
-                <?php
-                $statuses = ['Present', 'Absent', 'Late', 'Leave', 'Remote'];
-                foreach ($statuses as $statusOption): ?>
-                    <option value="<?= $statusOption ?>" <?= $filterStatus === $statusOption ? 'selected' : '' ?>>
-                        <?= $statusOption ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        
-        <div class="col-md-1">
-            <button type="submit" class="btn btn-outline-secondary w-100">Filter</button>
-        </div>
+<form method="GET" class="row g-2 align-items-end mb-4">
+
+  <?php if ($role === 'admin' || $role === 'manager'): ?>
+    <div class="col-md-3">
+      <label for="user_id" class="form-label mb-1 small">User</label>
+      <select id="user_id" name="user_id" class="form-select form-select-sm">
+        <option value="">All Users</option>
+        <?php foreach ($users as $user): ?>
+          <option value="<?= $user['id'] ?>" <?= $filterUser == $user['id'] ? 'selected' : '' ?>>
+            <?= htmlspecialchars($user['username']) ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+  <?php endif; ?>
+
+  <div class="col-md-2">
+    <label for="date_from" class="form-label mb-1 small">Date From</label>
+    <input type="date" id="date_from" name="date_from" class="form-control form-control-sm" value="<?= htmlspecialchars($filterDateFrom) ?>">
+  </div>
+
+  <div class="col-md-2">
+    <label for="date_to" class="form-label mb-1 small">Date To</label>
+    <input type="date" id="date_to" name="date_to" class="form-control form-control-sm" value="<?= htmlspecialchars($filterDateTo) ?>">
+  </div>
+
+  <div class="col-md-2">
+    <label for="status" class="form-label mb-1 small">Status</label>
+    <select id="status" name="status" class="form-select form-select-sm">
+      <option value="">All Status</option>
+      <?php foreach (['Present', 'Absent', 'Late', 'Leave', 'Remote'] as $statusOption): ?>
+        <option value="<?= $statusOption ?>" <?= $filterStatus === $statusOption ? 'selected' : '' ?>>
+          <?= $statusOption ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+
+  <div class="col-md-1 d-grid">
+    <button type="submit" class="btn btn-sm btn-outline-secondary">
+      <i class="bi bi-funnel me-1"></i> Filter
+    </button>
+  </div>
+
+
+
 
         <div class="col-md-2 text-end">
             <a href="add_attendance.php" class="btn btn-danger">Add Attendance</a>

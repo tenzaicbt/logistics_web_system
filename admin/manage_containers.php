@@ -70,9 +70,7 @@ $containers = $stmt->fetchAll();
   /* .container {
     font-size: 0.85rem;
   } */
-  h2 {
-    font-size: 1.25rem;
-  }
+
 </style>
 
 <div class="container my-5">
@@ -83,35 +81,44 @@ $containers = $stmt->fetchAll();
     <?php endif; ?>
   </div>
 
-  <div class="card p-3 shadow-sm mb-4">
-    <form class="row g-2" method="GET">
-      <div class="col-md-3">
-        <select class="form-select" name="type">
-          <option value="">All Types</option>
-          <option value="20ft" <?= $typeFilter === '20ft' ? 'selected' : '' ?>>20ft</option>
-          <option value="40ft" <?= $typeFilter === '40ft' ? 'selected' : '' ?>>40ft</option>
-          <option value="Reefer" <?= $typeFilter === 'Reefer' ? 'selected' : '' ?>>Reefer</option>
-          <option value="Open Top" <?= $typeFilter === 'Open Top' ? 'selected' : '' ?>>Open Top</option>
-          <option value="Tank" <?= $typeFilter === 'Tank' ? 'selected' : '' ?>>Tank</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select class="form-select" name="status">
-          <option value="">All Statuses</option>
-          <option value="Available" <?= $statusFilter === 'Available' ? 'selected' : '' ?>>Available</option>
-          <option value="In Use" <?= $statusFilter === 'In Use' ? 'selected' : '' ?>>In Use</option>
-          <option value="Under Maintenance" <?= $statusFilter === 'Under Maintenance' ? 'selected' : '' ?>>Under Maintenance</option>
-          <option value="Damaged" <?= $statusFilter === 'Damaged' ? 'selected' : '' ?>>Damaged</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <input type="text" name="q" class="form-control" placeholder="Search container no, fleet or location" value="<?= htmlspecialchars($searchQuery) ?>">
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
-      </div>
-    </form>
+ <form class="row gy-2 gx-3 align-items-center mb-4" method="GET">
+
+  <!-- Type -->
+  <div class="col-md-3">
+    <select class="form-select form-select-sm" name="type">
+      <option value="">All Types</option>
+      <option value="20ft" <?= $typeFilter === '20ft' ? 'selected' : '' ?>>20ft</option>
+      <option value="40ft" <?= $typeFilter === '40ft' ? 'selected' : '' ?>>40ft</option>
+      <option value="Reefer" <?= $typeFilter === 'Reefer' ? 'selected' : '' ?>>Reefer</option>
+      <option value="Open Top" <?= $typeFilter === 'Open Top' ? 'selected' : '' ?>>Open Top</option>
+      <option value="Tank" <?= $typeFilter === 'Tank' ? 'selected' : '' ?>>Tank</option>
+    </select>
   </div>
+
+  <!-- Status -->
+  <div class="col-md-3">
+    <select class="form-select form-select-sm" name="status">
+      <option value="">All Statuses</option>
+      <option value="Available" <?= $statusFilter === 'Available' ? 'selected' : '' ?>>Available</option>
+      <option value="In Use" <?= $statusFilter === 'In Use' ? 'selected' : '' ?>>In Use</option>
+      <option value="Under Maintenance" <?= $statusFilter === 'Under Maintenance' ? 'selected' : '' ?>>Under Maintenance</option>
+      <option value="Damaged" <?= $statusFilter === 'Damaged' ? 'selected' : '' ?>>Damaged</option>
+    </select>
+  </div>
+
+  <!-- Search -->
+  <div class="col-md-4">
+    <input type="text" name="q" class="form-control form-control-sm" placeholder="Search container no, fleet or location" value="<?= htmlspecialchars($searchQuery) ?>">
+  </div>
+
+  <!-- Submit -->
+  <div class="col-md-2 d-grid">
+    <button class="btn btn-sm btn-outline-secondary" type="submit">
+      <i class="bi bi-funnel me-1"></i> Filter
+    </button>
+  </div>
+
+</form>
 
   <div class="table-responsive card shadow-sm">
     <table class="table table-hover mb-0 align-middle">

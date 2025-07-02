@@ -72,7 +72,7 @@ $leaves = $stmt->fetchAll();
 </style>
 
 <div class="content-small container my-5">
-    <h2 class="fw-bold mb-4">LEAVE SHEET</h2>
+    <h2 class="fw-bold mb-4">Leave Sheet</h2>
 
     <?php if ($success): ?>
         <div class="alert alert-success">Leave request submitted successfully.</div>
