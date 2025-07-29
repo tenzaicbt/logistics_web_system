@@ -1,26 +1,118 @@
-# Tadefording Shipping Line System
+# 🌐 Full Stack Web-Based Logistics Management System (Laravel-Inspired, PHP)
 
-A professional PHP-based logistics management platform for shipping lines.
+I'm proud to present a complete **Logistics Management Platform** I designed and developed from scratch, combining modern web technologies with real-world enterprise features such as **shipment control**, **banking integration**, **HR & finance tools**, and **role-based dashboards**.
 
-## Key Modules
-- Admin and sub-admin roles
-- Shipment and fleet management
-- Invoice tracking
-- Theme settings (logo, footer, color)
-- Logs and permissions
+---
 
-## Structure Overview
-Refer to the full directory tree in the project plan.
+## 🔧 Core Tech Stack
 
-## Tech Stack
-- PHP 8+
-- MySQL 5.7+
-- Bootstrap 5
-- FontAwesome
-- Apache (for .htaccess support)
+- **PHP 8.x** – Custom Laravel-style MVC architecture  
+- **MySQL** – Structured relational database  
+- **HTML5 + CSS3** – Clean, responsive front-end  
+- **Chart.js** – Interactive, real-time data visualizations  
+- **AJAX & RESTful APIs** – Seamless user experience  
+- **CPanel Hosting** – Shared hosting environment for live deployment  
+
+---
+
+## 📁 Deployment & Hosting
+
+- ✅ Hosted on a shared **CPanel server**
+- 🌐 **Main domain** handles **client functions** (e.g., shipment booking, login)
+- 🧩 **Subdomains** used for admin and staff panels
+
+---
+
+## 🔐 Role-Based Access Control (RBAC)
+
+Role-specific interfaces and permissions handled via **middleware** and **session-based control**.
+
+### 👑 Admin
+- Full access to all system modules
+
+### 🧑‍💼 Manager
+- Access to **HR** and **Finance** tools
+
+### 👷‍♂️ Employer (Internal Staff)
+- Manage personal info, view paysheets, leave & attendance
+
+### 📦 Client (External)
+- Shipment booking, tracking, invoice & POD downloads
+
+---
+
+## 📊 Powerful Admin Dashboard
+
+- 🔔 **Live Notification Bell** – Displays unread counts and message previews
+- 📈 **Dynamic Charts** via Chart.js:
+  - **Monthly Shipments** (Bar Chart)
+  - **Shipment & Fleet Status** (Donut Charts)
+
+---
+
+## 👥 Role Hierarchy & Permissions
+
+### 🔹 Admin (Full Access)
+- Manage users, roles, modules
+- Edit organizations (in-house & external)
+- View audit logs, system alerts, and logs
+
+### 🔸 Manager (HR & Finance)
+- Onboard staff and assign roles
+- Process payroll, leaves, and expense claims
+- Generate reports
+
+### 🔹 Employee
+- Access assigned shipments
+- Update delivery statuses
+- Manage personal tasks, payslips, and leave
+
+### 🔸 Client (External User)
+- Book & track shipments (multi-step wizard)
+- Download invoices & proof of delivery
+
+---
+
+## 🔐 Security & Authentication
+
+- **Role-Based Access Control (RBAC)** for all modules
+- **Auto-Generated & Hashed Passwords** on user creation
+- **Unauthenticated users** are redirected to login
+
+---
+
+## 📂 Key Functional Modules
+
+✅ **Shipment Management**  
+✅ **Fleet Management** (containers, availability, maintenance)  
+✅ **Leave & Attendance** (apply, approve, history)  
+✅ **Paysheet Management** (generate, assign, view)  
+✅ **Document Uploads** (KYC, PODs, HR files)  
+✅ **Internal Messaging Center** (admin ↔ users communication)
+
+---
+
+## 💡 Why This Project?
+
+This platform solves real-world logistics problems by offering:
+
+- ✅ **Clean permission hierarchy**
+- ✅ **Integrated HR & finance workflows**
+- ✅ **Business intelligence dashboards**
+- ✅ **Real-time alerts & seamless UX**
+- ✅ **Scalable & modular structure**, even on shared hosting
+
+---
 
 ## License
 Proprietary — Tadefording Shipping Pvt Ltd
+
+## 🚀 Screenshots & Demo
+
+> (📸 Add screenshots, login previews, dashboard images, etc. here)
+
+---
+
 <img width="1365" height="630" alt="Screenshot 2025-07-14 105849" src="https://github.com/user-attachments/assets/dcfe9a44-da95-49a5-a64d-1aff67093820" />
 <img width="1346" height="631" alt="Screenshot 2025-07-14 105907" src="https://github.com/user-attachments/assets/e2f9c52f-0772-4c9f-9346-86b4a0ef159b" />
 <img width="1344" height="633" alt="Screenshot 2025-07-14 105925" src="https://github.com/user-attachments/assets/94b3e6d4-d985-476b-9b8b-0def199f8914" />
