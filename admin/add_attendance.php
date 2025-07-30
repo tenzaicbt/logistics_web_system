@@ -6,7 +6,7 @@ require_once '../includes/header.php';
 $role = $_SESSION['role'] ?? 'user';
 $userId = $_SESSION['user_id'] ?? null;
 
-// Only admin, manager, and employer can access this page
+// access
 if (!in_array($role, ['admin', 'manager', 'employer'])) {
     echo "<div class='alert alert-danger m-5'>Access denied. You do not have permission to add attendance.</div>";
     require_once '../includes/footer.php';
@@ -16,7 +16,7 @@ if (!in_array($role, ['admin', 'manager', 'employer'])) {
 $errors = [];
 $success = '';
 
-// Fetch users for dropdown — admin, manager, employer can mark attendance for any user
+// dropdown
 $users = [];
 $stmt = $pdo->query("SELECT id, username, role FROM users WHERE is_active = 1 AND role IN ('admin','manager','employer') ORDER BY username");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Invalid status selected.";
     }
 
-    // Check if attendance for that user/date already exists
+    // Check if attendance
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM attendances WHERE user_id = ? AND date = ?");
     $stmt->execute([$formUserId, $date]);
     if ($stmt->fetchColumn() > 0) {
